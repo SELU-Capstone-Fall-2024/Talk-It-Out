@@ -1,15 +1,43 @@
-﻿using Microsoft.AspNetCore;
-using Microsoft.AspNetCore.Hosting;
-using TalkItOut;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using TalkItOut.Entities;
+using TalkItOut.Extensions;
 
-public static class Program
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthorization();
+builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+
+builder.Services.AddIdentityCore<User>()
+    .AddEntityFrameworkStores<DataContext>()
+    .AddApiEndpoints();
+
+builder.Services.AddDbContext<DataContext>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
+
+WebApplication app = builder.Build();
+
+// if (app.Environment.IsDevelopment())
+// {
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    public static void Main(string[] args)
-    {
-        CreateWebHostBuilder(args).Build().Run();
-    }
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "TalkItOutAPI v1");
+    options.RoutePrefix = string.Empty; // Set the Swagger UI at the root URL
+});
 
-    public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-        WebHost.CreateDefaultBuilder(args)
-            .UseStartup<Startup>();
-}
+app.ApplyMigrations();
+// }
+app.UseHttpsRedirection();
+
+app.MapIdentityApi<User>();
+
+app.Run();
