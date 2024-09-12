@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using TalkItOut.Entities;
 using TalkItOut.Extensions;
 
@@ -20,11 +19,14 @@ builder.Services.AddIdentityCore<User>()
     .AddEntityFrameworkStores<DataContext>()
     .AddApiEndpoints();
 
+builder.Configuration.AddJsonFile("appsettings.json", optional: false);
+
 builder.Services.AddDbContext<DataContext>(options => 
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Database")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DbSet")));
 
 WebApplication app = builder.Build();
 
+//Don't forget to configure environments for builds :)
 // if (app.Environment.IsDevelopment())
 // {
 app.UseSwagger();
