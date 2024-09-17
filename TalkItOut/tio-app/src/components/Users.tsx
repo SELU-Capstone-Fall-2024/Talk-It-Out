@@ -1,26 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { getUsers } from '../api/api';
+import React from 'react';
+import useAsync from '../hooks/useAsync';
+import api from '../api/api';
+import { User } from '../types';
+
+const getUsers = async () => {
+  const response = await api.get('/users');
+  return response.data;
+};
 
 const Users: React.FC = () => {
-  const [users, setUsers] = useState<any[]>([]);
+  const { data: users, loading, error } = useAsync<User[]>(getUsers);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const data = await getUsers();
-        setUsers(data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
-      }
-    };
-    fetchUsers();
-  }, []);
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error loading users</div>;
+  if (users && users.length === 0) return <div>No users found.</div>;
 
   return (
     <div>
       <h1>Users</h1>
       <ul>
-        {users.map(user => (
+        {users?.map((user) => (
           <li key={user.id}>{user.name}</li>
         ))}
       </ul>
