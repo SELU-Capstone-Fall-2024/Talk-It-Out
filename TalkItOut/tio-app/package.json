@@ -21,6 +21,7 @@
     "react-native-svg": "^15.6.0",
     "react-native-web": "^0.19.12",
     "react-router-dom": "^6.26.2",
+    "react-use": "^17.5.1",
     "tamagui": "^1.111.3",
     "vite-plugin-react-native-web": "^1.0.3"
   },

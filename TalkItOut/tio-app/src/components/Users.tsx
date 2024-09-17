@@ -1,15 +1,15 @@
 import React from 'react';
-import useAsync from '../hooks/useAsync';
 import api from '../api/api';
 import { User } from '../types';
+import { useAsync } from 'react-use';
 
-const getUsers = async () => {
+const getUsers = async (): Promise<User[]> => {
   const response = await api.get('/users');
   return response.data;
 };
 
 const Users: React.FC = () => {
-  const { data: users, loading, error } = useAsync<User[]>(getUsers);
+  const { loading, error, value: users } = useAsync(getUsers);
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading users</div>;
