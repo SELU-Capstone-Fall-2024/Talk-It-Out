@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper.QueryableExtensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using TalkItOut.Common;
 using TalkItOut.Entities;
+using Response = TalkItOut.Common.Response;
 
 namespace TalkItOut.Controllers;
 
@@ -12,13 +13,16 @@ public class UserController : ControllerBase
 {
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
+    private readonly DataContext _dataContext;
 
     public UserController(
         UserManager<User> userManager,
-        SignInManager<User> signInManager)
+        SignInManager<User> signInManager,
+        DataContext dataContext)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _dataContext = dataContext;
     }
 
     [AllowAnonymous]
@@ -56,6 +60,23 @@ public class UserController : ControllerBase
     {
         await _signInManager.SignOutAsync();
         return Ok();
+    }
+
+    [HttpGet("users")]
+    public async Task<IActionResult> GetAll()
+    {
+        var response = new Response();
+
+        var usersGetDto = _dataContext.Set<User>()
+            .Select(x => new UserGetDto
+            {
+                Id = x.Id,
+                Name = x.Name,
+            })
+            .ToList();
+
+        response.Data = usersGetDto;
+        return Ok(response);
     }
 }
 
