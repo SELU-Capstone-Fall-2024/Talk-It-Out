@@ -56,7 +56,7 @@ public class UserController : ControllerBase
     {
         await _signInManager.SignOutAsync();
         return Ok();
-    }
+    }   
 }
 
 public class LoginDto
