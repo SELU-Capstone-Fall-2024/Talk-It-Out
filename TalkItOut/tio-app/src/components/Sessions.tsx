@@ -1,6 +1,6 @@
 import React from 'react';
 import api from '../api/api';
-import { Session, Response, SessionGetDto } from '../types';
+import { Response, SessionGetDto } from '../types';
 import { useAsync } from 'react-use';
 import Loader from '../components/Loader';
 
@@ -18,7 +18,7 @@ const Sessions: React.FC = () => {
       {sessions && !loading && sessions.data?.length === 0 && <div>No sessions found.</div>}
       {!loading && sessions && (
         <ul>
-          {sessions.data?.map((session: Session) => (
+          {sessions.data?.map((session) => (
             <li key={session.id}>{session.userId}{session.durationMinutes}{session.startTime}{session.endTime}{session.clients}</li>
           ))}
         </ul>

@@ -1,6 +1,6 @@
 import React from 'react';
 import api from '../api/api';
-import { Client, Response, ClientGetDto } from '../types';
+import { Response, ClientGetDto } from '../types';
 import { useAsync } from 'react-use';
 import Loader from '../components/Loader';
 
@@ -18,7 +18,7 @@ const Clients: React.FC = () => {
       {clients && !loading && clients.data?.length === 0 && <div>No clients found.</div>}
       {!loading && clients && (
         <ul>
-          {clients.data?.map((client: Client) => (
+          {clients.data?.map((client) => (
             <li key={client.id}>{client.firstName}{client.lastname}{client.dateOfBirth}</li>
           ))}
         </ul>

@@ -1,6 +1,6 @@
 import React from 'react';
 import api from '../api/api';
-import { User, Response, UserGetDto } from '../types';
+import { Response, UserGetDto } from '../types';
 import { useAsync } from 'react-use';
 import Loader from '../components/Loader';
 
@@ -18,7 +18,7 @@ const Users: React.FC = () => {
       {users && !loading && users.data?.length === 0 && <div>No users found.</div>}
       {!loading && users && (
         <ul>
-          {users.data?.map((user: User) => (
+          {users.data?.map((user) => (
             <li key={user.id}>{user.name}</li>
           ))}
         </ul>

@@ -9,21 +9,9 @@ export type Response<T = any> = {
   hasErrors: boolean;                 
 }
 
-export type User = {
-  id: number;
-  name: string;
-}
-
 export type UserGetDto = {
 id: number;
 name: string;
-}
-
-export type Client = {
-  id: number;
-  firstName: string;
-  lastname: string;
-  dateOfBirth: string;
 }
 
 export type ClientGetDto = {
@@ -37,15 +25,6 @@ export type ClientCreateDto = {
   firstName: string;
   lastname: string;
   dateOfBirth: string;
-}
-
-export type Session = {
-  id: number;
-  userId: number;
-  durationMinutes: number;
-  startTime: string;
-  endTime: string;
-  clients: number[];
 }
 
 export type SessionGetDto = {
