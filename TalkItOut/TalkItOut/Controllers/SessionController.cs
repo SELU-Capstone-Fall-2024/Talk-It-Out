@@ -97,7 +97,7 @@ namespace TalkItOut.Controllers;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] SessionUpdateDto sessionUpdateDto)
+        public async Task<IActionResult> Update(int id, [FromBody] SessionCreateDto sessionCreateDto)
         {
             var response = new Response();
 
@@ -108,11 +108,11 @@ namespace TalkItOut.Controllers;
                 response.AddError("Id", "Session could not be found.");
             }
 
-            session.UserId = sessionUpdateDto.UserId;
-            session.DurationMinutes = sessionUpdateDto.DurationMinutes;
-            session.StartTime = sessionUpdateDto.StartTime;
-            session.EndTime = sessionUpdateDto.EndTime;
-            session.Clients = sessionUpdateDto.Clients;
+            session.UserId = sessionCreateDto.UserId;
+            session.DurationMinutes = sessionCreateDto.DurationMinutes;
+            session.StartTime = sessionCreateDto.StartTime;
+            session.EndTime = sessionCreateDto.EndTime;
+            session.Clients = sessionCreateDto.Clients;
 
             await _dataContext.SaveChangesAsync();
 
