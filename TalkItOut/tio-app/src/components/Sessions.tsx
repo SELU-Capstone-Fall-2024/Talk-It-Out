@@ -19,7 +19,7 @@ const Sessions: React.FC = () => {
       {!loading && sessions && (
         <ul>
           {sessions.data?.map((session) => (
-            <li key={session.id}>{session.userId}{session.durationMinutes}{session.startTime}{session.endTime}{session.clients}</li>
+            <li key={session.id}>{session.userId}{session.durationMinutes}{session.startTime}{session.endTime}{session.groupId}{session.clientId}</li>
           ))}
         </ul>
       )}

@@ -33,7 +33,8 @@ export type SessionGetDto = {
   durationMinutes: number;
   startTime: string;
   endTime: string;
-  clients: number[];
+  groupId: number;
+  clientId: number;
 }
 
 export type SessionCreateDto = {
@@ -41,7 +42,8 @@ export type SessionCreateDto = {
   durationMinutes: number;
   startTime: string;
   endTime: string;
-  clients: number[];
+  groupId: number;
+  clientId: number;
 }
 
 export type SessionUpdateDto = {
@@ -49,5 +51,6 @@ export type SessionUpdateDto = {
   durationMinutes: number;
   startTime: string;
   endTime: string;
-  clients: number[];
+  groupId: number;
+  clientId: number;
 }

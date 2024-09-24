@@ -29,7 +29,8 @@ namespace TalkItOut.Controllers;
                     DurationMinutes = x.DurationMinutes,
                     StartTime = x.StartTime,
                     EndTime = x.EndTime,
-                    Clients = x.Clients.ToList()
+                    GroupId = x.GroupId,
+                    ClientId = x.ClientId
                 })
                 .ToList();
 
@@ -58,7 +59,8 @@ namespace TalkItOut.Controllers;
                 DurationMinutes = session.DurationMinutes,
                 StartTime = session.StartTime,
                 EndTime = session.EndTime,
-                Clients = session.Clients.ToList()
+                GroupId = session.GroupId,
+                ClientId = session.ClientId
             };
 
             response.Data = sessionDto;
@@ -77,7 +79,8 @@ namespace TalkItOut.Controllers;
                 DurationMinutes = sessionCreateDto.DurationMinutes,
                 StartTime = sessionCreateDto.StartTime,
                 EndTime = sessionCreateDto.EndTime,
-                Clients = sessionCreateDto.Clients.ToList()
+                GroupId = sessionCreateDto.GroupId,
+                ClientId = sessionCreateDto.ClientId
             };
 
             await _dataContext.Set<Session>().AddAsync(sessionToCreate);
@@ -90,7 +93,8 @@ namespace TalkItOut.Controllers;
                 DurationMinutes = sessionToCreate.DurationMinutes,
                 StartTime = sessionToCreate.StartTime,
                 EndTime = sessionToCreate.EndTime,
-                Clients = sessionToCreate.Clients
+                GroupId = sessionToCreate.GroupId,
+                ClientId = sessionCreateDto.ClientId
             };
 
             return Ok(response);
@@ -112,7 +116,8 @@ namespace TalkItOut.Controllers;
             session.DurationMinutes = sessionCreateDto.DurationMinutes;
             session.StartTime = sessionCreateDto.StartTime;
             session.EndTime = sessionCreateDto.EndTime;
-            session.Clients = sessionCreateDto.Clients;
+            session.GroupId = sessionCreateDto.GroupId;
+            session.ClientId = sessionCreateDto.ClientId;
 
             await _dataContext.SaveChangesAsync();
 
@@ -123,7 +128,8 @@ namespace TalkItOut.Controllers;
                 DurationMinutes = session.DurationMinutes,
                 StartTime = session.StartTime,
                 EndTime = session.EndTime,
-                Clients = session.Clients.ToList()
+                GroupId = session.GroupId,
+                ClientId = session.ClientId
             };
 
             return Ok(response);
