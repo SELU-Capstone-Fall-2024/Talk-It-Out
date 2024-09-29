@@ -12,6 +12,7 @@ namespace TalkItOut.Entities
         public DateTimeOffset EndTime { get; set; }
         public int GroupId { get; set; }
         public int ClientId { get; set; }
+        public Client Client { get; set; }
         public User User { get; set; }
     }
 
