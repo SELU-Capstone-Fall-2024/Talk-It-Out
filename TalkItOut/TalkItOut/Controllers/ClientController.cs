@@ -6,7 +6,7 @@ using TalkItOut.Entities;
 namespace TalkItOut.Controllers;
 
 [ApiController]
-[Route("api/clients")]
+[Route("/clients")]
 public class ClientController : ControllerBase
 {
     private readonly DataContext _dataContext;
