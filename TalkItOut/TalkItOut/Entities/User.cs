@@ -2,9 +2,10 @@
 
 namespace TalkItOut.Entities;
 
-public class User : IdentityUser
+public class User : IdentityUser<int>
 {
     public int Id { get; set; }
+    public List<UserRole> UserRoles = new(); 
     public string Name { get; set; }    
     public List<Session> Sessions { get; set; } = new();
 }

@@ -40,7 +40,7 @@ namespace TalkItOut.Controllers;
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById([FromBody] int id)
+        public async Task<IActionResult> GetById(int id)
         {
             var response = new Response();
 
