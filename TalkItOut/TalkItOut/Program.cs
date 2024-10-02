@@ -45,7 +45,11 @@ app.UseSwaggerUI(options =>
 
 app.ApplyMigrations();
 // }
+
+app.UseRouting();
 app.UseHttpsRedirection();
+
+app.MapControllers();
 
 app.MapIdentityApi<User>();
 

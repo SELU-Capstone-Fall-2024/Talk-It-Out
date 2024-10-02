@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace TalkItOut.Entities;
 
-public class DataContext : IdentityDbContext<User>
+public class DataContext : IdentityDbContext<User, Role, int>
 {
     public DataContext(DbContextOptions<DataContext> options)
     : base(options)
@@ -14,6 +15,12 @@ public class DataContext : IdentityDbContext<User>
     {
         base.OnModelCreating(builder);
 
-        builder.HasDefaultSchema("identity");
+        builder.ApplyConfigurationsFromAssembly(typeof(DataContext).GetTypeInfo().Assembly);
+        
+        foreach (var relationship in builder.Model.GetEntityTypes().Where(e => !e.IsOwned())
+                     .SelectMany(e => e.GetForeignKeys()))
+        {
+            relationship.DeleteBehavior = DeleteBehavior.Restrict;
+        }
     }
 }
