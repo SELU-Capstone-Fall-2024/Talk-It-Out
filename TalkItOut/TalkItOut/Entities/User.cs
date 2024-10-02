@@ -8,6 +8,7 @@ public class User : IdentityUser<int>
     public List<UserRole> UserRoles = new(); 
     public string Name { get; set; }    
     public List<Session> Sessions { get; set; } = new();
+    public List<Goal> Goals { get; set; } = new();
 }
 
 public class UserGetDto
