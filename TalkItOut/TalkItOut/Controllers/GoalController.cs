@@ -26,7 +26,7 @@ public class GoalController : ControllerBase
             {
                 Id = x.Id,
                 UserId = x.UserId,
-                GoalInformation = x.GoalInformation,
+                Information = x.Information,
                 ClientId = x.ClientId
             })
             .ToList();
@@ -37,7 +37,7 @@ public class GoalController : ControllerBase
     }
     
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetById([FromBody] int id)
+    public async Task<IActionResult> GetById(int id)
     {
         var response = new Response();
 
@@ -53,7 +53,7 @@ public class GoalController : ControllerBase
         {
             Id = goal.Id,
             UserId = goal.UserId,
-            GoalInformation = goal.GoalInformation,
+            Information = goal.Information,
             ClientId = goal.ClientId
         };
 
@@ -70,7 +70,7 @@ public class GoalController : ControllerBase
         var goalToCreate = new Goal
         {
             UserId = goalCreateDto.UserId,
-            GoalInformation = goalCreateDto.GoalInformation,
+            Information = goalCreateDto.Information,
             ClientId = goalCreateDto.ClientId
         };
 
@@ -81,7 +81,7 @@ public class GoalController : ControllerBase
         {
             Id = goalToCreate.Id,
             UserId = goalToCreate.UserId,
-            GoalInformation = goalCreateDto.GoalInformation,
+            Information = goalCreateDto.Information,
             ClientId = goalCreateDto.ClientId
         };
 
@@ -101,7 +101,7 @@ public class GoalController : ControllerBase
         }
 
         goal.UserId = goalCreateDto.UserId;
-        goal.GoalInformation = goalCreateDto.GoalInformation;
+        goal.Information = goalCreateDto.Information;
         goal.ClientId = goalCreateDto.ClientId;
 
         await _dataContext.SaveChangesAsync();
@@ -110,7 +110,7 @@ public class GoalController : ControllerBase
         {
             Id = goal.Id,
             UserId = goal.UserId,
-            GoalInformation = goalCreateDto.GoalInformation,
+            Information = goalCreateDto.Information,
             ClientId = goal.ClientId
         };
 

@@ -8,7 +8,7 @@ namespace TalkItOut.Entities
         public int Id { get; set; }
         public int UserId { get; set; }
         
-        public string GoalInformation { get; set; }
+        public string Information { get; set; }
         public int ClientId { get; set; }
         public User User { get; set; }
     }
@@ -18,9 +18,8 @@ namespace TalkItOut.Entities
         public int Id { get; set; }
         public int UserId { get; set; }
         
-        public string GoalInformation { get; set; }
+        public string Information { get; set; }
         public int ClientId { get; set; }
-        public User User { get; set; }
     }
 
     public class GoalCreateDto
@@ -28,9 +27,8 @@ namespace TalkItOut.Entities
         public int Id { get; set; }
         public int UserId { get; set; }
         
-        public string GoalInformation { get; set; }
+        public string Information { get; set; }
         public int ClientId { get; set; }
-        public User User { get; set; }
     }
 
     public class GoalConfiguration : IEntityTypeConfiguration<Goal>
