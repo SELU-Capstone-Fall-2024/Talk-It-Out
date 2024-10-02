@@ -10,6 +10,7 @@ namespace TalkItOut.Entities
         
         public string Information { get; set; }
         public int ClientId { get; set; }
+        public User User { get; set; }
     }
 
     public class GoalGetDto
