@@ -54,3 +54,22 @@ export type SessionUpdateDto = {
   groupId: number;
   clientId: number;
 }
+
+export type GoalGetDto = {
+  id: number;
+  userId: number;
+  goalInformation: string;
+  clientId: number;
+}
+
+export type GoalCreateDto = {
+  userId: number;
+  goalInformation: string;
+  clientId: number;
+}
+
+export type GoalUpdateDto = {
+  userId: number;
+  goalInformation: string;
+  clientId: number;
+}
