@@ -1,31 +1,32 @@
 export type Error = {
-    property: string;
-    message: string;
-  }
+  property: string;
+  message: string;
+};
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Response<T = any> = {
-  data: T | null;                      
-  errors: Error[];                    
-  hasErrors: boolean;                 
-}
+  data: T | null;
+  errors: Error[];
+  hasErrors: boolean;
+};
 
 export type UserGetDto = {
-id: number;
-name: string;
-}
+  id: number;
+  name: string;
+};
 
 export type ClientGetDto = {
   id: number;
   firstName: string;
   lastname: string;
   dateOfBirth: string;
-}
+};
 
 export type ClientCreateDto = {
   firstName: string;
   lastname: string;
   dateOfBirth: string;
-}
+};
 
 export type SessionGetDto = {
   id: number;
@@ -35,7 +36,7 @@ export type SessionGetDto = {
   endTime: string;
   groupId: number;
   clientId: number;
-}
+};
 
 export type SessionCreateDto = {
   userId: number;
@@ -44,7 +45,7 @@ export type SessionCreateDto = {
   endTime: string;
   groupId: number;
   clientId: number;
-}
+};
 
 export type SessionUpdateDto = {
   userId: number;
@@ -53,23 +54,23 @@ export type SessionUpdateDto = {
   endTime: string;
   groupId: number;
   clientId: number;
-}
+};
 
 export type GoalGetDto = {
   id: number;
   userId: number;
   goalInformation: string;
   clientId: number;
-}
+};
 
 export type GoalCreateDto = {
   userId: number;
   goalInformation: string;
   clientId: number;
-}
+};
 
 export type GoalUpdateDto = {
   userId: number;
   goalInformation: string;
   clientId: number;
-}
+};
