@@ -74,3 +74,16 @@ export type GoalUpdateDto = {
   goalInformation: string;
   clientId: number;
 };
+
+export type GroupGetDto = {
+  id: number,
+  clients: ClientGetDto[]
+};
+
+export type GroupCreateDto = {
+  clients: ClientGetDto[]
+};
+
+export type GroupUpdateDto = {
+  clients: ClientGetDto[]
+};
