@@ -6,7 +6,7 @@ using TalkItOut.Entities;
 namespace TalkItOut.Controllers;
 
 [ApiController]
-[Route("/clients")]
+[Route("/groups")]
 
 public class GroupController : ControllerBase
 {

@@ -4,6 +4,7 @@ import {UserRoutes} from './users/routes';
 import {SessionRoutes} from './sessions/routes';
 import Clients from './clients/clients-listing';
 import {GoalRoutes} from './goals/routes';
+import { GroupRoutes } from './groups/routes';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="sessions/*" element={<SessionRoutes />} />
           <Route path="clients/*" element={<Clients />} />
           <Route path="goals/*" element={<GoalRoutes />} />
+          <Route path="groups/*" element={<GroupRoutes />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
