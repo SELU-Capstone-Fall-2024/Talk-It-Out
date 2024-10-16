@@ -42,7 +42,7 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "TalkItOutAPI v1");
     options.RoutePrefix = string.Empty; // Set the Swagger UI at the root URL
 });
-
+app.UseCors();
 app.ApplyMigrations();
 // }
 

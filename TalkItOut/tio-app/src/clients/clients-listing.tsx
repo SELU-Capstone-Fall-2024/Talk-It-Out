@@ -1,19 +1,19 @@
-import React from 'react';
-import api from '../api/api';
-import {Response, ClientGetDto} from '../types';
-import {useAsync} from 'react-use';
-import Loader from '../components/loader';
+import React from "react";
+import api from "../api/api";
+import { Response, ClientGetDto } from "../types";
+import { useAsync } from "react-use";
+import { Spinner } from "tamagui";
 
 const Clients: React.FC = () => {
-  const {loading, value: clients} = useAsync(async () => {
-    const response = await api.get<Response<ClientGetDto[]>>('/clients');
+  const { loading, value: clients } = useAsync(async () => {
+    const response = await api.get<Response<ClientGetDto[]>>("/clients");
     return response.data;
   });
 
   return (
     <div>
       <h1>Clients</h1>
-      {loading && <Loader />}
+      {loading && <Spinner />}
       {clients?.hasErrors && <div>Error loading clients.</div>}
       {clients && !loading && clients.data?.length === 0 && (
         <div>No clients found.</div>
@@ -23,7 +23,7 @@ const Clients: React.FC = () => {
           {clients.data?.map((client) => (
             <li key={client.id}>
               {client.firstName}
-              {client.lastname}
+              {client.lastName}
               {client.dateOfBirth}
             </li>
           ))}

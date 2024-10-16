@@ -1,21 +1,21 @@
-import React from 'react';
-import api from '../api/api';
-import {Response, SessionGetDto} from '../types';
-import {useAsync} from 'react-use';
-import Loader from '../components/loader';
+import React from "react";
+import api from "../api/api";
+import { Response, SessionGetDto } from "../types";
+import { useAsync } from "react-use";
+import { H1, Spinner } from "tamagui";
 
-const Sessions: React.FC = () => {
-  const {loading, value: sessions} = useAsync(async () => {
-    const response = await api.get<Response<SessionGetDto[]>>('/sessions');
+export const Sessions: React.FC = () => {
+  const { loading, value: sessions } = useAsync(async () => {
+    const response = await api.get<Response<SessionGetDto[]>>("/sessions");
     return response.data;
   });
 
   return (
     <div>
-      <h1>Sessions</h1>
-      {loading && <Loader />}
+      <H1>Sessions</H1>
+      {loading && <Spinner />}
       {sessions?.hasErrors && <div>Error loading sessions.</div>}
-      {sessions && !loading && sessions.data?.length === 0 && (
+      {sessions && !loading && sessions.data == null && (
         <div>No sessions found.</div>
       )}
       {!loading && sessions && (
