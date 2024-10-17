@@ -10,7 +10,15 @@ using TalkItOut.Extensions;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCors();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()  
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
 builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
@@ -31,7 +39,17 @@ builder.Configuration.AddJsonFile("appsettings.json", optional: false);
 builder.Services.AddDbContext<DataContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("DbSet")));
 
+builder.Services.AddScoped<DataSeeder>();
+
 WebApplication app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var seeder = services.GetRequiredService<DataSeeder>();
+
+    seeder.Seed();
+}
 
 //Don't forget to configure environments for builds :)
 // if (app.Environment.IsDevelopment())
@@ -42,7 +60,7 @@ app.UseSwaggerUI(options =>
     options.SwaggerEndpoint("/swagger/v1/swagger.json", "TalkItOutAPI v1");
     options.RoutePrefix = string.Empty; // Set the Swagger UI at the root URL
 });
-app.UseCors();
+app.UseCors("AllowAll");
 app.ApplyMigrations();
 // }
 
@@ -51,6 +69,5 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
-app.MapIdentityApi<User>();
 
 app.Run();
