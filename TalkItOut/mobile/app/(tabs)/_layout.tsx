@@ -11,8 +11,15 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({color, focused}) => <TabBarIcon name={'search'} />,
+          title: 'Clients',
+          tabBarIcon: ({color, focused}) => <TabBarIcon name={'person'} />,
+        }}
+      />
+      <Tabs.Screen
+        name="calendar"
+        options={{
+          title: 'Calendar',
+          tabBarIcon: ({color, focused}) => <TabBarIcon name={'calendar'} />,
         }}
       />
     </Tabs>

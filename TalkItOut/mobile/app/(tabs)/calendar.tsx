@@ -10,7 +10,6 @@ export default function Calendar() {
       }}
     >
       <Text>Calendar</Text>
-      <Button title="Button"></Button>
     </View>
   );
 }

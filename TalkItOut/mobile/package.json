@@ -24,6 +24,7 @@
     "@tamagui/shorthands": "^1.112.21",
     "@tamagui/theme-base": "^1.112.21",
     "@tamagui/themes": "^1.112.21",
+    "axios": "^1.7.7",
     "babel-plugin-transform-inline-environment-variables": "^0.4.4",
     "expo": "~51.0.28",
     "expo-constants": "~16.0.2",
