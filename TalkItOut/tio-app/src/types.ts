@@ -26,6 +26,7 @@ export type ClientCreateDto = {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
+  userId: number;
 };
 
 export type SessionGetDto = {
