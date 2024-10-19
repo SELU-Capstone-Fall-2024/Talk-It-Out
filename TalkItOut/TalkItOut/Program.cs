@@ -43,6 +43,7 @@ builder.Services.AddScoped<DataSeeder>();
 
 WebApplication app = builder.Build();
 
+app.ApplyMigrations();
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
@@ -61,7 +62,6 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = string.Empty; // Set the Swagger UI at the root URL
 });
 app.UseCors("AllowAll");
-app.ApplyMigrations();
 // }
 
 app.UseRouting();
