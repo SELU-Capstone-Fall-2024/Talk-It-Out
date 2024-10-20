@@ -13,6 +13,24 @@ export type Response<T = any> = {
 export type UserGetDto = {
   id: number;
   name: string;
+  username: string;
+};
+
+export type UserCreateDto = {
+  name: string;
+  username: string;
+  password: string;
+};
+
+export type UserUpdateDto = {
+  name: string;
+  username: string;
+  password: string;
+};
+
+export type UserLoginDto = {
+  username: string;
+  password: string;
 };
 
 export type ClientGetDto = {

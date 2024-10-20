@@ -25,6 +25,16 @@ const Navbar: React.FC = () => {
             Sessions
           </Link>
         </li>
+        <li style={styles.navItem}>
+          <Link to="/users/listing" style={styles.navLink}>
+            Users
+          </Link>
+        </li>
+        <li style={styles.navItem}>
+          <Link to="/calendar" style={styles.navLink}>
+            Calendar
+          </Link>
+        </li>
       </ul>
     </nav>
   );

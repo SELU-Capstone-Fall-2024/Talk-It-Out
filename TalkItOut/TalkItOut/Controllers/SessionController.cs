@@ -73,6 +73,7 @@ namespace TalkItOut.Controllers;
         {
             var response = new Response();
 
+            // Create the session object from the DTO
             var sessionToCreate = new Session
             {
                 UserId = sessionCreateDto.UserId,
@@ -80,12 +81,13 @@ namespace TalkItOut.Controllers;
                 StartTime = sessionCreateDto.StartTime,
                 EndTime = sessionCreateDto.EndTime,
                 GroupId = sessionCreateDto.GroupId,
-                ClientId = sessionCreateDto.ClientId
+                ClientId = sessionCreateDto.ClientId 
             };
 
             await _dataContext.Set<Session>().AddAsync(sessionToCreate);
             await _dataContext.SaveChangesAsync();
 
+            // Prepare the response data
             response.Data = new SessionGetDto
             {
                 Id = sessionToCreate.Id,
@@ -94,7 +96,7 @@ namespace TalkItOut.Controllers;
                 StartTime = sessionToCreate.StartTime,
                 EndTime = sessionToCreate.EndTime,
                 GroupId = sessionToCreate.GroupId,
-                ClientId = sessionCreateDto.ClientId
+                ClientId = sessionToCreate.ClientId 
             };
 
             return Ok(response);

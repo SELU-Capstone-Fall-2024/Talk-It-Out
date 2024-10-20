@@ -43,13 +43,13 @@ builder.Services.AddScoped<DataSeeder>();
 
 WebApplication app = builder.Build();
 
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var seeder = services.GetRequiredService<DataSeeder>();
-
-    seeder.Seed();
-}
+// using (var scope = app.Services.CreateScope())
+// {
+//     var services = scope.ServiceProvider;
+//     var seeder = services.GetRequiredService<DataSeeder>();
+//
+//     seeder.Seed();
+// }
 
 //Don't forget to configure environments for builds :)
 // if (app.Environment.IsDevelopment())

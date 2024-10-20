@@ -1,0 +1,11 @@
+.custom-calendar {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.session-indicator {
+  display: block;
+  text-align: center; /* Center the indicator */
+  font-size: 1.2em; /* Adjust size as needed */
+  color: red; /* Change color if needed */
+}
