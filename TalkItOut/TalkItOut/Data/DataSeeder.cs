@@ -14,7 +14,7 @@ public class DataSeeder
     }
     
     public void Seed()
-    {
+    { 
         SeedUsers().Wait();
 
         _dataContext.SaveChanges();
@@ -26,7 +26,8 @@ public class DataSeeder
         {
             UserName = "JoeSmith1",
             NormalizedUserName = "JOESMITH1@DEVELOPMENT.COM",
-            Name = "Joe Smith",
+            FirstName = "Joe",
+            LastName = "Smith",
             EmailConfirmed = true,
             Email = "JOESMITH1@DEVELOPMENT.COM"
         };

@@ -27,16 +27,16 @@ public class UserController : ControllerBase
 
     [AllowAnonymous]
     [HttpPost("authenticate")]
-    public async Task<IActionResult> Authenticate([FromBody] UserLoginDto dto)
+    public async Task<IActionResult> Authenticate([FromBody] LoginDto dto)
     {
         var response = new Response();
 
         var user = await _userManager.FindByNameAsync(dto.UserName ?? "");
-        
+
         if (user == null)
         {
             response.AddError(string.Empty, "Username or password is incorrect");
-            return BadRequest(response);
+            return NotFound(response);
         }
 
         var result = await _signInManager.PasswordSignInAsync(
@@ -47,14 +47,14 @@ public class UserController : ControllerBase
 
         if (!result.Succeeded)
         {
-            response.AddError(string.Empty, "UserName or password is incorrect");
+            response.AddError(string.Empty, "Username or password is incorrect");
             return BadRequest(response);
         }
 
         response.Data = result.Succeeded;
         return Ok(response);
     }
-    
+
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
@@ -65,18 +65,18 @@ public class UserController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
-        var response = new Response();
-
-        var usersGetDto = _dataContext.Set<User>()
-            .Select(x => new UserGetDto
-            {
-                Id = x.Id,
-                Name = x.Name,
-                UserName = x.UserName,
-            })
-            .ToList();
-
-        response.Data = usersGetDto;
+        var response = new Response
+        {
+            Data = await _userManager.Users
+                .Select(x => new UserGetDto
+                {
+                    FirstName = x.FirstName,
+                    LastName = x.LastName,
+                    UserName = x.UserName,
+                    Email = x.Email,
+                })
+                .ToListAsync()
+        };
         return Ok(response);
     }
 
@@ -85,22 +85,21 @@ public class UserController : ControllerBase
     {
         var response = new Response();
 
-        var user = await _dataContext.Set<User>()
-            .FirstOrDefaultAsync(x => x.Id == id);
+        var user = await _userManager.FindByIdAsync(id.ToString());
 
         if (user == null)
         {
             response.AddError("Id", "User could not be found.");
+            return NotFound(response);
         }
 
-        var userGetDto = new UserGetDto()
+        response.Data = new UserGetDto()
         {
-            Id = user.Id,
-            Name = user.Name,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
             UserName = user.UserName,
+            Email = user.Email,
         };
-
-        response.Data = userGetDto;
 
         return Ok(response);
     }
@@ -109,82 +108,130 @@ public class UserController : ControllerBase
     public async Task<IActionResult> Create([FromBody] UserCreateDto userCreateDto)
     {
         var response = new Response();
+
+        var existingUser = await _userManager.FindByNameAsync(userCreateDto.UserName);
+
+        if (existingUser != null)
+        {
+            response.AddError("UserName", "User already exists.");
+            return BadRequest(response);
+        }
+
         var userToCreate = new User
         {
-            Name = userCreateDto.Name,
+            FirstName = userCreateDto.FirstName,
+            LastName = userCreateDto.LastName,
             UserName = userCreateDto.UserName,
-            Password = userCreateDto.Password,
+            Email = userCreateDto.Email
         };
 
-        await _dataContext.Set<User>().AddAsync(userToCreate);
+        userToCreate.NormalizedUserName = _userManager.NormalizeName(userCreateDto.UserName);
+        userToCreate.NormalizedEmail = _userManager.NormalizeEmail(userCreateDto.Email);
+
+        var result = await _userManager.CreateAsync(userToCreate, userCreateDto.Password);
+
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                response.AddError(error.Code, error.Description);
+            }
+            return BadRequest(response);
+        }
+
         await _dataContext.SaveChangesAsync();
 
-        response.Data = new UserGetDto()
+        return CreatedAtAction(nameof(GetById), new { id = userToCreate.Id }, new UserGetDto
         {
-            Id = userToCreate.Id,
-            Name = userToCreate.Name,
+            FirstName = userCreateDto.FirstName,
+            LastName = userToCreate.LastName,
             UserName = userToCreate.UserName,
-        };
-
-        return Ok(response);
+            Email = userToCreate.Email
+        });
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] UserCreateDto userCreateDto)
+    public async Task<IActionResult> Update(int id, [FromBody] UserUpdateDto userUpdateDto)
     {
         var response = new Response();
-        var user = await _dataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == id);
+        var user = await _userManager.FindByIdAsync(id.ToString());
 
         if (user == null)
         {
             response.AddError("Id", "User could not be found.");
+            return NotFound(response);
         }
 
-        if (!string.IsNullOrEmpty(userCreateDto.Name))
+        if (!string.IsNullOrEmpty(userUpdateDto.FirstName))
         {
-            user.Name = userCreateDto.Name;
+            user.FirstName = userUpdateDto.FirstName;
         }
 
-        if (!string.IsNullOrEmpty(userCreateDto.UserName))
+        if (!string.IsNullOrEmpty(userUpdateDto.LastName))
         {
-            user.UserName = userCreateDto.UserName;
+            user.LastName = userUpdateDto.LastName;
         }
-        
-        if (!string.IsNullOrEmpty(userCreateDto.Password))
+
+        if (!string.IsNullOrEmpty(userUpdateDto.UserName))
         {
-            user.Password = userCreateDto.Password;
+            user.UserName = userUpdateDto.UserName;
+        }
+
+        if (!string.IsNullOrEmpty(userUpdateDto.Email))
+        {
+            user.Email = userUpdateDto.Email;
+        }
+
+        var result = await _userManager.UpdateAsync(user);
+        if (!result.Succeeded)
+        {
+            response.AddError("Update", "User update failed.");
+            return BadRequest(response);
         }
 
         await _dataContext.SaveChangesAsync();
 
-        response.Data = new UserGetDto()
+        return Ok(new UserGetDto
         {
-            Id = user.Id,
-            Name = user.Name,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
             UserName = user.UserName,
-        };
-
-        return Ok(response);
+            Email = user.Email,
+        });
     }
     
     [HttpPut("users/{id}/password-update")]
     public async Task<IActionResult> UpdatePassword(int id, [FromBody] PasswordUpdateDto passwordUpdateDto)
     {
         var response = new Response();
-        var user = await _dataContext.Set<User>().FirstOrDefaultAsync(x => x.Id == id);
+        var user = await _userManager.FindByIdAsync(id.ToString());
 
         if (user == null)
         {
             response.AddError("Id", "User could not be found.");
-            return NotFound(response); // Return NotFound if user does not exist
+            return NotFound(response);
         }
 
-        if (user.PasswordHash != passwordUpdateDto.CurrentPassword)
+        var passwordCheck = await _userManager.CheckPasswordAsync(user, passwordUpdateDto.CurrentPassword);
+
+
+        if (!passwordCheck)
         {
-            return Unauthorized(new { message = "Current password is incorrect." });
+            response.AddError("CurrentPassword", "Current password is incorrect.");
+            return Unauthorized(response);
         }
 
-        user.PasswordHash = passwordUpdateDto.NewPassword;
+        var result = await _userManager.ChangePasswordAsync(user, passwordUpdateDto.CurrentPassword, passwordUpdateDto.NewPassword);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                response.AddError(error.Code, error.Description);
+            }
+
+            return BadRequest(response);
+        }
+
         await _dataContext.SaveChangesAsync();
 
         return Ok(new { message = "Password updated successfully." });
@@ -197,11 +244,25 @@ public class UserController : ControllerBase
     {
         var response = new Response();
 
-        var userToDelete = await _dataContext.Set<User>()
-            .FirstOrDefaultAsync(x => x.Id == id);
+        var userToDelete = await _userManager.FindByIdAsync(id.ToString());
 
-        _dataContext.Set<User>().Remove(userToDelete);
-
-        return Ok();
+        if (userToDelete == null)
+        {
+            response.AddError("Id", "User could not be found.");
+            return NotFound(response);
+        }
+        var result = await _userManager.DeleteAsync(userToDelete);
+        if (!result.Succeeded)
+        {
+            response.AddError("Delete", "User delete failed.");
+            return BadRequest(response);
+        }
+        return Ok(new { message = "User deleted successfully." });
     }
+}
+
+public class LoginDto
+{
+    public string UserName { get; set; }
+    public string Password { get; set; }
 }
