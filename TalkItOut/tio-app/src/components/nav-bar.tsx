@@ -1,10 +1,16 @@
 import React, { CSSProperties } from "react";
 import { Link } from "react-router-dom";
+import Logout from "./logout";
 
 const Navbar: React.FC = () => {
   return (
     <nav style={styles.nav}>
       <ul style={styles.navList}>
+        <li style={styles.navItem}>
+          <Link to="/home" style={styles.navLink}>
+            Home
+          </Link>
+        </li>
         <li style={styles.navItem}>
           <Link to="/clients/listing" style={styles.navLink}>
             Clients
@@ -35,12 +41,14 @@ const Navbar: React.FC = () => {
             Calendar
           </Link>
         </li>
+        <li style={styles.navItem}>
+          <Logout />
+        </li>
       </ul>
     </nav>
   );
 };
 
-// Define styles using CSSProperties
 const styles: { [key: string]: CSSProperties } = {
   nav: {
     background: "#282c34",

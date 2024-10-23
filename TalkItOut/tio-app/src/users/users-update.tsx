@@ -8,9 +8,10 @@ const UserUpdate: React.FC = () => {
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState<UserUpdateDto>({
-    name: "",
+    firstName: "",
+    lastName: "",
     username: "",
-    password: "", // Password will not be updated here
+    email: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -23,8 +24,8 @@ const UserUpdate: React.FC = () => {
       try {
         const response = await api.get<UserGetDto>(`/users/${id}`);
         if (response.status === 200) {
-          const { name, username } = response.data;
-          setUserData({ name, username, password: "" });
+          const { firstName, lastName, username, email } = response.data;
+          setUserData({ firstName, lastName, username, email });
         } else {
           setError("Failed to load user.");
         }
@@ -50,8 +51,10 @@ const UserUpdate: React.FC = () => {
     try {
       // Prepare update object, only include fields that are not empty
       const updateData: Partial<UserUpdateDto> = {};
-      if (userData.name) updateData.name = userData.name;
+      if (userData.firstName) updateData.firstName = userData.firstName;
+      if (userData.lastName) updateData.lastName = userData.lastName;
       if (userData.username) updateData.username = userData.username;
+      if (userData.email) updateData.email = userData.email;
 
       const response = await api.put(`/users/${id}`, updateData);
       if (response.status === 200) {
@@ -71,15 +74,7 @@ const UserUpdate: React.FC = () => {
       <h1>Update User</h1>
       {error && <div style={{ color: "red" }}>{error}</div>}
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name</label>
-          <input
-            type="string"
-            value={userData.name}
-            onChange={(e) => handleChange("name")(e.target.value)}
-            placeholder="Enter Name"
-          />
-        </div>
+
         <div>
           <label>Username</label>
           <input

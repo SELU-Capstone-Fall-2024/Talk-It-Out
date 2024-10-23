@@ -7,11 +7,10 @@ const Logout: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await api.post("/logout"); // Call the logout API endpoint
-      navigate("/login"); // Redirect to the login page or wherever needed
+      await api.post("/users/logout");
+      navigate("/");
     } catch (error) {
       console.error("An error occurred during logout:", error);
-      // Optionally, handle error (e.g., show a notification)
     }
   };
 

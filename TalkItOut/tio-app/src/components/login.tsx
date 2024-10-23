@@ -1,18 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/api"; // Adjust the import based on your project structure
-import { UserLoginDto } from "../types"; // Adjust the import based on your types location
-import {
-  YStack,
-  Input,
-  Button,
-  Text,
-  SizableText,
-  Form,
-  SizeTokens,
-} from "tamagui";
+import api from "../api/api";
+import { UserLoginDto } from "../types";
+import { YStack, Input, Button, Text, SizableText, Form } from "tamagui";
 import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
-//import config from "../../tamagui.config";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -32,20 +23,20 @@ const Login: React.FC = () => {
       }));
     };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleFormSubmit = async () => {
     setLoading(true);
-    setError(null); // Clear any previous errors
+    setError(null);
+
     if (!userData.username || !userData.password) {
       setError("Username and password are required.");
       setLoading(false);
       return;
     }
+
     try {
-      const response = await api.post("/authenticate", userData); // Adjust the endpoint as necessary
+      const response = await api.post("/users/authenticate", userData);
       if (response.status === 200) {
-        // Successful authentication
-        navigate("/users"); // Redirect to the users page or wherever needed
+        navigate("/home");
       } else {
         setError("Username or password is incorrect");
       }
@@ -56,54 +47,98 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleFormSubmit();
+  };
+
   return (
     <YStack
       flex={1}
       justifyContent="center"
       alignItems="center"
-      padding="$4"
-      background="$background"
+      padding={20}
+      background="$darkBackground"
+      minHeight="100vh"
+      width="100vw"
     >
-      <SizableText size="$8" marginBottom="$4">
-        Login
-      </SizableText>
-      {error && (
-        <Text color="red" marginBottom="$2">
-          {error}
-        </Text>
-      )}
+      <YStack
+        width="100%"
+        maxWidth={400}
+        padding={30}
+        borderRadius={15}
+        backgroundColor="$darkPrimary"
+        shadowColor="rgba(0, 0, 0, 0.5)"
+        shadowRadius={10}
+        shadowOpacity={0.5}
+        shadowOffset={{ width: 0, height: 4 }}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <SizableText size={30} marginBottom={20} color="#e6f2ff">
+          Login
+        </SizableText>
+        {error && (
+          <Text color="red" marginBottom={15}>
+            {error}
+          </Text>
+        )}
 
-      <Form onSubmit={() => handleSubmit} gap="$4" width="80%" maxWidth={400}>
-        <YStack gap="$2">
-          <SizableText size="$6">Username</SizableText>
-          <Input
-            size="$4"
-            value={userData.username}
-            onChange={handleChange("username")} // Fix onChangeText to onChange
-            placeholder="Enter Username"
-          />
-        </YStack>
+        <Form onSubmit={() => handleSubmit} gap={20} width="100%">
+          <YStack gap={10}>
+            <SizableText size={18} color="#e6f2ff">
+              Username
+            </SizableText>
+            <Input
+              size={46}
+              flex={1}
+              gap={20}
+              padding={4}
+              value={userData.username}
+              onChange={handleChange("username")}
+              placeholder="Enter Username"
+              borderColor="#cce6ff"
+              background="#3d444d"
+              borderRadius={2}
+              placeholderTextColor="#e6f2ff"
+            />
+          </YStack>
 
-        <YStack space="$2">
-          <SizableText size="$6">Password</SizableText>
-          <Input
-            size="$4"
-            secureTextEntry
-            value={userData.password}
-            onChange={handleChange("password")} // Fix onChangeText to onChange
-            placeholder="Enter Password"
-          />
-        </YStack>
+          <YStack gap={10}>
+            <SizableText size={18} color="#e6f2ff">
+              Password
+            </SizableText>
+            <Input
+              size={46}
+              flex={1}
+              padding={4}
+              secureTextEntry
+              value={userData.password}
+              onChange={handleChange("password")}
+              placeholder="Enter Password"
+              borderColor="#cce6ff"
+              background="#3d444d"
+              borderRadius={2}
+              placeholderTextColor="#e6f2ff"
+            />
+          </YStack>
 
-        <Button
-          size="$4"
-          disabled={loading}
-          theme={loading ? "red" : "blue"}
-          onPress={() => handleSubmit}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </Button>
-      </Form>
+          <Button
+            width={100}
+            alignSelf="center"
+            size={30}
+            padding={12}
+            disabled={loading}
+            background="#e6f2ff"
+            style={{ overflow: "hidden", textAlign: "center" }}
+            theme={loading ? "secondary" : "primary"}
+            onPress={handleFormSubmit}
+            borderRadius={4}
+          >
+            <Text fontSize={18}>{loading ? "Logging in..." : "Login"}</Text>
+          </Button>
+        </Form>
+      </YStack>
     </YStack>
   );
 };

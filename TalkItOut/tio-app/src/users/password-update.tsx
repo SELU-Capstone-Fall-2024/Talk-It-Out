@@ -15,7 +15,6 @@ const PasswordUpdate: React.FC = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Send current and new password to the server for verification and update
       const response = await api.put(`/users/${id}/password-update`, {
         currentPassword,
         newPassword,
