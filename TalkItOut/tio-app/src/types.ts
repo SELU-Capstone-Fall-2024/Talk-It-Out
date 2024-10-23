@@ -12,20 +12,30 @@ export type Response<T = any> = {
 
 export type UserGetDto = {
   id: number;
-  name: string;
+  firstName: string;
+  lastName: string;
   username: string;
+  email: string;
 };
 
 export type UserCreateDto = {
-  name: string;
+  firstName: string;
+  lastName: string;
   username: string;
+  email: string;
   password: string;
 };
 
 export type UserUpdateDto = {
-  name: string;
+  firstName: string;
+  lastName: string;
   username: string;
-  password: string;
+  email: string;
+};
+
+export type PasswordUpdateDto = {
+  currentPassword: string;
+  newPassword: string;
 };
 
 export type UserLoginDto = {
@@ -47,6 +57,14 @@ export type ClientCreateDto = {
   userId: number;
 };
 
+export type ClientUpdateDto = {
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  userId: number;
+  isDateOfBirthUpdated: boolean;
+};
+
 export type SessionGetDto = {
   id: number;
   userId: number;
@@ -59,7 +77,6 @@ export type SessionGetDto = {
 
 export type SessionCreateDto = {
   userId: number;
-  durationMinutes: number;
   startTime: string;
   endTime: string;
   groupId: number;
@@ -68,9 +85,10 @@ export type SessionCreateDto = {
 
 export type SessionUpdateDto = {
   userId: number;
-  durationMinutes: number;
   startTime: string;
+  startTimeChanged: boolean;
   endTime: string;
+  endTimeChanged: boolean;
   groupId: number;
   clientId: number;
 };
@@ -78,13 +96,13 @@ export type SessionUpdateDto = {
 export type GoalGetDto = {
   id: number;
   userId: number;
-  goalInformation: string;
+  information: string;
   clientId: number;
 };
 
 export type GoalCreateDto = {
   userId: number;
-  goalInformation: string;
+  information: string;
   clientId: number;
 };
 
@@ -96,13 +114,16 @@ export type GoalUpdateDto = {
 
 export type GroupGetDto = {
   id: number;
-  clients: ClientGetDto[];
+  clientIds: number[];
+  userId: number;
 };
 
 export type GroupCreateDto = {
-  clients: ClientGetDto[];
+  clientIds: number[];
+  userId: number;
 };
 
 export type GroupUpdateDto = {
-  clients: ClientGetDto[];
+  clientIds: number[];
+  userId: number;
 };
