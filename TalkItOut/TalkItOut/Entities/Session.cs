@@ -30,9 +30,18 @@ namespace TalkItOut.Entities
     public class SessionCreateDto
     {
         public int UserId { get; set; }
-        public int DurationMinutes { get; set; }
         public DateTimeOffset StartTime { get; set; }
         public DateTimeOffset EndTime { get; set; }
+        public int? GroupId { get; set; }
+        public int? ClientId { get; set; }
+    }
+    public class SessionUpdateDto
+    {
+        public int UserId { get; set; }
+        public DateTimeOffset StartTime { get; set; }
+        public bool StartTimeChanged { get; set; }
+        public DateTimeOffset EndTime { get; set; }
+        public bool EndTimeChanged { get; set; }
         public int? GroupId { get; set; }
         public int? ClientId { get; set; }
     }
