@@ -26,7 +26,8 @@ public class GroupController : ControllerBase
             .Select(x => new GroupGetDto()
             {
                 Id = x.Id,
-                Clients = x.Clients.ToList()
+                ClientIds = x.ClientIds.ToList(),
+                UserId = x.UserId,
             })
             .ToList();
 
@@ -46,12 +47,14 @@ public class GroupController : ControllerBase
         if (group == null)
         {
             response.AddError("Id", "Group could not be found.");
+            return NotFound(response);
         }
         
         var groupDto = new GroupGetDto
             {
                 Id = group.Id,
-                Clients = group.Clients.ToList()
+                ClientIds = group.ClientIds.ToList(),
+                UserId = group.UserId,
             };
 
         response.Data = groupDto;
@@ -66,19 +69,19 @@ public class GroupController : ControllerBase
 
         var groupToCreate = new Group
         {
-            Clients = groupCreateDto.Clients
+            ClientIds = groupCreateDto.ClientIds,
+            UserId = groupCreateDto.UserId,
         };
 
         await _dataContext.Set<Group>().AddAsync(groupToCreate);
         await _dataContext.SaveChangesAsync();
 
-        response.Data = new GroupGetDto
-        {
-            Id = groupToCreate.Id,
-            Clients = groupToCreate.Clients.ToList()
-        };
-
-        return Ok(response);
+        return CreatedAtAction(nameof(GetById), new { id = groupToCreate.Id }, new GroupGetDto
+            {
+                Id = groupToCreate.Id,
+                ClientIds = groupToCreate.ClientIds.ToList(),
+                UserId = groupToCreate.UserId,
+            });    
     }
 
     [HttpPut("{id}")]
@@ -91,16 +94,23 @@ public class GroupController : ControllerBase
         if (group == null)
         {
             response.AddError("Id", "Group could not be found.");
+            return NotFound(response);
         }
         
-        group.Clients = groupCreateDto.Clients;
-        
+        group.ClientIds = groupCreateDto.ClientIds;
+
+        if (groupCreateDto.UserId > 0)
+        {
+            group.UserId = groupCreateDto.UserId;
+        }
+
         await _dataContext.SaveChangesAsync();
 
         response.Data = new GroupGetDto
         {
             Id = group.Id,
-            Clients = group.Clients.ToList()
+            ClientIds = group.ClientIds.ToList(),
+            UserId = group.UserId,
         };
 
         return Ok(response);
@@ -113,9 +123,15 @@ public class GroupController : ControllerBase
 
         var groupToDelete = await _dataContext.Set<Group>()
             .FirstOrDefaultAsync(x => x.Id == id);
+        if (groupToDelete == null)
+        {
+            response.AddError("Id", "Group could not be found.");
+            return NotFound(response);
+        }
 
         _dataContext.Set<Group>().Remove(groupToDelete);
+        await _dataContext.SaveChangesAsync();
 
-        return Ok();
+        return Ok(new { message = "Group deleted successfully." });
     }
 }

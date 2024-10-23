@@ -100,7 +100,7 @@ public class GoalController : ControllerBase
             return NotFound(response);
         }
 
-        if (goal.UserId > 0)
+        if (goalCreateDto.UserId > 0)
         {
             goal.UserId = goalCreateDto.UserId;
         }
@@ -145,6 +145,6 @@ public class GoalController : ControllerBase
         await _dataContext.SaveChangesAsync();
 
 
-        return Ok(new { message = "Group deleted successfully." });
+        return Ok(new { message = "Goal deleted successfully." });
     }
 }

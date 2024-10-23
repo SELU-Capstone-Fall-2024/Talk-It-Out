@@ -11,6 +11,7 @@ public class User : IdentityUser<int>
     public string LastName { get; set; }
     public List<Session> Sessions { get; set; } = new();
     public List<Goal> Goals { get; set; } = new();
+    public List<Group> Groups { get; set; } = new();
 }
 
 public class UserGetDto
