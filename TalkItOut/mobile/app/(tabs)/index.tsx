@@ -38,7 +38,7 @@ export default function Index() {
             {clients.map((client) => {
               return (
                 <>
-                  <ClientModal client={client} />
+                  <ClientModal client={client} key={client.id} />
                 </>
               );
             })}

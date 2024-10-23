@@ -37,6 +37,7 @@ export type SessionGetDto = {
   endTime: string;
   groupId: number;
   clientId: number;
+  clientName: string;
 };
 
 export type SessionCreateDto = {

@@ -22,6 +22,7 @@ namespace TalkItOut.Controllers;
             var response = new Response();
 
             var sessions = _dataContext.Set<Session>()
+                .Include(x => x.Client)
                 .Select(x => new SessionGetDto
                 {
                     Id = x.Id,
@@ -30,7 +31,8 @@ namespace TalkItOut.Controllers;
                     StartTime = x.StartTime,
                     EndTime = x.EndTime,
                     GroupId = x.GroupId,
-                    ClientId = x.ClientId
+                    ClientId = x.ClientId,
+                    ClientName = x.Client.FirstName + " " + x.Client.LastName
                 })
                 .ToList();
 

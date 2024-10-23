@@ -25,6 +25,7 @@ namespace TalkItOut.Entities
         public DateTimeOffset EndTime { get; set; }
         public int GroupId { get; set; }
         public int ClientId { get; set; }
+        public string ClientName { get; set; }
     }
 
     public class SessionCreateDto

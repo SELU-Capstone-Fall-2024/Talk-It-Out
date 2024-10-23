@@ -1,7 +1,9 @@
 import {TabBarIcon} from '@/components/navigation/TabBarIcon';
 import {Tabs} from 'expo-router';
+import {LogBox} from 'react-native';
 
 export default function TabLayout() {
+  LogBox.ignoreAllLogs();
   return (
     <Tabs
       screenOptions={{
