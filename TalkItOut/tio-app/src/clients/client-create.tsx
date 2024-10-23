@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api"; // Adjust the import according to your folder structure
 import { ClientCreateDto } from "../types"; // Adjust the import according to your folder structure
+import type { SizeTokens } from 'tamagui'
+import { Button, Input, TextArea, XStack, YStack } from 'tamagui'
 
 const ClientCreate: React.FC = () => {
   const navigate = useNavigate();
