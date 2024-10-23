@@ -47,6 +47,7 @@ public class ClientController : ControllerBase
         if (client == null)
         {
             response.AddError("Id", "Client could not be found.");
+            return NotFound(response);
         }
         
         var clientDto = new ClientGetDto
@@ -71,21 +72,20 @@ public class ClientController : ControllerBase
         {
             FirstName = clientCreateDto.FirstName,
             LastName = clientCreateDto.LastName,
-            DateOfBirth = clientCreateDto.DateOfBirth
+            DateOfBirth = clientCreateDto.DateOfBirth,
+            UserId = clientCreateDto.UserId
         };
 
         await _dataContext.Set<Client>().AddAsync(clientToCreate);
         await _dataContext.SaveChangesAsync();
-
-        response.Data = new ClientGetDto
+        
+        return CreatedAtAction(nameof(GetById), new { id = clientToCreate.Id }, new ClientGetDto
         {
             Id = clientToCreate.Id,
             FirstName = clientCreateDto.FirstName,
             LastName = clientCreateDto.LastName,
-            DateOfBirth = clientCreateDto.DateOfBirth
-        };
-
-        return Ok(response);
+            DateOfBirth = clientCreateDto.DateOfBirth,
+        });    
     }
 
     [HttpPut("{id}")]
@@ -125,8 +125,17 @@ public class ClientController : ControllerBase
         var clientToDelete = await _dataContext.Set<Client>()
             .FirstOrDefaultAsync(x => x.Id == id);
 
+        if (clientToDelete == null)
+        {
+            response.AddError("Id", "Client could not be found.");
+            return NotFound(response);
+        }
+
         _dataContext.Set<Client>().Remove(clientToDelete);
 
-        return Ok();
+        await _dataContext.SaveChangesAsync();
+
+        return Ok(new { message = "Client deleted successfully." });
     }
+
 }
