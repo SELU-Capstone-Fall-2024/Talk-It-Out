@@ -1,12 +1,55 @@
-import { createTamagui } from "tamagui";
-const tamaguiConfig = createTamagui(config);
-// this makes typescript properly type everything based on the config
+import { createTamagui, createTokens } from "@tamagui/core";
 
-type Conf = typeof tamaguiConfig;
-
-declare module "tamagui" {
-  interface TamaguiCustomConfig extends Conf {}
-}
-export default tamaguiConfig;
-// depending on if you chose tamagui, @tamagui/core, or @tamagui/web
-// be sure the import and declare module lines both use that same name
+export default createTamagui({
+  tokens: createTokens({
+    size: {
+      sm: 38,
+      md: 46,
+      lg: 60,
+    },
+    space: {
+      sm: 15,
+      md: 20,
+      lg: 25,
+    },
+    radius: {
+      sm: 4,
+      md: 8,
+      lg: 12,
+    },
+    color: {
+      blue: "#AAAAAA",
+    },
+    zIndex: {
+      low: 1,
+    },
+  }),
+  components: {
+    Button: {
+      variants: {
+        primary: {
+          backgroundColor: "$primary",
+          color: "white",
+          padding: 12,
+          borderRadius: 8,
+        },
+        secondary: {
+          backgroundColor: "$secondary",
+          color: "white",
+          padding: 12,
+          borderRadius: 8,
+        },
+      },
+    },
+  },
+  themes: {
+    light: {
+      background: "#fff",
+      color: "#000",
+    },
+    dark: {
+      background: "#000",
+      color: "#fff",
+    },
+  },
+});
