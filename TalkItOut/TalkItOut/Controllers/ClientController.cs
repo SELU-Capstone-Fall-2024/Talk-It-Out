@@ -88,8 +88,9 @@ public class ClientController : ControllerBase
         });    
     }
 
+    //for some reason, this is requiring first and last name to update, which will need to be fixed in the future
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] ClientCreateDto clientCreateDto)
+    public async Task<IActionResult> Update(int id, [FromBody] ClientUpdateDto clientUpdateDto)
     {
         var response = new Response();
 
@@ -99,14 +100,27 @@ public class ClientController : ControllerBase
         {
             response.AddError("Id", "Client could not be found.");
         }
-        
-        client.FirstName = clientCreateDto.FirstName;
-        client.LastName = clientCreateDto.LastName;
-        client.DateOfBirth = clientCreateDto.DateOfBirth;
+
+        if (!string.IsNullOrEmpty(clientUpdateDto.FirstName))
+        {
+            client.FirstName = clientUpdateDto.FirstName;
+        }
+        if (!string.IsNullOrEmpty(clientUpdateDto.LastName))
+        {
+            client.LastName = clientUpdateDto.LastName;
+        }
+        if (clientUpdateDto.IsDateOfBirthUpdated)
+        {
+            client.DateOfBirth = clientUpdateDto.DateOfBirth;
+        }
+        if (clientUpdateDto.UserId > 0)
+        {
+            client.UserId = clientUpdateDto.UserId;
+        }
         
         await _dataContext.SaveChangesAsync();
 
-        response.Data = new ClientGetDto
+        response.Data = new ClientGetDto 
         {
             Id = client.Id,
             FirstName = client.FirstName,
