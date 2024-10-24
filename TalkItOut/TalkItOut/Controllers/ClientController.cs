@@ -47,6 +47,7 @@ public class ClientController : ControllerBase
         if (client == null)
         {
             response.AddError("Id", "Client could not be found.");
+            return NotFound(response);
         }
         
         var clientDto = new ClientGetDto
@@ -71,25 +72,25 @@ public class ClientController : ControllerBase
         {
             FirstName = clientCreateDto.FirstName,
             LastName = clientCreateDto.LastName,
-            DateOfBirth = clientCreateDto.DateOfBirth
+            DateOfBirth = clientCreateDto.DateOfBirth,
+            UserId = clientCreateDto.UserId
         };
 
         await _dataContext.Set<Client>().AddAsync(clientToCreate);
         await _dataContext.SaveChangesAsync();
-
-        response.Data = new ClientGetDto
+        
+        return CreatedAtAction(nameof(GetById), new { id = clientToCreate.Id }, new ClientGetDto
         {
             Id = clientToCreate.Id,
             FirstName = clientCreateDto.FirstName,
             LastName = clientCreateDto.LastName,
-            DateOfBirth = clientCreateDto.DateOfBirth
-        };
-
-        return Ok(response);
+            DateOfBirth = clientCreateDto.DateOfBirth,
+        });    
     }
 
+    //for some reason, this is requiring first and last name to update, which will need to be fixed in the future
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] ClientCreateDto clientCreateDto)
+    public async Task<IActionResult> Update(int id, [FromBody] ClientUpdateDto clientUpdateDto)
     {
         var response = new Response();
 
@@ -99,14 +100,27 @@ public class ClientController : ControllerBase
         {
             response.AddError("Id", "Client could not be found.");
         }
-        
-        client.FirstName = clientCreateDto.FirstName;
-        client.LastName = clientCreateDto.LastName;
-        client.DateOfBirth = clientCreateDto.DateOfBirth;
+
+        if (!string.IsNullOrEmpty(clientUpdateDto.FirstName))
+        {
+            client.FirstName = clientUpdateDto.FirstName;
+        }
+        if (!string.IsNullOrEmpty(clientUpdateDto.LastName))
+        {
+            client.LastName = clientUpdateDto.LastName;
+        }
+        if (clientUpdateDto.IsDateOfBirthUpdated)
+        {
+            client.DateOfBirth = clientUpdateDto.DateOfBirth;
+        }
+        if (clientUpdateDto.UserId > 0)
+        {
+            client.UserId = clientUpdateDto.UserId;
+        }
         
         await _dataContext.SaveChangesAsync();
 
-        response.Data = new ClientGetDto
+        response.Data = new ClientGetDto 
         {
             Id = client.Id,
             FirstName = client.FirstName,
@@ -125,8 +139,17 @@ public class ClientController : ControllerBase
         var clientToDelete = await _dataContext.Set<Client>()
             .FirstOrDefaultAsync(x => x.Id == id);
 
+        if (clientToDelete == null)
+        {
+            response.AddError("Id", "Client could not be found.");
+            return NotFound(response);
+        }
+
         _dataContext.Set<Client>().Remove(clientToDelete);
 
-        return Ok();
+        await _dataContext.SaveChangesAsync();
+
+        return Ok(new { message = "Client deleted successfully." });
     }
+
 }
