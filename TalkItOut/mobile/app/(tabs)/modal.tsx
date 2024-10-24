@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Pressable, Modal, Button, Text, StyleSheet} from 'react-native';
 import {ClientGetDto, OptionItemDto, Response} from '../types';
 import api from '../api/api';
+import { Link } from 'expo-router';
 
 type Props = {
   client: ClientGetDto;
@@ -13,25 +14,25 @@ export const ClientModal = (props: Props) => {
   const [isLoading, setLoading] = useState(true);
   const [options, setOptions] = useState<OptionItemDto[] | null>([]);
 
-  const getOptions = async () => {
-    try {
-      const response = await api.get<Response<OptionItemDto[]>>(
-        `/goals/options/${props.client.id}`
-      );
-      setOptions(response.data.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getOptions = async () => {
+  //   try {
+  //     const response = await api.get<Response<OptionItemDto[]>>(
+  //       `/goals/options/${props.client.id}`
+  //     );
+  //     setOptions(response.data.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-  useEffect(() => {
-    getOptions();
-  }, []);
+  // useEffect(() => {
+  //   getOptions();
+  // }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} key={props.client.id}>
       <Pressable onPress={() => setModalVisible(true)}>
         <Text style={styles.pressableText}>{props.client.firstName}</Text>
       </Pressable>
@@ -46,15 +47,17 @@ export const ClientModal = (props: Props) => {
           <Text style={styles.modalText}>
             {props.client.firstName} {props.client.lastName}
           </Text>
+          <Link href={'/counter'}>
+            <View style={styles.buttonContainer}>
+              <Button
+                title="Start Session"
+                onPress={() => {
+                  setModalVisible(false);
 
-          <View style={styles.buttonContainer}>
-            <Button
-              title="Start Session"
-              onPress={() => {
-                setModalVisible(false);
-              }}
-            />
-          </View>
+                }}
+              />
+            </View>
+          </Link>
           <Text style={{marginBottom: 10}}>Current Goal</Text>
           <Text>{props.client.goals.at(0)?.information}</Text>
 

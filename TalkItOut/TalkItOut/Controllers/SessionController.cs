@@ -82,15 +82,15 @@ namespace TalkItOut.Controllers;
                 GroupId = sessionCreateDto.GroupId,
                 ClientId = sessionCreateDto.ClientId 
             };
-            if (sessionCreateDto.StartTime < sessionCreateDto.EndTime)
-            {
-                sessionToCreate.DurationMinutes = (int)(sessionCreateDto.EndTime - sessionCreateDto.StartTime).TotalMinutes;
-            }
-            else
-            {
-                response.AddError("Duration", "StartTime must be earlier than EndTime.");
-                return BadRequest(response);
-            }
+            // if (sessionCreateDto.StartTime < sessionCreateDto.EndTime)
+            // {
+            //     sessionToCreate.DurationMinutes = (int)(sessionCreateDto.EndTime - sessionCreateDto.StartTime).TotalMinutes;
+            // }
+            // else
+            // {
+            //     response.AddError("Duration", "StartTime must be earlier than EndTime.");
+            //     return BadRequest(response);
+            // }
 
             await _dataContext.Set<Session>().AddAsync(sessionToCreate);
             await _dataContext.SaveChangesAsync();

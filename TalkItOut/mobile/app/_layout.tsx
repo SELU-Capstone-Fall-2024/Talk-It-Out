@@ -7,6 +7,7 @@ export default function RootLayout() {
     <TamaguiProvider config={config}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{headerTitle: 'Talk It Out'}} />
+        <Stack.Screen name="counter" options={{headerTitle: 'Talk It Out'}} />
       </Stack>
     </TamaguiProvider>
   );
