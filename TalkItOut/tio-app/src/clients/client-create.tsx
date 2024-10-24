@@ -1,25 +1,30 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api/api"; // Adjust the import according to your folder structure
-import { ClientCreateDto } from "../types"; // Adjust the import according to your folder structure
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import api from '../api/api'; // Adjust the import according to your folder structure
+import {ClientCreateDto} from '../types'; // Adjust the import according to your folder structure
+// import type { SizeTokens } from 'tamagui'
+import {Button, Input} from 'tamagui';
+import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
+import DatePicker from 'react-datepicker';
 
 const ClientCreate: React.FC = () => {
   const navigate = useNavigate();
   const [clientData, setClientData] = useState<ClientCreateDto>({
-    firstName: "",
-    lastName: "",
-    dateOfBirth: "",
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Handle form changes
+
   const handleChange =
     (field: keyof ClientCreateDto) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
       setClientData((prevData) => ({
         ...prevData,
-        [field]: event.target.value,
+        [field]: e.nativeEvent.text,
       }));
     };
 
@@ -29,52 +34,47 @@ const ClientCreate: React.FC = () => {
     setLoading(true);
 
     try {
-      await api.post("/clients", clientData); // Adjust the endpoint as necessary
-      navigate("/clients"); // Redirect to clients listing after successful creation
+      await api.post('/clients', clientData); // Adjust the endpoint as necessary
+      navigate('/clients'); // Redirect to clients listing after successful creation
     } catch (err) {
-      setError("Failed to create client. Please try again.");
+      setError('Failed to create client. Please try again.');
     } finally {
       setLoading(false);
     }
   };
 
+  const [startDate, setStartDate] = useState(new Date());
+
   return (
-    <div>
+    <>
       <h1>Create Client</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{color: 'red'}}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <label htmlFor="firstName">First Name:</label>
-        <input
-          type="text"
+        <Input
           id="firstName"
           value={clientData.firstName}
-          onChange={handleChange("firstName")}
-          required
+          onChange={() => handleChange('firstName')}
         />
 
         <label htmlFor="lastName">Last Name:</label>
-        <input
-          type="text"
+        <Input
           id="lastName"
           value={clientData.lastName}
-          onChange={handleChange("lastName")}
-          required
+          onChange={() => handleChange('lastName')}
         />
 
         <label htmlFor="dateOfBirth">Date of Birth:</label>
-        <input
-          type="date"
-          id="dateOfBirth"
-          value={clientData.dateOfBirth}
-          onChange={handleChange("dateOfBirth")}
-          required
+        <DatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
         />
 
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating..." : "Create Client"}
-        </button>
+        <Button disabled={loading} size={20}>
+          {loading ? 'Creating...' : 'Create Client'}
+        </Button>
       </form>
-    </div>
+    </>
   );
 };
 
