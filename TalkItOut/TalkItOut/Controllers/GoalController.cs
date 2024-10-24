@@ -151,4 +151,23 @@ public class GoalController : ControllerBase
 
         return Ok(new { message = "Goal deleted successfully." });
     }
+
+    [HttpGet("options/{clientId:int}")]
+    public async Task<IActionResult> GetOptions(int clientId)
+    {
+        var response = new Response();
+
+        var items = _dataContext.Set<Goal>()
+            .Where(x => x.ClientId == clientId)
+            .Select(x => new OptionItemDto
+            {
+                Value = x.Id,
+                Text = x.Information,
+            })
+            .ToList();
+
+        response.Data = items;
+
+        return Ok(response);
+    }
 }

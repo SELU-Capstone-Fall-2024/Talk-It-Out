@@ -13,6 +13,7 @@ public class Client
     public User User { get; set; }
     public int? GroupId { get; set; }
     public Group Group { get; set; }
+    public List<Goal> Goals { get; set; }
 }
 
 public class ClientGetDto
@@ -21,6 +22,7 @@ public class ClientGetDto
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public DateTimeOffset DateOfBirth { get; set; }
+    public List<GoalGetDto> Goals { get; set; }
 }
 
 public class ClientCreateDto
