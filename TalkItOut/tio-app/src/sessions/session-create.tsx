@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import { SessionCreateDto, Response } from "../types";
-import { H1 } from "tamagui";
+import { H1, Input } from "tamagui";
 
 const SessionCreate: React.FC = () => {
   const navigate = useNavigate();
@@ -84,44 +84,37 @@ const SessionCreate: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="userId">User ID</label>
-          <input
-            type="number"
+          <Input
             id="userId"
             value={sessionData.userId}
-            onChange={handleChange("userId")}
+            onChange={() => handleChange("userId")}
             placeholder="Enter User ID"
-            required
           />
         </div>
 
         <div>
           <label htmlFor="startTime">Start Time</label>
-          <input
-            type="datetime-local"
+          <Input
             id="startTime"
             value={sessionData.startTime}
-            onChange={handleChange("startTime")}
+            onChange={() => handleChange("startTime")}
             placeholder="Enter start time"
-            required
           />
         </div>
 
         <div>
           <label htmlFor="endTime">End Time</label>
-          <input
-            type="datetime-local"
+          <Input
             id="endTime"
             value={sessionData.endTime}
-            onChange={handleChange("endTime")}
+            onChange={() => handleChange("endTime")}
             placeholder="Enter end time"
-            required
           />
         </div>
 
         <div>
           <label htmlFor="durationMinutes">Duration (Minutes)</label>
-          <input
-            type="number"
+          <Input
             id="durationMinutes"
             value={sessionData.durationMinutes}
             readOnly
@@ -130,22 +123,20 @@ const SessionCreate: React.FC = () => {
 
         <div>
           <label htmlFor="groupId">Group ID</label>
-          <input
-            type="number"
+          <Input
             id="groupId"
             value={sessionData.groupId}
-            onChange={handleChange("groupId")}
+            onChange={() => handleChange("groupId")}
             placeholder="Enter Group ID"
           />
         </div>
 
         <div>
           <label htmlFor="clientId">Client ID</label>
-          <input
-            type="number"
+          <Input
             id="clientId"
             value={sessionData.clientId}
-            onChange={handleChange("clientId")}
+            onChange={() => handleChange("clientId")}
             placeholder="Enter Client ID"
           />
         </div>

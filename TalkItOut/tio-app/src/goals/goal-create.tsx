@@ -2,9 +2,7 @@ import React, { useState } from "react";
 import api from "../api/api"; // Adjust the import based on your project structure
 import { GoalCreateDto } from "../types"; // Adjust the import based on your types location
 import { useNavigate } from "react-router-dom";
-import { Button } from 'tamagui'
-
-
+import { Input } from "tamagui";
 
 const GoalCreate: React.FC = () => {
   const navigate = useNavigate();
@@ -40,8 +38,7 @@ const GoalCreate: React.FC = () => {
       setLoading(false);
     }
   };
-  
-  
+
   return (
     <div>
       <h1>Create Goal</h1>
@@ -49,12 +46,10 @@ const GoalCreate: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label>User ID</label>
-          <input
-            type="number"
+          <Input
             value={goalData.userId}
-            onChange={(e) => handleChange("userId")(Number(e.target.value))}
+            onChange={() => handleChange("userId")}
             placeholder="Enter User ID"
-            required
           />
         </div>
         <div>
@@ -68,12 +63,10 @@ const GoalCreate: React.FC = () => {
         </div>
         <div>
           <label>Client ID</label>
-          <input
-            type="number"
+          <Input
             value={goalData.clientId}
-            onChange={(e) => handleChange("clientId")(Number(e.target.value))}
+            onChange={() => handleChange("clientId")}
             placeholder="Enter Client ID"
-            required
           />
         </div>
         <button type="submit" disabled={loading}>
@@ -84,4 +77,4 @@ const GoalCreate: React.FC = () => {
   );
 };
 
-export default GoalCreate; 
+export default GoalCreate;

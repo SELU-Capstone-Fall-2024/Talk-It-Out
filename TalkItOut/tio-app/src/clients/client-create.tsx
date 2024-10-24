@@ -4,6 +4,8 @@ import api from "../api/api"; // Adjust the import according to your folder stru
 import { ClientCreateDto } from "../types"; // Adjust the import according to your folder structure
 import type { SizeTokens } from 'tamagui'
 import { Button, Input, TextArea, XStack, YStack } from 'tamagui'
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import DatePicker from "react-datepicker";
 
 const ClientCreate: React.FC = () => {
   const navigate = useNavigate();
@@ -16,14 +18,15 @@ const ClientCreate: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   // Handle form changes
+
   const handleChange =
-    (field: keyof ClientCreateDto) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setClientData((prevData) => ({
-        ...prevData,
-        [field]: event.target.value,
-      }));
-    };
+  (field: keyof ClientCreateDto) =>
+  (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    setClientData((prevData) => ({
+      ...prevData,
+      [field]: e.nativeEvent.text,
+    }));
+  };
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -40,41 +43,33 @@ const ClientCreate: React.FC = () => {
     }
   };
 
+  const [startDate, setStartDate] = useState(new Date());
+
   return (
     <div>
       <h1>Create Client</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <label htmlFor="firstName">First Name:</label>
-        <input
-          type="text"
+        <Input
           id="firstName"
           value={clientData.firstName}
-          onChange={handleChange("firstName")}
-          required
+          onChange={() => handleChange("firstName")}
         />
 
         <label htmlFor="lastName">Last Name:</label>
-        <input
-          type="text"
+        <Input
           id="lastName"
           value={clientData.lastName}
-          onChange={handleChange("lastName")}
-          required
+          onChange={() => handleChange("lastName")}
         />
 
         <label htmlFor="dateOfBirth">Date of Birth:</label>
-        <input
-          type="date"
-          id="dateOfBirth"
-          value={clientData.dateOfBirth}
-          onChange={handleChange("dateOfBirth")}
-          required
-        />
+        <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
 
-        <button type="submit" disabled={loading}>
+        <Button  disabled={loading}>
           {loading ? "Creating..." : "Create Client"}
-        </button>
+        </Button>
       </form>
     </div>
   );
