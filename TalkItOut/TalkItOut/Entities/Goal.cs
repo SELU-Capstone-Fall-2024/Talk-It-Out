@@ -11,6 +11,7 @@ namespace TalkItOut.Entities
         public string Information { get; set; }
         public int ClientId { get; set; }
         public User User { get; set; }
+        public Client Client { get; set; }
     }
 
     public class GoalGetDto
@@ -20,6 +21,9 @@ namespace TalkItOut.Entities
         
         public string Information { get; set; }
         public int ClientId { get; set; }
+        public string CreatedByUserName { get; set; }
+        public string ClientFirstName { get; set; }
+        public string ClientLastName { get; set; }
     }
 
     public class GoalCreateDto

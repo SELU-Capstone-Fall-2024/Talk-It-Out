@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import type React from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/api";
-import { UserGetDto, UserUpdateDto } from "../types";
+import type { UserGetDto, UserUpdateDto } from "../types";
+import { SizableText, YStack } from "tamagui";
+import type { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 const UserUpdate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,7 +20,6 @@ const UserUpdate: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch user data to populate the form
   useEffect(() => {
     const fetchUser = async () => {
       setLoading(true);
@@ -38,18 +40,19 @@ const UserUpdate: React.FC = () => {
     fetchUser();
   }, [id]);
 
-  const handleChange = (field: keyof UserUpdateDto) => (value: string) => {
-    setUserData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
+  const handleChange =
+    (field: keyof UserUpdateDto) =>
+    (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+      setUserData((prevData) => ({
+        ...prevData,
+        [field]: e.nativeEvent.text,
+      }));
+    };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     try {
-      // Prepare update object, only include fields that are not empty
       const updateData: Partial<UserUpdateDto> = {};
       if (userData.firstName) updateData.firstName = userData.firstName;
       if (userData.lastName) updateData.lastName = userData.lastName;
@@ -58,7 +61,7 @@ const UserUpdate: React.FC = () => {
 
       const response = await api.put(`/users/${id}`, updateData);
       if (response.status === 200) {
-        navigate("/users");
+        navigate("/users/listing");
       } else {
         setError("Failed to update user. Please try again.");
       }
@@ -70,30 +73,29 @@ const UserUpdate: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Update User</h1>
-      {error && <div style={{ color: "red" }}>{error}</div>}
-      <form onSubmit={handleSubmit}>
-
-        <div>
-          <label>Username</label>
-          <input
-            type="string"
-            value={userData.username}
-            onChange={(e) => handleChange("username")(e.target.value)}
-            placeholder="Enter Username"
-          />
-        </div>
-
-        <div>
-          <Link to={`/users/${id}/password-update`}>Change Password</Link>
-        </div>
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Updating..." : "Update User"}
-        </button>
-      </form>
-    </div>
+    <YStack
+      flex={1}
+      justifyContent="center"
+      alignItems="center"
+      padding={20}
+      background="$darkBackground"
+      minHeight="100vh"
+      width="100vw"
+    >
+      <YStack
+        width="100%"
+        maxWidth={400}
+        padding={30}
+        borderRadius={15}
+        backgroundColor="$darkPrimary"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <SizableText size={30} marginBottom={20} color="#e6f2ff">
+          Update User
+        </SizableText>
+      </YStack>
+    </YStack>
   );
 };
 
