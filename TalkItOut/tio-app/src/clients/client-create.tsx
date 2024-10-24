@@ -1,23 +1,21 @@
-import React, {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import api from '../api/api'; // Adjust the import according to your folder structure
-import {ClientCreateDto} from '../types'; // Adjust the import according to your folder structure
-// import type { SizeTokens } from 'tamagui'
-import {Button, Input} from 'tamagui';
-import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
-import DatePicker from 'react-datepicker';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import api from "../api/api";
+import { ClientCreateDto } from "../types";
+import { Button, Input, SizableText, YStack, Text, Form } from "tamagui";
+import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import DatePicker from "react-datepicker";
 
 const ClientCreate: React.FC = () => {
   const navigate = useNavigate();
   const [clientData, setClientData] = useState<ClientCreateDto>({
-    firstName: '',
-    lastName: '',
-    dateOfBirth: '',
+    firstName: "",
+    lastName: "",
+    dateOfBirth: "",
+    userId: 1,
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
-  // Handle form changes
 
   const handleChange =
     (field: keyof ClientCreateDto) =>
@@ -28,52 +26,126 @@ const ClientCreate: React.FC = () => {
       }));
     };
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setLoading(true);
 
     try {
-      await api.post('/clients', clientData); // Adjust the endpoint as necessary
-      navigate('/clients'); // Redirect to clients listing after successful creation
+      await api.post("/clients", clientData);
+      navigate("/clients/listing");
     } catch (err) {
-      setError('Failed to create client. Please try again.');
+      setError("Failed to create client. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState<Date | null>(null);
 
   return (
     <>
-      <h1>Create Client</h1>
-      {error && <p style={{color: 'red'}}>{error}</p>}
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="firstName">First Name:</label>
-        <Input
-          id="firstName"
-          value={clientData.firstName}
-          onChange={() => handleChange('firstName')}
-        />
+      <YStack
+        flex={1}
+        justifyContent="center"
+        alignItems="center"
+        padding={20}
+        background="$darkBackground"
+        minHeight="100vh"
+        width="100vw"
+      >
+        <YStack
+          width="100%"
+          maxWidth={400}
+          padding={30}
+          borderRadius={15}
+          backgroundColor="$darkPrimary"
+          shadowColor="rgba(0, 0, 0, 0.5)"
+          shadowRadius={10}
+          shadowOpacity={0.5}
+          shadowOffset={{ width: 0, height: 4 }}
+          alignItems="center"
+          justifyContent="center"
+        >
+          <SizableText size={30} marginBottom={20} color="#e6f2ff">
+            Create Client
+          </SizableText>
 
-        <label htmlFor="lastName">Last Name:</label>
-        <Input
-          id="lastName"
-          value={clientData.lastName}
-          onChange={() => handleChange('lastName')}
-        />
+          {error && (
+            <Text color="red" marginBottom={15}>
+              {error}
+            </Text>
+          )}
+          <Form onSubmit={handleSubmit} style={{ width: "100%" }}>
+            <YStack gap={10}>
+              <SizableText size={18} color={"#e6f2ff"}>
+                First Name
+              </SizableText>
+              <Input
+                size={46}
+                flex={1}
+                gap={20}
+                padding={4}
+                value={clientData.firstName}
+                onChange={handleChange("firstName")}
+                placeholder="First Name"
+                borderColor="#cce6ff"
+                background="#3d444d"
+                borderRadius={2}
+                placeholderTextColor="#e6f2ff"
+              />
+            </YStack>
 
-        <label htmlFor="dateOfBirth">Date of Birth:</label>
-        <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-        />
+            <YStack gap={10}>
+              <SizableText size={18} color={"#e6f2ff"}>
+                Last Name
+              </SizableText>
+              <Input
+                size={46}
+                flex={1}
+                gap={20}
+                padding={4}
+                value={clientData.lastName}
+                onChange={handleChange("lastName")}
+                placeholder="Last Name"
+                borderColor="#cce6ff"
+                background="#3d444d"
+                borderRadius={2}
+                placeholderTextColor="#e6f2ff"
+              />
+            </YStack>
+            <YStack gap={10}>
+              <SizableText size={18} color="#e6f2ff">
+                Date of Birth
+              </SizableText>
+              <DatePicker
+                openToDate={new Date("1993/09/28")}
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                dateFormat="MM/dd/yyyy"
+                className="datepicker"
+                placeholderText="Select Date"
+              />
+            </YStack>
 
-        <Button disabled={loading} size={20}>
-          {loading ? 'Creating...' : 'Create Client'}
-        </Button>
-      </form>
+            <Button
+              width={150}
+              alignSelf="center"
+              size={30}
+              padding={12}
+              disabled={loading}
+              background="#e6f2ff"
+              borderRadius={4}
+              marginTop={20}
+              onPress={handleSubmit}
+              style={{ overflow: "hidden" }}
+              theme={loading ? "secondary" : "primary"}
+            >
+              <Text fontSize={18}>
+                {loading ? "Creating..." : "Create Client"}
+              </Text>
+            </Button>
+          </Form>
+        </YStack>
+      </YStack>
     </>
   );
 };

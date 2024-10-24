@@ -12,18 +12,18 @@ const ClientUpdate: React.FC = () => {
     firstName: "",
     lastName: "",
     dateOfBirth: "",
+    userId: 1,
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // Fetch client data to populate form fields
   useEffect(() => {
     const fetchClient = async () => {
       setLoading(true);
       try {
-        const response = await api.get<ClientGetDto>(`/clients/${id}`); // Adjust the endpoint as necessary
-        const { firstName, lastName, dateOfBirth } = response.data;
-        setClientData({ firstName, lastName, dateOfBirth });
+        const response = await api.get<ClientGetDto>(`/clients/${id}`);
+        const { firstName, lastName, dateOfBirth, userId } = response.data;
+        setClientData({ firstName, lastName, dateOfBirth, userId });
       } catch (err) {
         setError("Failed to load client data.");
       } finally {
@@ -33,7 +33,7 @@ const ClientUpdate: React.FC = () => {
     fetchClient();
   }, [id]);
 
-  // Handle form changes
+
   const handleChange =
   (field: keyof ClientCreateDto) =>
   (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
@@ -43,14 +43,12 @@ const ClientUpdate: React.FC = () => {
     }));
   };
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async() => {
     setLoading(true);
 
     try {
-      await api.put(`/clients/${id}`, clientData); // Adjust the endpoint as necessary
-      navigate("/clients"); // Redirect to clients listing after successful update
+      await api.put(`/clients/${id}`, clientData);
+      navigate("/clients/listing");
     } catch (err) {
       setError("Failed to update client. Please try again.");
     } finally {
@@ -59,14 +57,14 @@ const ClientUpdate: React.FC = () => {
   };
 
   if (loading) {
-    return <p>Loading client data...</p>; // Loading state
+    return <p>Loading client data...</p>;
   }
 
   return (
     <div>
       <h1>Update Client</h1>
       {error && <p style={{ color: "red" }}>{error}</p>}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={() => handleSubmit}>
         <label htmlFor="firstName">First Name:</label>
         <Input
           id="firstName"
