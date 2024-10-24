@@ -59,8 +59,7 @@ const GoalUpdate: React.FC = () => {
       }));
     };
   console.log("goaldata.information =", goalData.information);
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setLoading(true);
     try {
       const response = await api.put(`/goals/${id}`, goalData);
@@ -109,7 +108,7 @@ const GoalUpdate: React.FC = () => {
           </Text>
         )}
         {goalData && (
-          <Form onSubmit={() => handleSubmit} style={{ width: "100%" }}>
+          <Form onSubmit={handleSubmit} style={{ width: "100%" }}>
             <YStack gap={20}>
               <SizableText size={18} color="#e6f2ff">
                 Goal Information
@@ -134,7 +133,8 @@ const GoalUpdate: React.FC = () => {
               padding={12}
               disabled={loading}
               background="#e6f2ff"
-              style={{ overflow: "hidden", textAlign: "center" }}
+              onPress={handleSubmit}
+              style={{ overflow: "hidden" }}
               marginTop={20}
             >
               <Text fontSize={18}>

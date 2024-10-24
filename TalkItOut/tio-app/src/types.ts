@@ -4,6 +4,7 @@ export type Error = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export type Response<T = any> = {
   data: T | null;
   errors: Error[];

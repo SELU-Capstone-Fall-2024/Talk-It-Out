@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import type React from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import api from "../api/api";
-import { UserGetDto, UserUpdateDto } from "../types";
+import type { UserGetDto, UserUpdateDto } from "../types";
 import { SizableText, YStack } from "tamagui";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import type { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 const UserUpdate: React.FC = () => {
   const { id } = useParams<{ id: string }>();
