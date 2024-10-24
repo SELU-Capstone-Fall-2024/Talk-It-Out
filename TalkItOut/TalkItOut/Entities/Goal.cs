@@ -24,7 +24,6 @@ namespace TalkItOut.Entities
 
     public class GoalCreateDto
     {
-        public int Id { get; set; }
         public int UserId { get; set; }
         
         public string Information { get; set; }

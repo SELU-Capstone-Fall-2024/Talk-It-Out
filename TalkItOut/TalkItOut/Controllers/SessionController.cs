@@ -50,9 +50,10 @@ namespace TalkItOut.Controllers;
             if (session == null)
             {
                 response.AddError("Id", "Session could not be found.");
+                return NotFound(response);
             }
 
-            var sessionDto = new SessionGetDto
+            response.Data = new SessionGetDto
             {
                 Id = session.Id,
                 UserId = session.UserId,
@@ -62,9 +63,7 @@ namespace TalkItOut.Controllers;
                 GroupId = session.GroupId,
                 ClientId = session.ClientId
             };
-
-            response.Data = sessionDto;
-
+            
             return Ok(response);
         }
 
@@ -76,17 +75,26 @@ namespace TalkItOut.Controllers;
             var sessionToCreate = new Session
             {
                 UserId = sessionCreateDto.UserId,
-                DurationMinutes = sessionCreateDto.DurationMinutes,
                 StartTime = sessionCreateDto.StartTime,
                 EndTime = sessionCreateDto.EndTime,
                 GroupId = sessionCreateDto.GroupId,
-                ClientId = sessionCreateDto.ClientId
+                ClientId = sessionCreateDto.ClientId 
             };
+            if (sessionCreateDto.StartTime < sessionCreateDto.EndTime)
+            {
+                sessionToCreate.DurationMinutes = (int)(sessionCreateDto.EndTime - sessionCreateDto.StartTime).TotalMinutes;
+            }
+            else
+            {
+                response.AddError("Duration", "StartTime must be earlier than EndTime.");
+                return BadRequest(response);
+            }
 
             await _dataContext.Set<Session>().AddAsync(sessionToCreate);
             await _dataContext.SaveChangesAsync();
 
-            response.Data = new SessionGetDto
+            
+            return CreatedAtAction(nameof(GetById), new { id = sessionToCreate.Id }, new SessionGetDto
             {
                 Id = sessionToCreate.Id,
                 UserId = sessionToCreate.UserId,
@@ -94,14 +102,11 @@ namespace TalkItOut.Controllers;
                 StartTime = sessionToCreate.StartTime,
                 EndTime = sessionToCreate.EndTime,
                 GroupId = sessionToCreate.GroupId,
-                ClientId = sessionCreateDto.ClientId
-            };
-
-            return Ok(response);
-        }
+                ClientId = sessionToCreate.ClientId 
+            });        }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] SessionCreateDto sessionCreateDto)
+        public async Task<IActionResult> Update(int id, [FromBody] SessionUpdateDto sessionUpdateDto)
         {
             var response = new Response();
 
@@ -110,14 +115,41 @@ namespace TalkItOut.Controllers;
             if (session == null)
             {
                 response.AddError("Id", "Session could not be found.");
+                return NotFound(response);
             }
 
-            session.UserId = sessionCreateDto.UserId;
-            session.DurationMinutes = sessionCreateDto.DurationMinutes;
-            session.StartTime = sessionCreateDto.StartTime;
-            session.EndTime = sessionCreateDto.EndTime;
-            session.GroupId = sessionCreateDto.GroupId;
-            session.ClientId = sessionCreateDto.ClientId;
+            if (sessionUpdateDto.UserId > 0)
+            {
+                session.UserId = sessionUpdateDto.UserId;
+            }
+            if (sessionUpdateDto.StartTimeChanged | sessionUpdateDto.EndTimeChanged)
+            {
+                if (session.StartTime < session.EndTime)
+                {
+                    session.DurationMinutes = (int)(session.EndTime - session.StartTime).TotalMinutes;
+                }
+                else
+                {
+                    response.AddError("Duration", "StartTime must be earlier than EndTime.");
+                    return BadRequest(response);
+                }
+            }
+            if(sessionUpdateDto.StartTimeChanged)
+            {
+                session.StartTime = sessionUpdateDto.StartTime;
+            }
+            if(sessionUpdateDto.EndTimeChanged)
+            {
+                session.EndTime = sessionUpdateDto.EndTime;
+            }
+            if(sessionUpdateDto.GroupId > 0)
+            {
+                session.GroupId = sessionUpdateDto.GroupId;
+            }
+            if(sessionUpdateDto.ClientId > 0)
+            {
+                session.ClientId = sessionUpdateDto.ClientId;
+            }
 
             await _dataContext.SaveChangesAsync();
 
@@ -142,9 +174,16 @@ namespace TalkItOut.Controllers;
 
             var sessionToDelete = await _dataContext.Set<Session>()
                 .FirstOrDefaultAsync(x => x.Id == id);
-
+            
+            if (sessionToDelete == null)
+            {
+                response.AddError("Id", "Session could not be found.");
+                return NotFound(response);
+            }
+            
             _dataContext.Set<Session>().Remove(sessionToDelete);
+            await _dataContext.SaveChangesAsync();
 
-            return Ok();
+            return Ok(new { message = "Session deleted successfully." });
         }
     }

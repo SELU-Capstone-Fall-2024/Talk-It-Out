@@ -17,17 +17,39 @@ export default createTamagui({
       md: 8,
       lg: 12,
     },
-    color: {},
-    zIndex: {}
+    color: {
+      blue: "#AAAAAA",
+    },
+    zIndex: {
+      low: 1,
+    },
   }),
+  components: {
+    Button: {
+      variants: {
+        primary: {
+          backgroundColor: "$primary",
+          color: "white",
+          padding: 12,
+          borderRadius: 8,
+        },
+        secondary: {
+          backgroundColor: "$secondary",
+          color: "white",
+          padding: 12,
+          borderRadius: 8,
+        },
+      },
+    },
+  },
   themes: {
     light: {
-      background: '#fff',
-      color: '#000',
+      background: "#fff",
+      color: "#000",
     },
     dark: {
-      background: '#000',
-      color: '#fff',
+      background: "#000",
+      color: "#fff",
     },
   },
 })

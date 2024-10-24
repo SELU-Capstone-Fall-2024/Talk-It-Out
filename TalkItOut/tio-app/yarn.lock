@@ -710,6 +710,18 @@
     "@babel/helper-validator-identifier" "^7.24.7"
     to-fast-properties "^2.0.0"
 
+"@emotion/is-prop-valid@^0.8.2":
+  version "0.8.8"
+  resolved "https://registry.npmjs.org/@emotion/is-prop-valid/-/is-prop-valid-0.8.8.tgz#db28b1c4368a259b60a97311d6a952d4fd01ac1a"
+  integrity sha512-u5WtneEAr5IDG2Wv65yhunPSMLIpuKsbuOktRojfrEiEvRyC85LgPMZI63cr7NUqT8ZIGdSVg8ZKGxIug4lXcA==
+  dependencies:
+    "@emotion/memoize" "0.7.4"
+
+"@emotion/memoize@0.7.4":
+  version "0.7.4"
+  resolved "https://registry.npmjs.org/@emotion/memoize/-/memoize-0.7.4.tgz#19bf0f5af19149111c40d98bb0cf82119f5d9eeb"
+  integrity sha512-Ja/Vfqe3HpuzRsG1oBtWTHk2PGZ7GR+2Vz5iYGelAw8dx32K0y7PjVuxK6z1nMpZOqAFsRUPCkK1YjJ56qJlgw==
+
 "@esbuild/aix-ppc64@0.21.5":
   version "0.21.5"
   resolved "https://registry.yarnpkg.com/@esbuild/aix-ppc64/-/aix-ppc64-0.21.5.tgz#c7184a326533fcdf1b8ee0733e21c713b975575f"
@@ -1175,6 +1187,59 @@
   dependencies:
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
+
+"@motionone/animation@^10.12.0":
+  version "10.18.0"
+  resolved "https://registry.npmjs.org/@motionone/animation/-/animation-10.18.0.tgz#868d00b447191816d5d5cf24b1cafa144017922b"
+  integrity sha512-9z2p5GFGCm0gBsZbi8rVMOAJCtw1WqBTIPw3ozk06gDvZInBPIsQcHgYogEJ4yuHJ+akuW8g1SEIOpTOvYs8hw==
+  dependencies:
+    "@motionone/easing" "^10.18.0"
+    "@motionone/types" "^10.17.1"
+    "@motionone/utils" "^10.18.0"
+    tslib "^2.3.1"
+
+"@motionone/dom@10.12.0":
+  version "10.12.0"
+  resolved "https://registry.npmjs.org/@motionone/dom/-/dom-10.12.0.tgz#ae30827fd53219efca4e1150a5ff2165c28351ed"
+  integrity sha512-UdPTtLMAktHiqV0atOczNYyDd/d8Cf5fFsd1tua03PqTwwCe/6lwhLSQ8a7TbnQ5SN0gm44N1slBfj+ORIhrqw==
+  dependencies:
+    "@motionone/animation" "^10.12.0"
+    "@motionone/generators" "^10.12.0"
+    "@motionone/types" "^10.12.0"
+    "@motionone/utils" "^10.12.0"
+    hey-listen "^1.0.8"
+    tslib "^2.3.1"
+
+"@motionone/easing@^10.18.0":
+  version "10.18.0"
+  resolved "https://registry.npmjs.org/@motionone/easing/-/easing-10.18.0.tgz#7b82f6010dfee3a1bb0ee83abfbaff6edae0c708"
+  integrity sha512-VcjByo7XpdLS4o9T8t99JtgxkdMcNWD3yHU/n6CLEz3bkmKDRZyYQ/wmSf6daum8ZXqfUAgFeCZSpJZIMxaCzg==
+  dependencies:
+    "@motionone/utils" "^10.18.0"
+    tslib "^2.3.1"
+
+"@motionone/generators@^10.12.0":
+  version "10.18.0"
+  resolved "https://registry.npmjs.org/@motionone/generators/-/generators-10.18.0.tgz#fe09ab5cfa0fb9a8884097feb7eb60abeb600762"
+  integrity sha512-+qfkC2DtkDj4tHPu+AFKVfR/C30O1vYdvsGYaR13W/1cczPrrcjdvYCj0VLFuRMN+lP1xvpNZHCRNM4fBzn1jg==
+  dependencies:
+    "@motionone/types" "^10.17.1"
+    "@motionone/utils" "^10.18.0"
+    tslib "^2.3.1"
+
+"@motionone/types@^10.12.0", "@motionone/types@^10.17.1":
+  version "10.17.1"
+  resolved "https://registry.npmjs.org/@motionone/types/-/types-10.17.1.tgz#cf487badbbdc9da0c2cb86ffc1e5d11147c6e6fb"
+  integrity sha512-KaC4kgiODDz8hswCrS0btrVrzyU2CSQKO7Ps90ibBVSQmjkrt2teqta6/sOG59v7+dPnKMAg13jyqtMKV2yJ7A==
+
+"@motionone/utils@^10.12.0", "@motionone/utils@^10.18.0":
+  version "10.18.0"
+  resolved "https://registry.npmjs.org/@motionone/utils/-/utils-10.18.0.tgz#a59ff8932ed9009624bca07c56b28ef2bb2f885e"
+  integrity sha512-3XVF7sgyTSI2KWvTf6uLlBJ5iAgRgmvp3bpuOiQJvInd4nZ19ET8lX5unn30SlmRH7hXbBbH+Gxd0m0klJ3Xtw==
+  dependencies:
+    "@motionone/types" "^10.17.1"
+    hey-listen "^1.0.8"
+    tslib "^2.3.1"
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -1783,6 +1848,25 @@
     "@tamagui/use-presence" "1.111.3"
     "@tamagui/web" "1.111.3"
 
+"@tamagui/animations-css@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/animations-css/-/animations-css-1.116.2.tgz#6f48a177cdb78f6dd2afd4715942866e84b92a84"
+  integrity sha512-o2IS+J0auGSa0g8YDxcIkaDNK6s3oBp9s8B6lSHPgljZjiCYlMRd1CEpOiPT30n3remUcl2jeQKBJrWhy2+1UQ==
+  dependencies:
+    "@tamagui/constants" "1.116.2"
+    "@tamagui/cubic-bezier-animator" "1.116.2"
+    "@tamagui/use-presence" "1.116.2"
+    "@tamagui/web" "1.116.2"
+
+"@tamagui/animations-moti@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/animations-moti/-/animations-moti-1.116.2.tgz#2a90bbc407fe967cc3145dffd5c773fb5478a5d8"
+  integrity sha512-T3KhGg7g/pME6N6oJI6RKpdlZYn7T/gffWZ2gKl8rJB4n1XHAVqrWZo8AqgnGlqnWL5roFNw6nBVU/20xO7OGw==
+  dependencies:
+    "@tamagui/use-presence" "1.116.2"
+    "@tamagui/web" "1.116.2"
+    moti "^0.29.0"
+
 "@tamagui/animations-react-native@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/animations-react-native/-/animations-react-native-1.111.3.tgz#f80b0ccc0526335c835a165a3dfaaca0d33810ad"
@@ -1791,6 +1875,15 @@
     "@tamagui/constants" "1.111.3"
     "@tamagui/use-presence" "1.111.3"
     "@tamagui/web" "1.111.3"
+
+"@tamagui/animations-react-native@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/animations-react-native/-/animations-react-native-1.116.2.tgz#2e2d05cd10dae1463ab118ea4774603e3ed82869"
+  integrity sha512-zpfrorxfTm3saBYmh+IZ4PgIb003SD4W17mlb79jO+eOOn6xRfHfLxcsCIeEad2co/demZGEeNQF1crpc0RdSg==
+  dependencies:
+    "@tamagui/constants" "1.116.2"
+    "@tamagui/use-presence" "1.116.2"
+    "@tamagui/web" "1.116.2"
 
 "@tamagui/aria-hidden@1.111.3":
   version "1.111.3"
@@ -1926,10 +2019,20 @@
     "@tamagui/stacks" "1.111.3"
     "@tamagui/use-controllable-state" "1.111.3"
 
+"@tamagui/colors@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/colors/-/colors-1.116.2.tgz#9b5c17373f455335b53624ee892fc8eb6882642c"
+  integrity sha512-Lq5XlZFjoQvoVVi9Dd3DbshKm6X+Fj7MB48pfLXEEPeyi+Ou8G3aNF8a+t0damYX0hJCDKWLNHOgSgx7kLV2/g==
+
 "@tamagui/compose-refs@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/compose-refs/-/compose-refs-1.111.3.tgz#9dd369af99b4c743ff68466e7b5fc1ca2c1beba0"
   integrity sha512-C0mgdt1Xcm17fhIAHK6DOp8Kz/3KdWrvwEtId90/MOKTMSK3sA0rDhaHgznCUDnIbLrnaV0G3iQjdj8s8QLiDA==
+
+"@tamagui/compose-refs@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/compose-refs/-/compose-refs-1.116.2.tgz#5d08f2bf23deea38332966dd46824abdd909cbb6"
+  integrity sha512-KrqONsqfcYcQb/Yjn/5Q/I8SPKcIRxJ1IQhEU4na0BmDJro/55A/GxU0F7Kw6nWOjrgU4XLwlYBoj0gIrw8U5Q==
 
 "@tamagui/config-default@1.111.3":
   version "1.111.3"
@@ -1940,10 +2043,31 @@
     "@tamagui/core" "1.111.3"
     "@tamagui/shorthands" "1.111.3"
 
+"@tamagui/config@^1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/config/-/config-1.116.2.tgz#1cfe95e46137ad37c841ac9a8daf20d23d331e1a"
+  integrity sha512-AxA2zbQQtqJdiOLxfoTfxzjQzKMp8b8IU3UKRggUmlWlcFTTP/dAf0KgV7AZqBhmZzQvFOaM4GrS7U1VKQcIsQ==
+  dependencies:
+    "@tamagui/animations-css" "1.116.2"
+    "@tamagui/animations-moti" "1.116.2"
+    "@tamagui/animations-react-native" "1.116.2"
+    "@tamagui/colors" "1.116.2"
+    "@tamagui/font-inter" "1.116.2"
+    "@tamagui/font-silkscreen" "1.116.2"
+    "@tamagui/react-native-media-driver" "1.116.2"
+    "@tamagui/shorthands" "1.116.2"
+    "@tamagui/themes" "1.116.2"
+    "@tamagui/web" "1.116.2"
+
 "@tamagui/constants@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/constants/-/constants-1.111.3.tgz#7e38f54b5982068c94a1dc86129e99fd19ad0a9f"
   integrity sha512-pI3X+ROU22vaINWKT1PLupjtMAYzXjdhLOyk5aab3oWSe266FUXImCuqIFE+yOFJOtME8F8lwQm+t56SbkRs0Q==
+
+"@tamagui/constants@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/constants/-/constants-1.116.2.tgz#080db9c5ebd360e666b6d06c54268c3ca110ce8b"
+  integrity sha512-N+FdMbGYjqcxZBCkQOG5R42uv1GEIUWCWpbuivLOp8SF3Nr9zBj4HorP3XpvDxGIgQCb3itKKGNvVLMuy59lOA==
 
 "@tamagui/core@1.111.3", "@tamagui/core@^1.111.3":
   version "1.111.3"
@@ -1954,6 +2078,16 @@
     "@tamagui/react-native-use-responder-events" "1.111.3"
     "@tamagui/use-event" "1.111.3"
     "@tamagui/web" "1.111.3"
+
+"@tamagui/core@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/core/-/core-1.116.2.tgz#c72c1a1039a46e3b716efe5fe3f6268551929c18"
+  integrity sha512-PXFYD+usYp20Vax0+04TyvPaTK0uWqrEQudNjhCtPttToagVV2eZeNWVuxwLjc6G8i9N4Es5xmsEkd6lGkU8zQ==
+  dependencies:
+    "@tamagui/react-native-use-pressable" "1.116.2"
+    "@tamagui/react-native-use-responder-events" "1.116.2"
+    "@tamagui/use-event" "1.116.2"
+    "@tamagui/web" "1.116.2"
 
 "@tamagui/create-context@1.111.3":
   version "1.111.3"
@@ -1967,10 +2101,22 @@
   dependencies:
     "@tamagui/web" "1.111.3"
 
+"@tamagui/create-theme@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/create-theme/-/create-theme-1.116.2.tgz#2b3e5fd7d94ba45b71dfd6508a7695fdae5d16fd"
+  integrity sha512-DpWWw1kztQL6Q7JGeLISCljQfqXfb5gX0jTkZlWMghbU2p7u3qpJ5vpvsswey8Cp4rvrBtxzYYSCuv/r8Hu0Yw==
+  dependencies:
+    "@tamagui/web" "1.116.2"
+
 "@tamagui/cubic-bezier-animator@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/cubic-bezier-animator/-/cubic-bezier-animator-1.111.3.tgz#42c9c51bf8053dd729841d4ffa14e9a5e1b4d17a"
   integrity sha512-QQazKKjUskIubM7WFlBONpC0uxyPKYWe8UmcfYloUKV3IAZdKoEuSZ8FWPzkVXpWvKTK8T1RdAQN7mdvphfasA==
+
+"@tamagui/cubic-bezier-animator@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/cubic-bezier-animator/-/cubic-bezier-animator-1.116.2.tgz#f2d4c3baa782a2cc31ee87448f8bdbf012b9bf0e"
+  integrity sha512-fW8IGaJbSAeJmtAnEJw5dmeoU1uzBiuJsdvFV7b2saIHBUsZ97/pSbU/pydpoB4OSLKYU7WnTBxsjiUWhDkdzQ==
 
 "@tamagui/dialog@1.111.3":
   version "1.111.3"
@@ -2043,6 +2189,20 @@
   dependencies:
     "@tamagui/compose-refs" "1.111.3"
     "@tamagui/web" "1.111.3"
+
+"@tamagui/font-inter@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/font-inter/-/font-inter-1.116.2.tgz#0e7975de3718c04db0970f87253518270b18feeb"
+  integrity sha512-bBtWnr3sAJ4lCzjEJwTOiTz8lhoKa/nOOikeKzHLqE4kP27qqw4szVc9+58nVwP9XmElHZmo6aYcgU4NRhFlLQ==
+  dependencies:
+    "@tamagui/core" "1.116.2"
+
+"@tamagui/font-silkscreen@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/font-silkscreen/-/font-silkscreen-1.116.2.tgz#22d5a430e1dc2186610fbcf5d6b3edac1fbfceba"
+  integrity sha512-YWTAlTMEkSuNKT8+tUSRIGKzPlZhIiv5MO9dY5rnbZ7AClZWRSpMvbGTNTMiqFCVL/1bWhXfLlyogyUaRYOxeQ==
+  dependencies:
+    "@tamagui/core" "1.116.2"
 
 "@tamagui/font-size@1.111.3":
   version "1.111.3"
@@ -2133,6 +2293,14 @@
     "@tamagui/constants" "1.111.3"
     "@tamagui/simple-hash" "1.111.3"
 
+"@tamagui/helpers@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/helpers/-/helpers-1.116.2.tgz#e38d1774e5239757a7aaed87e63258e485e7020a"
+  integrity sha512-kGxfvxiwc396Z7x9Q5IxfRh3GP1iQUZ54GaPxIkQSoXMiznkJA01eYxq9qUuXeNIlLyl+LmeCSCRv5d0qYwejA==
+  dependencies:
+    "@tamagui/constants" "1.116.2"
+    "@tamagui/simple-hash" "1.116.2"
+
 "@tamagui/image@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/image/-/image-1.111.3.tgz#60f997f492ea5219f796c57fc23c062bb26ca27f"
@@ -2181,6 +2349,13 @@
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/normalize-css-color/-/normalize-css-color-1.111.3.tgz#40ed3f400b81016ead2f41048596f29c7a9f913e"
   integrity sha512-UhO6d9iUM0Of+MDyxJP/0pprr2jJO2+CtGDnnxc/9VRvn1T6Czpk+/iV7CjRCfUMda/1ADEmzJXntu+dUCAdjw==
+  dependencies:
+    "@react-native/normalize-color" "^2.1.0"
+
+"@tamagui/normalize-css-color@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/normalize-css-color/-/normalize-css-color-1.116.2.tgz#e7a418828934cd3b28663da1e138b32c56a026e1"
+  integrity sha512-/eiKn8v4Xx7VvPfFprh86q2QYag+X2SNWFd8h/dJcXDYy1sUsi+a44tlVW7w+n8PxxjkasSmYosOY/lCjwGeiQ==
   dependencies:
     "@react-native/normalize-color" "^2.1.0"
 
@@ -2298,6 +2473,13 @@
   dependencies:
     "@tamagui/web" "1.111.3"
 
+"@tamagui/react-native-media-driver@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/react-native-media-driver/-/react-native-media-driver-1.116.2.tgz#515fb92082571ad1e133484ebedcc04080e48ca4"
+  integrity sha512-auxcfiXOA4PzTQiNK2ZkQxt0cUsRWlGzubUb1fXRaMzs97duI64li+IboQu6bIcvzByMJgQK1y1Rx/5M/Fp+qg==
+  dependencies:
+    "@tamagui/web" "1.116.2"
+
 "@tamagui/react-native-svg@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/react-native-svg/-/react-native-svg-1.111.3.tgz#b00ae7f4946f556288feb7a7a512be9411b5eeb7"
@@ -2308,10 +2490,20 @@
   resolved "https://registry.yarnpkg.com/@tamagui/react-native-use-pressable/-/react-native-use-pressable-1.111.3.tgz#098324b5bde6baa67cee726cfc60b62273068e94"
   integrity sha512-vRuSVXbrWJDrAF17Dk+LFWz5MvL7RJcierfVrw/d1wdIfVCM+Mm2hPBxAkWtn0g9L4atZ3+ZjqhPGLgRcVshVw==
 
+"@tamagui/react-native-use-pressable@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/react-native-use-pressable/-/react-native-use-pressable-1.116.2.tgz#e8fa4b333c8da19101e86a5e2b5d3a2c4f8aa8de"
+  integrity sha512-9UjEVeGvbKQYVu7uucnoD65n7qN9PuRNHFWAYHMDeUVcZ4vlTbqI5sPkzOoMyQaRm2PtKKqNW8cphvf0A/CNgA==
+
 "@tamagui/react-native-use-responder-events@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/react-native-use-responder-events/-/react-native-use-responder-events-1.111.3.tgz#04fb8fbf4f4cbf71a16e2984a5c8d55f147f7bda"
   integrity sha512-A6zDnp1U3XjLrj2K8Hy3VF2s+82+FmwFb0hC/7uR4Z1BP9ws4pZsmeG1JoKytGVRUmtpm5aHTbE0N5GEU4006A==
+
+"@tamagui/react-native-use-responder-events@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/react-native-use-responder-events/-/react-native-use-responder-events-1.116.2.tgz#bae481a3bde79a554719c2e3536a2fcec3f5cdcb"
+  integrity sha512-g9TkHKHtuAbPE0+FJaBosLtRpp4fT1y1jCz769e/24IbQnQlJuwdeDKIu5/zqdeFH7uiLyzDT7Sr52KSVY0Ihg==
 
 "@tamagui/remove-scroll@1.111.3":
   version "1.111.3"
@@ -2414,10 +2606,20 @@
   resolved "https://registry.yarnpkg.com/@tamagui/shorthands/-/shorthands-1.111.3.tgz#8f78dcfe39749fe0a06a35b8194a76f998dd8deb"
   integrity sha512-Pffst4Z0xkMHOnBB1AW1IjCB3laTIjvl2UGmFlRpFnC9tBGHa15aPcuhuAcovyKksfoEnF1J/m65ADCd6gldYw==
 
+"@tamagui/shorthands@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/shorthands/-/shorthands-1.116.2.tgz#22c5997bc55a35c99261f9a7a0bda088c1639fb4"
+  integrity sha512-lSwUYplb50vK99N5p+CDBHFNnLFUz/ixvx9PMF2EKzdxp8bjP0Dhm1CRlCDGTYVw6olQ4RjxWhyg0aGmvuSFng==
+
 "@tamagui/simple-hash@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/simple-hash/-/simple-hash-1.111.3.tgz#e0f058b9b4a84840dfc45858754d268ab74967dc"
   integrity sha512-zse0L0EGW2vp1ZJKwBKOYPXRCUQKJaYmDVh6GsBO1GmILeFP8I8ACtcFtslu5/X40Puv6/jdfZtrRcgw/GVSPA==
+
+"@tamagui/simple-hash@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/simple-hash/-/simple-hash-1.116.2.tgz#ebdee881fdfd0a8aab0bc574b6e4da2d74407afa"
+  integrity sha512-XrPJYJ/2wrXb7RWWKZ2B24Q4YH7nWwc8nYNvEjWKcafuLWP2EEYq5PS95N0HoivsNry/P+lBkJKqVJnPKHg1Mw==
 
 "@tamagui/slider@1.111.3":
   version "1.111.3"
@@ -2550,6 +2752,14 @@
     "@tamagui/create-theme" "1.111.3"
     color2k "^2.0.2"
 
+"@tamagui/theme-builder@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/theme-builder/-/theme-builder-1.116.2.tgz#cce76383f2127ca9c8b447ae9bdb088be7f7f0f4"
+  integrity sha512-53twm8hc7GApYEyNdfsnSZgRT6AavsJafsQW3td+4aQSNjnOEKvB0QrZr92Ers/OuLsRRgbDXMHPAMHHcKi2kA==
+  dependencies:
+    "@tamagui/create-theme" "1.116.2"
+    color2k "^2.0.2"
+
 "@tamagui/theme@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/theme/-/theme-1.111.3.tgz#2773681653488d6401eed450503435dc54835045"
@@ -2558,10 +2768,25 @@
     "@tamagui/constants" "1.111.3"
     "@tamagui/web" "1.111.3"
 
+"@tamagui/themes@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/themes/-/themes-1.116.2.tgz#a30d717042fd8a4971e39402e7403a82e4332ef3"
+  integrity sha512-gCPB7/vLUb9ze8mTkQvqEvMErycBEu8gcwUStAp/wLS18B5du7klT1nSIaqJ09xrJYX7Q6i/KbOiPCs41wHOBA==
+  dependencies:
+    "@tamagui/colors" "1.116.2"
+    "@tamagui/create-theme" "1.116.2"
+    "@tamagui/theme-builder" "1.116.2"
+    "@tamagui/web" "1.116.2"
+
 "@tamagui/timer@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/timer/-/timer-1.111.3.tgz#b5df24644b8d71fa353762545ef4c96adb22dd05"
   integrity sha512-ACMu1lVFCrzJRPiTXHRz2Y+bIWbW23tI4EF2+W3g5j+JaobgrD50Zlir25t8SSDFEOVhYXFa0igFG4290rM33Q==
+
+"@tamagui/timer@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/timer/-/timer-1.116.2.tgz#d8614dc3d313ebcb18599190392743d8455e512a"
+  integrity sha512-EI+Fxr+xPqs/h3Tn7tD2zbtzlXTLD+EhVDmjyeadLGq89ovQyUxZmicz16tMw+SxjrD716XTenhE1RXzeBuW4w==
 
 "@tamagui/toggle-group@1.111.3":
   version "1.111.3"
@@ -2606,6 +2831,11 @@
   resolved "https://registry.yarnpkg.com/@tamagui/types/-/types-1.111.3.tgz#c22b6fb6623f7d2e33352f7e42788fd4bfc3b2ae"
   integrity sha512-xIYLeAqAUAVRJH4+5b2dtNumOLMZHpQkwT2ZaUrvET5y7x2D3nmMUlNOdS9k/DVzjus7eqL4wuQpow3USxm+uw==
 
+"@tamagui/types@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/types/-/types-1.116.2.tgz#abfce609a25dc71aba784b830b7d0199150581ae"
+  integrity sha512-5rk5xp3fCpwym1Ia+dq1woTJXODnOu5CjRGK03q5P1EBhtrd9OGFLiWij0EVn2yx6Gfr/9znI3OxP+x+B6VLgA==
+
 "@tamagui/use-callback-ref@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/use-callback-ref/-/use-callback-ref-1.111.3.tgz#24a5dfdd972848b8757c7039fed538460bfc1c8c"
@@ -2634,6 +2864,11 @@
   resolved "https://registry.yarnpkg.com/@tamagui/use-did-finish-ssr/-/use-did-finish-ssr-1.111.3.tgz#aff110a9bdc04a930a520fd3bb3817b6b99d3bd4"
   integrity sha512-tYHZuK4C/cIngL6CE+QrK1PlVWeQWqsreICYR2oIqNKRlweKc2SeFGxdCoKaE6m4vAGGoZ+F8zBN1SesTLgA4Q==
 
+"@tamagui/use-did-finish-ssr@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/use-did-finish-ssr/-/use-did-finish-ssr-1.116.2.tgz#d2aac23f07aacff737618a875a3e19bdc5cfaa3e"
+  integrity sha512-bmCRbkyNvbKg5/z0b9lnujeDQ1DcgDQ95d4O/EBstxCaCVCaYWGRlKCRLoVhohKl6BAzjl+XBLxRnqPQV0/wJQ==
+
 "@tamagui/use-direction@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/use-direction/-/use-direction-1.111.3.tgz#c234976de1a91be6ab7be1e0436be66bf4754cdd"
@@ -2653,10 +2888,22 @@
   dependencies:
     "@tamagui/constants" "1.111.3"
 
+"@tamagui/use-event@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/use-event/-/use-event-1.116.2.tgz#db7e38f44872f8f32fba298ce202be3c05f88557"
+  integrity sha512-ddzqPNOYWTBIxblGlhCy/rN8ehugSDwGHPV+XP8CvvAR5YDjdZTNBjED4RL3NqyktnGhGbsulMN5MUvnVud+ZA==
+  dependencies:
+    "@tamagui/constants" "1.116.2"
+
 "@tamagui/use-force-update@1.111.3":
   version "1.111.3"
   resolved "https://registry.yarnpkg.com/@tamagui/use-force-update/-/use-force-update-1.111.3.tgz#a5bad6d1f3065cf7b2142bb29e48ccb46be1508b"
   integrity sha512-OHMMWjJC4pBhzw0wKJUvLFoaTYCLRS56e2dGOrECzjT1rxP/7lRJ5IMDRXhg03PUdVLJ+lLMaQq5Nh1TW5IDdQ==
+
+"@tamagui/use-force-update@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/use-force-update/-/use-force-update-1.116.2.tgz#3e83247afe2dbc9b5fc894562dc5dc76d9c7a35e"
+  integrity sha512-yBJZvPoAPqcTK0vwMXtjBJ6rexVIg7BWKWDQaGgfkf/2AZI/eNUIYYdfVnc57dALYSud5b8n/uW1kQNYrrhm9w==
 
 "@tamagui/use-keyboard-visible@1.111.3":
   version "1.111.3"
@@ -2669,6 +2916,13 @@
   integrity sha512-bQ8/kKT/6p7mn836itcU3ItTwR2FjOBV9wcHTnNJTIS2/iVye81tYU9iYM5J5wqIDQwr0ltdkNCE7iVG5ZHtSg==
   dependencies:
     "@tamagui/web" "1.111.3"
+
+"@tamagui/use-presence@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/use-presence/-/use-presence-1.116.2.tgz#f0e34075abd318434391940e052f7b7c21727f68"
+  integrity sha512-e8E5i5Eu7uc2R4o+7k/SlGSLdlpx5VMVr/8Xl4GtDVVWIn5HY0RnKXr230DW5fHcVnFhW0XMUOA8m3PZ8bt4Qw==
+  dependencies:
+    "@tamagui/web" "1.116.2"
 
 "@tamagui/use-previous@1.111.3":
   version "1.111.3"
@@ -2717,6 +2971,23 @@
     "@tamagui/use-did-finish-ssr" "1.111.3"
     "@tamagui/use-event" "1.111.3"
     "@tamagui/use-force-update" "1.111.3"
+
+"@tamagui/web@1.116.2":
+  version "1.116.2"
+  resolved "https://registry.npmjs.org/@tamagui/web/-/web-1.116.2.tgz#6e6a790423c676592d7d8341e6a306454a08ed52"
+  integrity sha512-pzLuJ1AVdttlOIsK8oTSJOmROp6ACWtMkJt5l0Wlf+w7m7EaHCqFykySUGROj3ESh5BBE2jOD6Sii8N4ST1e1Q==
+  dependencies:
+    "@tamagui/compose-refs" "1.116.2"
+    "@tamagui/constants" "1.116.2"
+    "@tamagui/helpers" "1.116.2"
+    "@tamagui/normalize-css-color" "1.116.2"
+    "@tamagui/timer" "1.116.2"
+    "@tamagui/types" "1.116.2"
+    "@tamagui/use-did-finish-ssr" "1.116.2"
+    "@tamagui/use-event" "1.116.2"
+    "@tamagui/use-force-update" "1.116.2"
+    react "^18.2.0 || ^19.0.0"
+    react-dom "^18.2.0 || ^19.0.0"
 
 "@types/babel__core@^7.20.5":
   version "7.20.5"
@@ -2963,6 +3234,11 @@
     "@babel/plugin-transform-react-jsx-source" "^7.24.1"
     "@types/babel__core" "^7.20.5"
     react-refresh "^0.14.2"
+
+"@wojtekmaj/date-utils@^1.1.3":
+  version "1.5.1"
+  resolved "https://registry.npmjs.org/@wojtekmaj/date-utils/-/date-utils-1.5.1.tgz#c3cd67177ac781cfa5736219d702a55a2aea5f2b"
+  integrity sha512-+i7+JmNiE/3c9FKxzWFi2IjRJ+KzZl1QPu6QNrsgaa2MuBgXvUy4gA1TVzf/JMdIIloB76xSKikTWuyYAIVLww==
 
 "@xobotyi/scrollbar-width@^1.9.5":
   version "1.9.5"
@@ -4266,6 +4542,27 @@ form-data@^4.0.0:
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
+framer-motion@^6.5.1:
+  version "6.5.1"
+  resolved "https://registry.npmjs.org/framer-motion/-/framer-motion-6.5.1.tgz#802448a16a6eb764124bf36d8cbdfa6dd6b931a7"
+  integrity sha512-o1BGqqposwi7cgDrtg0dNONhkmPsUFDaLcKXigzuTFC5x58mE8iyTazxSudFzmT6MEyJKfjjU8ItoMe3W+3fiw==
+  dependencies:
+    "@motionone/dom" "10.12.0"
+    framesync "6.0.1"
+    hey-listen "^1.0.8"
+    popmotion "11.0.3"
+    style-value-types "5.0.0"
+    tslib "^2.1.0"
+  optionalDependencies:
+    "@emotion/is-prop-valid" "^0.8.2"
+
+framesync@6.0.1:
+  version "6.0.1"
+  resolved "https://registry.npmjs.org/framesync/-/framesync-6.0.1.tgz#5e32fc01f1c42b39c654c35b16440e07a25d6f20"
+  integrity sha512-fUY88kXvGiIItgNC7wcTOl0SNRCVXMKSWW2Yzfmn7EKNc+MpCzcz9DhdHcdjbrtN3c6R4H5dTY2jiCpPdysEjA==
+  dependencies:
+    tslib "^2.1.0"
+
 fresh@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
@@ -4323,6 +4620,13 @@ get-stream@^6.0.0:
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-6.0.1.tgz#a262d8eef67aced57c2852ad6167526a43cbf7b7"
   integrity sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==
+
+get-user-locale@^2.2.1:
+  version "2.3.2"
+  resolved "https://registry.npmjs.org/get-user-locale/-/get-user-locale-2.3.2.tgz#d37ae6e670c2b57d23a96fb4d91e04b2059d52cf"
+  integrity sha512-O2GWvQkhnbDoWFUJfaBlDIKUEdND8ATpBXD6KXcbhxlfktyD/d8w6mkzM/IlQEqGZAMz/PW6j6Hv53BiigKLUQ==
+  dependencies:
+    mem "^8.0.0"
 
 glob-parent@^5.1.2, glob-parent@~5.1.2:
   version "5.1.2"
@@ -4426,6 +4730,11 @@ hermes-parser@0.23.1:
   integrity sha512-oxl5h2DkFW83hT4DAUJorpah8ou4yvmweUzLJmmr6YV2cezduCdlil1AvU/a/xSsAFo4WUcNA4GoV5Bvq6JffA==
   dependencies:
     hermes-estree "0.23.1"
+
+hey-listen@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.npmjs.org/hey-listen/-/hey-listen-1.0.8.tgz#8e59561ff724908de1aa924ed6ecc84a56a9aa68"
+  integrity sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==
 
 http-errors@2.0.0:
   version "2.0.0"
@@ -4991,6 +5300,13 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
+map-age-cleaner@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.npmjs.org/map-age-cleaner/-/map-age-cleaner-0.1.3.tgz#7d583a7306434c055fe474b0f45078e6e1b4b92a"
+  integrity sha512-bJzx6nMoP6PDLPBFmg7+xRKeFZvFboMrGlxmNj9ClvX53KrmvM5bXFXEWjbz4cz1AFn+jWJ9z/DJSz7hrs0w3w==
+  dependencies:
+    p-defer "^1.0.0"
+
 marky@^1.2.2:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/marky/-/marky-1.2.5.tgz#55796b688cbd72390d2d399eaaf1832c9413e3c0"
@@ -5000,6 +5316,14 @@ mdn-data@2.0.14:
   version "2.0.14"
   resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-2.0.14.tgz#7113fc4281917d63ce29b43446f701e68c25ba50"
   integrity sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==
+
+mem@^8.0.0:
+  version "8.1.1"
+  resolved "https://registry.npmjs.org/mem/-/mem-8.1.1.tgz#cf118b357c65ab7b7e0817bdf00c8062297c0122"
+  integrity sha512-qFCFUDs7U3b8mBDPyz5EToEKoAkgCzqquIgi9nkkR9bixxOVOre+09lbuH7+9Kn2NFpm56M3GUWVbU2hQgdACA==
+  dependencies:
+    map-age-cleaner "^0.1.3"
+    mimic-fn "^3.1.0"
 
 memoize-one@^5.0.0:
   version "5.2.1"
@@ -5259,6 +5583,11 @@ mimic-fn@^2.1.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
+mimic-fn@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.npmjs.org/mimic-fn/-/mimic-fn-3.1.0.tgz#65755145bbf3e36954b949c16450427451d5ca74"
+  integrity sha512-Ysbi9uYW9hFyfrThdDEQuykN4Ey6BuwPD2kpI5ES/nFTDn/98yxYNLZJcgUAKPT/mcrLLKaGzJR9YVxJrIdASQ==
+
 minimatch@^3.0.2, minimatch@^3.1.1, minimatch@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/minimatch/-/minimatch-3.1.2.tgz#19cd194bfd3e428f049a70817c038d89ab4be35b"
@@ -5289,6 +5618,13 @@ mkdirp@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/mkdirp/-/mkdirp-1.0.4.tgz#3eb5ed62622756d79a5f0e2a221dfebad75c2f7e"
   integrity sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
+
+moti@^0.29.0:
+  version "0.29.0"
+  resolved "https://registry.npmjs.org/moti/-/moti-0.29.0.tgz#bd8820749bbaae61ef28298b53fabb84fe4ad171"
+  integrity sha512-o/blVE3lm0i/6E5X0RLK59SVWEGxo7pQh8dTm+JykVCYY9bcz0lWyZFCO1s+MMNq+nMsSZBX8lkp4im/AZmhyw==
+  dependencies:
+    framer-motion "^6.5.1"
 
 ms@2.0.0:
   version "2.0.0"
@@ -5499,6 +5835,11 @@ outdent@^0.8.0:
   resolved "https://registry.yarnpkg.com/outdent/-/outdent-0.8.0.tgz#2ebc3e77bf49912543f1008100ff8e7f44428eb0"
   integrity sha512-KiOAIsdpUTcAXuykya5fnVVT+/5uS0Q1mrkRHcF89tpieSmY33O/tmc54CqwA+bfhbtEfZUNLHaPUiB9X3jt1A==
 
+p-defer@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/p-defer/-/p-defer-1.0.0.tgz#9f6eb182f6c9aa8cd743004a7d4f96b196b0fb0c"
+  integrity sha512-wB3wfAxZpk2AzOfUMJNL+d36xothRSyj8EXOa4f6GMqYDN9BJaaSISbsk+wS9abmnebVw95C2Kb5t85UmpCxuw==
+
 p-limit@^2.0.0, p-limit@^2.2.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-2.3.0.tgz#3dd33c647a214fdfffd835933eb086da0dc21db1"
@@ -5644,6 +5985,16 @@ pkg-dir@^4.1.0:
   integrity sha512-HRDzbaKjC+AOWVXxAU/x54COGeIv9eb+6CkDSQoNTt4XyWoIJvuPsXizxu/Fr23EiekbtZwmh1IcIG/l/a10GQ==
   dependencies:
     find-up "^4.0.0"
+
+popmotion@11.0.3:
+  version "11.0.3"
+  resolved "https://registry.npmjs.org/popmotion/-/popmotion-11.0.3.tgz#565c5f6590bbcddab7a33a074bb2ba97e24b0cc9"
+  integrity sha512-Y55FLdj3UxkR7Vl3s7Qr4e9m0onSnP8W7d/xQLsoJM40vs6UKHFdygs6SWryasTZYqugMjm3BepCF4CWXDiHgA==
+  dependencies:
+    framesync "6.0.1"
+    hey-listen "^1.0.8"
+    style-value-types "5.0.0"
+    tslib "^2.1.0"
 
 postcss-value-parser@^4.2.0:
   version "4.2.0"
@@ -6490,6 +6841,14 @@ strnum@^1.0.5:
   resolved "https://registry.yarnpkg.com/strnum/-/strnum-1.0.5.tgz#5c4e829fe15ad4ff0d20c3db5ac97b73c9b072db"
   integrity sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==
 
+style-value-types@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.npmjs.org/style-value-types/-/style-value-types-5.0.0.tgz#76c35f0e579843d523187989da866729411fc8ad"
+  integrity sha512-08yq36Ikn4kx4YU6RD7jWEv27v4V+PUsOGa4n/as8Et3CuODMJQ00ENeAVXAeydX4Z2j1XHZF1K2sX4mGl18fA==
+  dependencies:
+    hey-listen "^1.0.8"
+    tslib "^2.1.0"
+
 styleq@^0.1.3:
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/styleq/-/styleq-0.1.3.tgz#8efb2892debd51ce7b31dc09c227ad920decab71"
@@ -6692,6 +7051,11 @@ tslib@^2.0.0, tslib@^2.0.1, tslib@^2.1.0, tslib@^2.4.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.7.0.tgz#d9b40c5c40ab59e8738f297df3087bf1a2690c01"
   integrity sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==
 
+tslib@^2.3.1:
+  version "2.8.0"
+  resolved "https://registry.npmjs.org/tslib/-/tslib-2.8.0.tgz#d124c86c3c05a40a91e6fdea4021bd31d377971b"
+  integrity sha512-jWVzBLplnCmoaTr13V9dYbiQ99wvZRd0vNWaDRg+aVYRcjDF3nDksxFDE/+fkXnKhpnUUkmx5pK/v8mCtLVqZA==
+
 type-check@^0.4.0, type-check@~0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/type-check/-/type-check-0.4.0.tgz#07b8203bfa7056c0657050e3ccd2c37730bab8f1"
@@ -6870,6 +7234,13 @@ warn-once@0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/warn-once/-/warn-once-0.1.1.tgz#952088f4fb56896e73fd4e6a3767272a3fccce43"
   integrity sha512-VkQZJbO8zVImzYFteBXvBOZEl1qL175WH8VmZcxF2fZAoudNhNDvHi+doCaAEdU2l2vtcIwa2zn0QK5+I1HQ3Q==
+
+warning@^4.0.0:
+  version "4.0.3"
+  resolved "https://registry.npmjs.org/warning/-/warning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
+  integrity sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==
+  dependencies:
+    loose-envify "^1.0.0"
 
 wcwidth@^1.0.1:
   version "1.0.1"

@@ -11,6 +11,8 @@ public class Client
     public DateTimeOffset DateOfBirth { get; set; }
     public int UserId { get; set; }
     public User User { get; set; }
+    public int? GroupId { get; set; }
+    public Group Group { get; set; }
 }
 
 public class ClientGetDto
@@ -27,7 +29,19 @@ public class ClientCreateDto
     public string LastName { get; set; }
     public DateTimeOffset DateOfBirth { get; set; }
     public int UserId { get; set; }
+    
 }
+
+public class ClientUpdateDto
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public DateTimeOffset DateOfBirth { get; set; }
+    public int UserId { get; set; }
+    public bool IsDateOfBirthUpdated { get; set; }
+    
+}
+
 
 public class ClientConfiguration : IEntityTypeConfiguration<Client>
 {
