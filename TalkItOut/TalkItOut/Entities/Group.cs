@@ -8,7 +8,6 @@ public class Group
     public int Id { get; set; }
     public List<Client> Clients { get; set; } = new List<Client>();
     public User User { get; set; }
-    public List<int> ClientIds { get; set; }
     public int UserId { get; set; }
 
 }

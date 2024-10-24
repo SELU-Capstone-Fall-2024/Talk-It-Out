@@ -26,7 +26,7 @@ public class GroupController : ControllerBase
             .Select(x => new GroupGetDto()
             {
                 Id = x.Id,
-                ClientIds = x.ClientIds.ToList(),
+                ClientIds = x.Clients.Select(y => y.Id).ToList(),
                 UserId = x.UserId,
             })
             .ToList();
@@ -42,6 +42,7 @@ public class GroupController : ControllerBase
         var response = new Response();
 
         var group = await _dataContext.Set<Group>()
+            .Include(x => x.Clients)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (group == null)
@@ -53,7 +54,7 @@ public class GroupController : ControllerBase
         var groupDto = new GroupGetDto
             {
                 Id = group.Id,
-                ClientIds = group.ClientIds.ToList(),
+                ClientIds = group.Clients.Select(y => y.Id).ToList(),
                 UserId = group.UserId,
             };
 
@@ -69,17 +70,22 @@ public class GroupController : ControllerBase
 
         var groupToCreate = new Group
         {
-            ClientIds = groupCreateDto.ClientIds,
             UserId = groupCreateDto.UserId,
         };
 
         await _dataContext.Set<Group>().AddAsync(groupToCreate);
         await _dataContext.SaveChangesAsync();
+        
+        await _dataContext.Set<Client>()
+            .Where(x => groupCreateDto.ClientIds.Contains(x.Id))
+            .ForEachAsync(x => x.GroupId = groupToCreate.Id);
+        
+        await _dataContext.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetById), new { id = groupToCreate.Id }, new GroupGetDto
             {
                 Id = groupToCreate.Id,
-                ClientIds = groupToCreate.ClientIds.ToList(),
+                ClientIds = groupToCreate.Clients.Select(x => x.Id).ToList(),
                 UserId = groupToCreate.UserId,
             });    
     }
@@ -97,8 +103,10 @@ public class GroupController : ControllerBase
             return NotFound(response);
         }
         
-        group.ClientIds = groupCreateDto.ClientIds;
-
+        await _dataContext.Set<Client>()
+            .Where(x => groupCreateDto.ClientIds.Contains(x.Id))
+            .ForEachAsync(x => x.GroupId = group.Id);
+        
         if (groupCreateDto.UserId > 0)
         {
             group.UserId = groupCreateDto.UserId;
@@ -109,7 +117,7 @@ public class GroupController : ControllerBase
         response.Data = new GroupGetDto
         {
             Id = group.Id,
-            ClientIds = group.ClientIds.ToList(),
+            ClientIds = group.Clients.Select(x => x.Id).ToList(),
             UserId = group.UserId,
         };
 

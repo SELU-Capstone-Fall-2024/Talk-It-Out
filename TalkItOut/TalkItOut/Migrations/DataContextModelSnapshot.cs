@@ -199,10 +199,6 @@ namespace TalkItOut.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("ClientIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -429,7 +425,7 @@ namespace TalkItOut.Migrations
             modelBuilder.Entity("TalkItOut.Entities.Group", b =>
                 {
                     b.HasOne("TalkItOut.Entities.User", "User")
-                        .WithMany("Groups")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -487,8 +483,6 @@ namespace TalkItOut.Migrations
             modelBuilder.Entity("TalkItOut.Entities.User", b =>
                 {
                     b.Navigation("Goals");
-
-                    b.Navigation("Groups");
 
                     b.Navigation("Sessions");
 
