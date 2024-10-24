@@ -20,6 +20,7 @@ export type ClientGetDto = {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
+  goals: GoalGetDto[];
 };
 
 export type ClientCreateDto = {
@@ -61,19 +62,19 @@ export type SessionUpdateDto = {
 export type GoalGetDto = {
   id: number;
   userId: number;
-  goalInformation: string;
+  information: string;
   clientId: number;
 };
 
 export type GoalCreateDto = {
   userId: number;
-  goalInformation: string;
+  information: string;
   clientId: number;
 };
 
 export type GoalUpdateDto = {
   userId: number;
-  goalInformation: string;
+  information: string;
   clientId: number;
 };
 
@@ -88,4 +89,9 @@ export type GroupCreateDto = {
 
 export type GroupUpdateDto = {
   clients: ClientGetDto[];
+};
+
+export type OptionItemDto = {
+  value: number;
+  text: string;
 };

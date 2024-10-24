@@ -1,6 +1,7 @@
-import {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Pressable, Modal, Button, Text, StyleSheet} from 'react-native';
-import {ClientGetDto} from '../types';
+import {ClientGetDto, OptionItemDto, Response} from '../types';
+import api from '../api/api';
 
 type Props = {
   client: ClientGetDto;
@@ -8,6 +9,26 @@ type Props = {
 
 export const ClientModal = (props: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedValue, setSelectedValue] = useState('');
+  const [isLoading, setLoading] = useState(true);
+  const [options, setOptions] = useState<OptionItemDto[] | null>([]);
+
+  const getOptions = async () => {
+    try {
+      const response = await api.get<Response<OptionItemDto[]>>(
+        `/goals/options/${props.client.id}`
+      );
+      setOptions(response.data.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getOptions();
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -34,6 +55,12 @@ export const ClientModal = (props: Props) => {
               }}
             />
           </View>
+          <Text style={{marginBottom: 10}}>Current Goal</Text>
+          <Text>{props.client.goals.at(0)?.information}</Text>
+
+          {selectedValue ? (
+            <Text style={{marginTop: 20}}>You selected: {selectedValue}</Text>
+          ) : null}
 
           <Pressable
             style={styles.closeButton}
