@@ -10,9 +10,9 @@ namespace TalkItOut.Entities
         public int DurationMinutes { get; set; }
         public DateTimeOffset StartTime { get; set; }
         public DateTimeOffset EndTime { get; set; }
-        public int GroupId { get; set; }
-        public int ClientId { get; set; }
-        public Client Client { get; set; }
+        public int? GroupId { get; set; }
+        public int? ClientId { get; set; }
+        public Client? Client { get; set; }
         public User User { get; set; }
     }
 
@@ -23,19 +23,28 @@ namespace TalkItOut.Entities
         public int DurationMinutes { get; set; }
         public DateTimeOffset StartTime { get; set; }
         public DateTimeOffset EndTime { get; set; }
-        public int GroupId { get; set; }
-        public int ClientId { get; set; }
+        public int? GroupId { get; set; }
+        public int? ClientId { get; set; }
         public string ClientName { get; set; }
     }
 
     public class SessionCreateDto
     {
         public int UserId { get; set; }
-        public int DurationMinutes { get; set; }
         public DateTimeOffset StartTime { get; set; }
         public DateTimeOffset EndTime { get; set; }
-        public int GroupId { get; set; }
-        public int ClientId { get; set; }
+        public int? GroupId { get; set; }
+        public int? ClientId { get; set; }
+    }
+    public class SessionUpdateDto
+    {
+        public int UserId { get; set; }
+        public DateTimeOffset StartTime { get; set; }
+        public bool StartTimeChanged { get; set; }
+        public DateTimeOffset EndTime { get; set; }
+        public bool EndTimeChanged { get; set; }
+        public int? GroupId { get; set; }
+        public int? ClientId { get; set; }
     }
 
     public class SessionConfiguration : IEntityTypeConfiguration<Session>

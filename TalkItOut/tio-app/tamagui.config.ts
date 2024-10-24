@@ -1,4 +1,4 @@
-import {createTamagui, createTokens} from '@tamagui/core';
+import { createTamagui, createTokens } from "@tamagui/core";
 
 export default createTamagui({
   tokens: createTokens({
@@ -18,7 +18,7 @@ export default createTamagui({
       lg: 12,
     },
     color: {
-      blue: '#AAAAAA',
+      blue: "#AAAAAA",
     },
     zIndex: {
       low: 1,
@@ -28,14 +28,14 @@ export default createTamagui({
     Button: {
       variants: {
         primary: {
-          backgroundColor: '$primary',
-          color: 'white',
+          backgroundColor: "$primary",
+          color: "white",
           padding: 12,
           borderRadius: 8,
         },
         secondary: {
-          backgroundColor: '$secondary',
-          color: 'white',
+          backgroundColor: "$secondary",
+          color: "white",
           padding: 12,
           borderRadius: 8,
         },
@@ -44,12 +44,12 @@ export default createTamagui({
   },
   themes: {
     light: {
-      background: '#fff',
-      color: '#000',
+      background: "#fff",
+      color: "#000",
     },
     dark: {
-      background: '#000',
-      color: '#fff',
+      background: "#000",
+      color: "#fff",
     },
   },
 });

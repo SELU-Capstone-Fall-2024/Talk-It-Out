@@ -47,6 +47,7 @@ public class GoalController : ControllerBase
         if (goal == null)
         {
             response.AddError("Id", "Goal could not be found.");
+            return NotFound(response);
         }
 
         var goalDto = new GoalGetDto
@@ -76,16 +77,14 @@ public class GoalController : ControllerBase
 
         await _dataContext.Set<Goal>().AddAsync(goalToCreate);
         await _dataContext.SaveChangesAsync();
-
-        response.Data = new GoalGetDto
+        
+        return CreatedAtAction(nameof(GetById), new { id = goalToCreate.Id }, new GoalGetDto
         {
             Id = goalToCreate.Id,
             UserId = goalToCreate.UserId,
             Information = goalCreateDto.Information,
             ClientId = goalCreateDto.ClientId
-        };
-
-        return Ok(response);
+        });
     }
     
     [HttpPut("{id}")]
@@ -98,11 +97,22 @@ public class GoalController : ControllerBase
         if (goal == null)
         {
             response.AddError("Id", "Goal could not be found.");
+            return NotFound(response);
         }
 
-        goal.UserId = goalCreateDto.UserId;
-        goal.Information = goalCreateDto.Information;
-        goal.ClientId = goalCreateDto.ClientId;
+        if (goalCreateDto.UserId > 0)
+        {
+            goal.UserId = goalCreateDto.UserId;
+        }
+        if (!string.IsNullOrEmpty(goalCreateDto.Information))
+        {
+            goal.Information = goalCreateDto.Information;
+
+        }
+        if (goalCreateDto.ClientId > 0)
+        {
+            goal.ClientId = goalCreateDto.ClientId;
+        }
 
         await _dataContext.SaveChangesAsync();
 
@@ -124,9 +134,17 @@ public class GoalController : ControllerBase
 
         var goalToDelete = await _dataContext.Set<Goal>()
             .FirstOrDefaultAsync(x => x.Id == id);
+        
+        if (goalToDelete == null)
+        {
+            response.AddError("Id", "Goal could not be found.");
+            return NotFound(response);
+        }
 
         _dataContext.Set<Goal>().Remove(goalToDelete);
+        await _dataContext.SaveChangesAsync();
 
-        return Ok();
+
+        return Ok(new { message = "Goal deleted successfully." });
     }
 }

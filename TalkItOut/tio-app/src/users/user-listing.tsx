@@ -21,7 +21,10 @@ const Users: React.FC = () => {
       {!loading && users && (
         <ul>
           {users.data?.map((user) => (
-            <li key={user.id}>{user.name}</li>
+            <li key={user.id}>
+              {user.username}: Name: {user.firstName} {user.lastName}
+               Email: {user.email}
+            </li>
           ))}
         </ul>
       )}
