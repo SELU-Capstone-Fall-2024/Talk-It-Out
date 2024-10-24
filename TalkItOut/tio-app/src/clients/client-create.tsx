@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api/api"; // Adjust the import according to your folder structure
-import { ClientCreateDto } from "../types"; // Adjust the import according to your folder structure
-import type { SizeTokens } from 'tamagui'
-import { Button, Input, TextArea, XStack, YStack } from 'tamagui'
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
-import DatePicker from "react-datepicker";
+import React, {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import api from '../api/api'; // Adjust the import according to your folder structure
+import {ClientCreateDto} from '../types'; // Adjust the import according to your folder structure
+// import type { SizeTokens } from 'tamagui'
+import {Button, Input} from 'tamagui';
+import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
+import DatePicker from 'react-datepicker';
 
 const ClientCreate: React.FC = () => {
   const navigate = useNavigate();
   const [clientData, setClientData] = useState<ClientCreateDto>({
-    firstName: "",
-    lastName: "",
-    dateOfBirth: "",
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -20,13 +20,13 @@ const ClientCreate: React.FC = () => {
   // Handle form changes
 
   const handleChange =
-  (field: keyof ClientCreateDto) =>
-  (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
-    setClientData((prevData) => ({
-      ...prevData,
-      [field]: e.nativeEvent.text,
-    }));
-  };
+    (field: keyof ClientCreateDto) =>
+    (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+      setClientData((prevData) => ({
+        ...prevData,
+        [field]: e.nativeEvent.text,
+      }));
+    };
 
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,10 +34,10 @@ const ClientCreate: React.FC = () => {
     setLoading(true);
 
     try {
-      await api.post("/clients", clientData); // Adjust the endpoint as necessary
-      navigate("/clients"); // Redirect to clients listing after successful creation
+      await api.post('/clients', clientData); // Adjust the endpoint as necessary
+      navigate('/clients'); // Redirect to clients listing after successful creation
     } catch (err) {
-      setError("Failed to create client. Please try again.");
+      setError('Failed to create client. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -46,32 +46,35 @@ const ClientCreate: React.FC = () => {
   const [startDate, setStartDate] = useState(new Date());
 
   return (
-    <div>
+    <>
       <h1>Create Client</h1>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p style={{color: 'red'}}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <label htmlFor="firstName">First Name:</label>
         <Input
           id="firstName"
           value={clientData.firstName}
-          onChange={() => handleChange("firstName")}
+          onChange={() => handleChange('firstName')}
         />
 
         <label htmlFor="lastName">Last Name:</label>
         <Input
           id="lastName"
           value={clientData.lastName}
-          onChange={() => handleChange("lastName")}
+          onChange={() => handleChange('lastName')}
         />
 
         <label htmlFor="dateOfBirth">Date of Birth:</label>
-        <DatePicker selected={startDate} onChange={(date) => setStartDate(date)} />
+        <DatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+        />
 
-        <Button  disabled={loading}>
-          {loading ? "Creating..." : "Create Client"}
+        <Button disabled={loading} size={20}>
+          {loading ? 'Creating...' : 'Create Client'}
         </Button>
       </form>
-    </div>
+    </>
   );
 };
 
