@@ -22,12 +22,19 @@ public class ClientController : ControllerBase
         var response = new Response();
 
         var clients = _dataContext.Set<Client>()
+            .Include(x => x.Goals)
             .Select(x => new ClientGetDto
             {
                 Id = x.Id,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
-                DateOfBirth = x.DateOfBirth
+                DateOfBirth = x.DateOfBirth,
+                Goals = _dataContext.Set<Goal>().Where(y => y.ClientId == x.Id).Select(y => new GoalGetDto
+                {
+                    Id = y.Id,
+                    Information = y.Information,
+                    ClientId = y.ClientId
+                }).ToList()
             })
             .ToList();
 

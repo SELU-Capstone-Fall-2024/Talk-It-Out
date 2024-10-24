@@ -22,6 +22,7 @@ namespace TalkItOut.Controllers;
             var response = new Response();
 
             var sessions = _dataContext.Set<Session>()
+                .Include(x => x.Client)
                 .Select(x => new SessionGetDto
                 {
                     Id = x.Id,
@@ -30,7 +31,8 @@ namespace TalkItOut.Controllers;
                     StartTime = x.StartTime,
                     EndTime = x.EndTime,
                     GroupId = x.GroupId,
-                    ClientId = x.ClientId
+                    ClientId = x.ClientId,
+                    ClientName = x.Client.FirstName + " " + x.Client.LastName
                 })
                 .ToList();
 
@@ -80,15 +82,15 @@ namespace TalkItOut.Controllers;
                 GroupId = sessionCreateDto.GroupId,
                 ClientId = sessionCreateDto.ClientId 
             };
-            if (sessionCreateDto.StartTime < sessionCreateDto.EndTime)
-            {
-                sessionToCreate.DurationMinutes = (int)(sessionCreateDto.EndTime - sessionCreateDto.StartTime).TotalMinutes;
-            }
-            else
-            {
-                response.AddError("Duration", "StartTime must be earlier than EndTime.");
-                return BadRequest(response);
-            }
+            // if (sessionCreateDto.StartTime < sessionCreateDto.EndTime)
+            // {
+            //     sessionToCreate.DurationMinutes = (int)(sessionCreateDto.EndTime - sessionCreateDto.StartTime).TotalMinutes;
+            // }
+            // else
+            // {
+            //     response.AddError("Duration", "StartTime must be earlier than EndTime.");
+            //     return BadRequest(response);
+            // }
 
             await _dataContext.Set<Session>().AddAsync(sessionToCreate);
             await _dataContext.SaveChangesAsync();
