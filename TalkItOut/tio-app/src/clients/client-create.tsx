@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
-import { ClientCreateDto } from "../types";
+import type { ClientCreateDto } from "../types";
 import { Button, Input, SizableText, YStack, Text, Form } from "tamagui";
-import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import type {
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+} from "react-native";
 import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const ClientCreate: React.FC = () => {
   const navigate = useNavigate();
@@ -19,10 +24,14 @@ const ClientCreate: React.FC = () => {
 
   const handleChange =
     (field: keyof ClientCreateDto) =>
-    (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+    (value: string | Date | NativeSyntheticEvent<TextInputChangeEventData>) => {
       setClientData((prevData) => ({
         ...prevData,
-        [field]: e.nativeEvent.text,
+        [field]:
+          value instanceof Date
+            ? value.toISOString()
+            : (value as NativeSyntheticEvent<TextInputChangeEventData>)
+                .nativeEvent?.text || (value as string),
       }));
     };
 
@@ -38,8 +47,6 @@ const ClientCreate: React.FC = () => {
       setLoading(false);
     }
   };
-
-  const [startDate, setStartDate] = useState<Date | null>(null);
 
   return (
     <>
@@ -80,17 +87,14 @@ const ClientCreate: React.FC = () => {
                 First Name
               </SizableText>
               <Input
+                value={clientData.firstName}
+                onChange={handleChange("firstName")}
+                placeholder="First Name"
                 size={46}
                 flex={1}
                 gap={20}
                 padding={4}
-                value={clientData.firstName}
-                onChange={handleChange("firstName")}
-                placeholder="First Name"
-                borderColor="#cce6ff"
-                background="#3d444d"
-                borderRadius={2}
-                placeholderTextColor="#e6f2ff"
+                placeholderTextColor="#b0b0b0"
               />
             </YStack>
 
@@ -99,30 +103,32 @@ const ClientCreate: React.FC = () => {
                 Last Name
               </SizableText>
               <Input
+                value={clientData.lastName}
+                onChange={handleChange("lastName")}
+                placeholder="Last Name"
                 size={46}
                 flex={1}
                 gap={20}
                 padding={4}
-                value={clientData.lastName}
-                onChange={handleChange("lastName")}
-                placeholder="Last Name"
-                borderColor="#cce6ff"
-                background="#3d444d"
-                borderRadius={2}
-                placeholderTextColor="#e6f2ff"
+                placeholderTextColor="#b0b0b0"
               />
             </YStack>
+
             <YStack gap={10}>
               <SizableText size={18} color="#e6f2ff">
                 Date of Birth
               </SizableText>
               <DatePicker
-                openToDate={new Date("1993/09/28")}
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
+                selected={
+                  clientData.dateOfBirth
+                    ? new Date(clientData.dateOfBirth)
+                    : null
+                }
+                onChange={(date) =>
+                  handleChange("dateOfBirth")(date || new Date())
+                }
                 dateFormat="MM/dd/yyyy"
-                className="datepicker"
-                placeholderText="Select Date"
+                placeholderText="Date of Birth"
               />
             </YStack>
 
@@ -131,13 +137,10 @@ const ClientCreate: React.FC = () => {
               alignSelf="center"
               size={30}
               padding={12}
-              disabled={loading}
               background="#e6f2ff"
               borderRadius={4}
               marginTop={20}
               onPress={handleSubmit}
-              style={{ overflow: "hidden" }}
-              theme={loading ? "secondary" : "primary"}
             >
               <Text fontSize={18}>
                 {loading ? "Creating..." : "Create Client"}
