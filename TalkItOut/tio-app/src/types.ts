@@ -119,19 +119,19 @@ export type GoalUpdateDto = {
 
 export type GroupGetDto = {
   id: number;
-  name: string;
+  groupName: string;
   clientIds: number[];
   userId: number;
 };
 
 export type GroupCreateDto = {
-  name: string;
+  groupName: string;
   clientIds: number[];
   userId: number;
 };
 
 export type GroupUpdateDto = {
-  name: string;
+  groupName: string;
   clientIds: number[];
   userId: number;
 };
