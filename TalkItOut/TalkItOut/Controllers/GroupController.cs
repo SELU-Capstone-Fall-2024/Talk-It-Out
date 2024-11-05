@@ -109,7 +109,7 @@ public class GroupController : ControllerBase
             return NotFound(response);
         }
 
-        if (groupUpdateDto.ClientIds != null)
+        if (groupUpdateDto.ClientIds.Any())
         {
             var currentClientIds = group.Clients.Select(c => c.Id).ToHashSet();
             var newClientIds = groupUpdateDto.ClientIds.ToHashSet();
