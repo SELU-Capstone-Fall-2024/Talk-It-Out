@@ -54,7 +54,6 @@ const ClientUpdate: React.FC = () => {
       await api.put(`/clients/${id}`, clientData);
       navigate("/clients/listing");
     } catch (err) {
-      console.log(err);
       setError("Failed to update client. Please try again.");
     } finally {
       setLoading(false);
