@@ -8,7 +8,7 @@ export const ClientRoutes: React.FC = () => {
     <Routes>
       <Route index path="listing" element={<Clients />} />
       <Route path="create" element={<ClientCreate />} />
-      <Route path="update/:id" element={<ClientUpdate />} />
+      <Route path=":id" element={<ClientUpdate />} />
     </Routes>
   );
 };
