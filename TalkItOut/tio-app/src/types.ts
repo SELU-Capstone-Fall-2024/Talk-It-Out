@@ -15,14 +15,14 @@ export type UserGetDto = {
   id: number;
   firstName: string;
   lastName: string;
-  username: string;
+  userName: string;
   email: string;
 };
 
 export type UserCreateDto = {
   firstName: string;
   lastName: string;
-  username: string;
+  userName: string;
   email: string;
   password: string;
 };
@@ -30,7 +30,7 @@ export type UserCreateDto = {
 export type UserUpdateDto = {
   firstName: string;
   lastName: string;
-  username: string;
+  userName: string;
   email: string;
 };
 
@@ -40,7 +40,7 @@ export type PasswordUpdateDto = {
 };
 
 export type UserLoginDto = {
-  username: string;
+  userName: string;
   password: string;
 };
 
