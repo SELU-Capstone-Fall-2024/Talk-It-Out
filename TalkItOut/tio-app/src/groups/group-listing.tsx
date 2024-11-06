@@ -20,7 +20,6 @@ const Groups: React.FC = () => {
   if (groups?.hasErrors) return <div>Error loading groups.</div>;
   if (clients?.hasErrors) return <div>Error loading clients.</div>;
 
-  // Create a lookup map for clients by ID for efficient retrieval
   const clientMap = clients?.data?.reduce<Record<number, ClientGetDto>>(
     (map, client) => {
       map[client.id] = client;
