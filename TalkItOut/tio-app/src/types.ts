@@ -70,7 +70,6 @@ export type ClientUpdateDto = {
 export type SessionGetDto = {
   id: number;
   userId: number;
-  durationMinutes: number;
   startTime: string;
   endTime: string;
   groupId: number;
@@ -88,9 +87,7 @@ export type SessionCreateDto = {
 export type SessionUpdateDto = {
   userId: number;
   startTime: string;
-  startTimeChanged: boolean;
   endTime: string;
-  endTimeChanged: boolean;
   groupId: number;
   clientId: number;
 };
