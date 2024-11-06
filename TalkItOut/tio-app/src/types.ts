@@ -135,3 +135,8 @@ export type GroupUpdateDto = {
   clientIds: number[];
   userId: number;
 };
+
+export type OptionType = {
+  label: string;
+  value: string;
+};
