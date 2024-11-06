@@ -9,7 +9,7 @@ import type {
   GroupGetDto,
   ClientGetDto,
 } from "../types";
-import { Button, Form, Input, SizableText, YStack, Text } from "tamagui";
+import { Button, Form, SizableText, YStack, Text } from "tamagui";
 import ReactSelect from "react-select";
 import DatePicker from "react-datepicker";
 import { useAsync } from "react-use";
