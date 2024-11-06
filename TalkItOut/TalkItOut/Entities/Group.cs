@@ -9,12 +9,14 @@ public class Group
     public List<Client> Clients { get; set; } = new List<Client>();
     public User User { get; set; }
     public int UserId { get; set; }
-
+    public string GroupName { get; set; }
 }
 
 public class GroupGetDto
 {
     public int Id { get; set; }
+    public string GroupName { get; set; }
+
     public List<int> ClientIds { get; set; }
     public int UserId { get; set; }
     
@@ -22,8 +24,17 @@ public class GroupGetDto
 
 public class GroupCreateDto
 {
+    public string GroupName { get; set; }
+
     public List<int> ClientIds { get; set; }
     public int UserId { get; set; }
+}
+
+public class GroupUpdateDto
+{
+    public string? GroupName { get; set; }
+
+    public List<int>? ClientIds { get; set; }
 }
 
 public class GroupConfiguration : IEntityTypeConfiguration<Group>

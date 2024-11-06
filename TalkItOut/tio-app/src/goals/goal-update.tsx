@@ -7,10 +7,8 @@ import {
   Button,
   Form,
   Input,
-  Select,
   SizableText,
   Text,
-  TextArea,
   YStack,
 } from "tamagui";
 
@@ -21,7 +19,7 @@ const GoalUpdate: React.FC = () => {
   const [goalData, setGoalData] = useState<GoalUpdateDto>({
     userId: 1,
     information: "",
-    clientId: 1,
+    clientId: 0,
   });
 
   const [loading, setLoading] = useState(false);
@@ -51,20 +49,20 @@ const GoalUpdate: React.FC = () => {
     fetchGoal();
   }, [id]);
 
-  const handleChange =
-    (field: keyof GoalUpdateDto) => (value: string | number) => {
+  const handleChange = 
+    (field: keyof GoalUpdateDto) => (value: string) => {
       setGoalData((prevData) => ({
         ...prevData,
         [field]: value,
       }));
     };
-  console.log("goaldata.information =", goalData.information);
+    
   const handleSubmit = async () => {
     setLoading(true);
     try {
       const response = await api.put(`/goals/${id}`, goalData);
       if (response.status === 200) {
-        navigate("/goals");
+        navigate("/goals/listing");
       } else {
         setError("Failed to update goal. Please try again.");
       }
@@ -91,10 +89,6 @@ const GoalUpdate: React.FC = () => {
         padding={30}
         borderRadius={15}
         backgroundColor="$darkPrimary"
-        shadowColor="rgba(0, 0, 0, 0.5)"
-        shadowRadius={10}
-        shadowOpacity={0.5}
-        shadowOffset={{ width: 0, height: 4 }}
         alignItems="center"
         justifyContent="center"
       >
@@ -109,20 +103,21 @@ const GoalUpdate: React.FC = () => {
         )}
         {goalData && (
           <Form onSubmit={handleSubmit} style={{ width: "100%" }}>
-            <YStack gap={20}>
+            <YStack gap={10}>
               <SizableText size={18} color="#e6f2ff">
                 Goal Information
               </SizableText>
-              <TextArea
+              <Input
                 size={46}
                 flex={1}
                 padding={4}
-                defaultValue={goalData.information}
-                onChange={() => handleChange("information")}
-                borderColor="#cce6ff"
-                background="#3d444d"
+                value={goalData.information}
+                onChangeText={(text) => handleChange("information")(text)}
+                placeholder="Enter goal information"
+                placeholderTextColor="gray"
+                color="black"
                 borderRadius={2}
-                placeholderTextColor="#e6f2ff"
+                multiline
               />
             </YStack>
 
@@ -132,9 +127,9 @@ const GoalUpdate: React.FC = () => {
               size={30}
               padding={12}
               disabled={loading}
-              background="#e6f2ff"
-              onPress={handleSubmit}
               style={{ overflow: "hidden" }}
+              onPress={handleSubmit}
+              borderRadius={4}
               marginTop={20}
             >
               <Text fontSize={18}>

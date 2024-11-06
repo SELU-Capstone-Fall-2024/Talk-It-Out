@@ -23,6 +23,7 @@ public class ClientGetDto
     public string LastName { get; set; }
     public DateTimeOffset DateOfBirth { get; set; }
     public List<GoalGetDto> Goals { get; set; }
+    public int? GroupId { get; set; }
 }
 
 public class ClientCreateDto
