@@ -9,8 +9,8 @@ export const UserRoutes: React.FC = () => {
     <Routes>
       <Route index path="listing" element={<Users />} />
       <Route path="create" element={<UserCreate />} />
-      <Route path="update/:id" element={<UserUpdate />} />
-      <Route path="update-password/:id" element={<PasswordUpdate />} />
+      <Route path=":id" element={<UserUpdate />} />
+      <Route path="password/:id" element={<PasswordUpdate />} />
     </Routes>
   );
 };

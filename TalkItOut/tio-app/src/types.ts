@@ -15,14 +15,14 @@ export type UserGetDto = {
   id: number;
   firstName: string;
   lastName: string;
-  username: string;
+  userName: string;
   email: string;
 };
 
 export type UserCreateDto = {
   firstName: string;
   lastName: string;
-  username: string;
+  userName: string;
   email: string;
   password: string;
 };
@@ -30,7 +30,7 @@ export type UserCreateDto = {
 export type UserUpdateDto = {
   firstName: string;
   lastName: string;
-  username: string;
+  userName: string;
   email: string;
 };
 
@@ -40,7 +40,7 @@ export type PasswordUpdateDto = {
 };
 
 export type UserLoginDto = {
-  username: string;
+  userName: string;
   password: string;
 };
 
@@ -70,7 +70,6 @@ export type ClientUpdateDto = {
 export type SessionGetDto = {
   id: number;
   userId: number;
-  durationMinutes: number;
   startTime: string;
   endTime: string;
   groupId: number;
@@ -88,9 +87,7 @@ export type SessionCreateDto = {
 export type SessionUpdateDto = {
   userId: number;
   startTime: string;
-  startTimeChanged: boolean;
   endTime: string;
-  endTimeChanged: boolean;
   groupId: number;
   clientId: number;
 };
@@ -134,4 +131,9 @@ export type GroupUpdateDto = {
   groupName: string;
   clientIds: number[];
   userId: number;
+};
+
+export type OptionType = {
+  label: string;
+  value: string;
 };
