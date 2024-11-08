@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from "react";
+import type React from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
-import { SessionCreateDto, Response } from "../types";
-import { H1, Input } from "tamagui";
+import type { ClientGetDto, GroupGetDto, Response } from "../types";
+import { YStack, SizableText, Button, Text, Form } from "tamagui";
+import ReactSelect from "react-select";
+import { useAsync } from "react-use";
+import DatePicker from "react-datepicker";
 
 const SessionCreate: React.FC = () => {
   const navigate = useNavigate();
 
-  const [sessionData, setSessionData] = useState<SessionCreateDto>({
-    userId: 0,
-    durationMinutes: 0,
+  const [sessionData, setSessionData] = useState({
+    userId: 1,
     startTime: "",
     endTime: "",
     groupId: 0,
@@ -19,51 +22,52 @@ const SessionCreate: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Handle form input changes
-  const handleChange =
-    (field: keyof SessionCreateDto) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value =
-        field === "userId" ||
-        field === "durationMinutes" ||
-        field === "groupId" ||
-        field === "clientId"
-          ? Number(e.target.value)
-          : e.target.value;
+  const { value: clients } = useAsync(async () => {
+    const response = await api.get<Response<ClientGetDto[]>>("/clients");
+    return response.data;
+  });
 
+  const { value: groups } = useAsync(async () => {
+    const response = await api.get<Response<GroupGetDto[]>>("/groups");
+    return response.data;
+  });
+
+  const clientOptions = clients?.data?.map((client) => ({
+    label: `${client.firstName} ${client.lastName}`,
+    value: client.id.toString(),
+  }));
+
+  const groupOptions = groups?.data?.map((group) => ({
+    label: group.groupName,
+    value: group.id.toString(),
+  }));
+
+  const handleChange =
+    (field: keyof typeof sessionData) => (value: string | number) => {
       setSessionData((prevData) => ({
         ...prevData,
         [field]: value,
       }));
     };
 
-  // Calculate durationMinutes when startTime or endTime changes
-  useEffect(() => {
-    if (sessionData.startTime && sessionData.endTime) {
-      const start = new Date(sessionData.startTime);
-      const end = new Date(sessionData.endTime);
-      const duration = Math.abs(end.getTime() - start.getTime());
-      const minutes = Math.floor(duration / (1000 * 60)); // Convert milliseconds to minutes
-      setSessionData((prevData) => ({
-        ...prevData,
-        durationMinutes: minutes,
-      }));
+  const handleSubmit = async () => {
+    if (!sessionData.startTime || !sessionData.endTime) {
+      setError("Please select both start and end times.");
+      return;
     }
-  }, [sessionData.startTime, sessionData.endTime]);
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    if (sessionData.clientId && sessionData.groupId) {
+      setError("Only select client or group, not both.");
+    }
+
     setLoading(true);
-    setError(null);
-
     try {
-      const response = await api.post<Response<SessionCreateDto>>(
+      const response = await api.post<Response<typeof sessionData>>(
         "/sessions",
         sessionData
       );
-      if (response.status === 200 && !response.data.hasErrors) {
-        navigate("/sessions"); // Redirect to session listing on success
+      if (response.status === 201 && !response.data.hasErrors) {
+        navigate("/sessions/listing");
       } else {
         setError("Failed to create session. Please try again.");
       }
@@ -75,77 +79,129 @@ const SessionCreate: React.FC = () => {
   };
 
   return (
-    <div>
-      <H1>Create New Session</H1>
+    <YStack
+      flex={1}
+      justifyContent="center"
+      alignItems="center"
+      padding={20}
+      background="$darkBackground"
+      minHeight="100vh"
+      width="100vw"
+    >
+      <YStack
+        width="100%"
+        maxWidth={400}
+        padding={30}
+        borderRadius={15}
+        backgroundColor="$darkPrimary"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <SizableText size={30} marginBottom={20} color="#e6f2ff">
+          Create New Session
+        </SizableText>
 
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && (
+          <Text color="red" marginBottom={15}>
+            {error}
+          </Text>
+        )}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="userId">User ID</label>
-          <Input
-            id="userId"
-            value={sessionData.userId}
-            onChange={() => handleChange("userId")}
-            placeholder="Enter User ID"
-          />
-        </div>
+        <Form onSubmit={handleSubmit} gap={20} width="100%">
+          <YStack gap={10}>
+            <SizableText size={18} color="#e6f2ff">
+              Start Time
+            </SizableText>
+            <DatePicker
+              selected={
+                sessionData.startTime ? new Date(sessionData.startTime) : null
+              }
+              onChange={(date) =>
+                handleChange("startTime")(date?.toISOString() || "")
+              }
+              showTimeSelect
+              timeFormat="hh:mm aa"
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="MM/dd/yyyy h:mm aa"
+              placeholderText="Select Start Time"
+            />
+          </YStack>
 
-        <div>
-          <label htmlFor="startTime">Start Time</label>
-          <Input
-            id="startTime"
-            value={sessionData.startTime}
-            onChange={() => handleChange("startTime")}
-            placeholder="Enter start time"
-          />
-        </div>
+          <YStack gap={10}>
+            <SizableText size={18} color="#e6f2ff">
+              End Time
+            </SizableText>
+            <DatePicker
+              selected={
+                sessionData.endTime ? new Date(sessionData.endTime) : null
+              }
+              onChange={(date) =>
+                handleChange("endTime")(date?.toISOString() || "")
+              }
+              showTimeSelect
+              timeFormat="hh:mm aa"
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="MM/dd/yyyy h:mm aa"
+              placeholderText="Select End Time"
+            />
+          </YStack>
 
-        <div>
-          <label htmlFor="endTime">End Time</label>
-          <Input
-            id="endTime"
-            value={sessionData.endTime}
-            onChange={() => handleChange("endTime")}
-            placeholder="Enter end time"
-          />
-        </div>
+          <YStack gap={10}>
+            <SizableText size={18} color="#e6f2ff">
+              Select Client
+            </SizableText>
+            <ReactSelect
+              options={clientOptions}
+              onChange={(selectedOption) =>
+                handleChange("clientId")(Number(selectedOption?.value))
+              }
+              value={clientOptions?.find(
+                (option) => Number(option.value) === sessionData.clientId
+              )}
+              placeholder="Select Client"
+              isClearable={true}
+            />
+          </YStack>
+          <SizableText size={18} color="#e6f2ff">
+            Or
+          </SizableText>
 
-        <div>
-          <label htmlFor="durationMinutes">Duration (Minutes)</label>
-          <Input
-            id="durationMinutes"
-            value={sessionData.durationMinutes}
-            readOnly
-          />
-        </div>
+          <YStack gap={10}>
+            <SizableText size={18} color="#e6f2ff">
+              Select Group
+            </SizableText>
+            <ReactSelect
+              options={groupOptions}
+              onChange={(selectedOption) =>
+                handleChange("groupId")(Number(selectedOption?.value))
+              }
+              value={groupOptions?.find(
+                (option) => Number(option.value) === sessionData.groupId
+              )}
+              placeholder="Select Group"
+              isClearable={true}
+            />
+          </YStack>
 
-        <div>
-          <label htmlFor="groupId">Group ID</label>
-          <Input
-            id="groupId"
-            value={sessionData.groupId}
-            onChange={() => handleChange("groupId")}
-            placeholder="Enter Group ID"
-          />
-        </div>
-
-        <div>
-          <label htmlFor="clientId">Client ID</label>
-          <Input
-            id="clientId"
-            value={sessionData.clientId}
-            onChange={() => handleChange("clientId")}
-            placeholder="Enter Client ID"
-          />
-        </div>
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Submitting..." : "Create Session"}
-        </button>
-      </form>
-    </div>
+          <Button
+            width={150}
+            alignSelf="center"
+            size={30}
+            padding={12}
+            disabled={loading}
+            onPress={handleSubmit}
+            borderRadius={4}
+            marginTop={20}
+          >
+            <Text fontSize={18}>
+              {loading ? "Creating..." : "Create Session"}
+            </Text>
+          </Button>
+        </Form>
+      </YStack>
+    </YStack>
   );
 };
 

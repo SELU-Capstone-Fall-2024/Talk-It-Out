@@ -4,7 +4,6 @@ export type Error = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 export type Response<T = any> = {
   data: T | null;
   errors: Error[];
@@ -13,35 +12,7 @@ export type Response<T = any> = {
 
 export type UserGetDto = {
   id: number;
-  firstName: string;
-  lastName: string;
-  userName: string;
-  email: string;
-};
-
-export type UserCreateDto = {
-  firstName: string;
-  lastName: string;
-  userName: string;
-  email: string;
-  password: string;
-};
-
-export type UserUpdateDto = {
-  firstName: string;
-  lastName: string;
-  userName: string;
-  email: string;
-};
-
-export type PasswordUpdateDto = {
-  currentPassword: string;
-  newPassword: string;
-};
-
-export type UserLoginDto = {
-  userName: string;
-  password: string;
+  name: string;
 };
 
 export type ClientGetDto = {
@@ -49,7 +20,7 @@ export type ClientGetDto = {
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  userId: number;
+  goals: GoalGetDto[];
 };
 
 export type ClientCreateDto = {
@@ -59,25 +30,20 @@ export type ClientCreateDto = {
   userId: number;
 };
 
-export type ClientUpdateDto = {
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
-  userId: number;
-  isDateOfBirthUpdated: boolean;
-};
-
 export type SessionGetDto = {
   id: number;
   userId: number;
+  durationMinutes: number;
   startTime: string;
   endTime: string;
   groupId: number;
   clientId: number;
+  clientName: string;
 };
 
 export type SessionCreateDto = {
   userId: number;
+  durationMinutes: number;
   startTime: string;
   endTime: string;
   groupId: number;
@@ -86,6 +52,7 @@ export type SessionCreateDto = {
 
 export type SessionUpdateDto = {
   userId: number;
+  durationMinutes: number;
   startTime: string;
   endTime: string;
   groupId: number;
@@ -97,9 +64,6 @@ export type GoalGetDto = {
   userId: number;
   information: string;
   clientId: number;
-  createdByUserName: string;
-  clientFirstName: string;
-  clientLastName: string;
 };
 
 export type GoalCreateDto = {
@@ -116,24 +80,18 @@ export type GoalUpdateDto = {
 
 export type GroupGetDto = {
   id: number;
-  groupName: string;
-  clientIds: number[];
-  userId: number;
+  clients: ClientGetDto[];
 };
 
 export type GroupCreateDto = {
-  groupName: string;
-  clientIds: number[];
-  userId: number;
+  clients: ClientGetDto[];
 };
 
 export type GroupUpdateDto = {
-  groupName: string;
-  clientIds: number[];
-  userId: number;
+  clients: ClientGetDto[];
 };
 
-export type OptionType = {
-  label: string;
-  value: string;
+export type OptionItemDto = {
+  value: number;
+  text: string;
 };

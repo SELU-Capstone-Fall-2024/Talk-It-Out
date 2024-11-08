@@ -8,7 +8,7 @@ export const SessionRoutes: React.FC = () => {
     <Routes>
       <Route index path="listing" element={<Sessions />} />
       <Route path="create" element={<SessionCreate />} />
-      <Route path="update/:id" element={<SessionUpdate />} />
+      <Route path=":id" element={<SessionUpdate />} />
     </Routes>
   );
 };

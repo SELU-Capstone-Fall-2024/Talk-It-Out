@@ -21,13 +21,15 @@ public class GoalController : ControllerBase
     {
         var response = new Response();
 
-        var goals = _dataContext.Set<Goal>()
+        var goals = _dataContext.Set<Goal>().Include(x => x.Client)
             .Select(x => new GoalGetDto
             {
                 Id = x.Id,
                 UserId = x.UserId,
                 Information = x.Information,
-                ClientId = x.ClientId
+                ClientId = x.ClientId,
+                ClientFirstName = x.Client.FirstName,
+                ClientLastName = x.Client.LastName,
             })
             .ToList();
 
@@ -41,7 +43,7 @@ public class GoalController : ControllerBase
     {
         var response = new Response();
 
-        var goal = await _dataContext.Set<Goal>()
+        var goal = await _dataContext.Set<Goal>().Include(x => x.Client)
             .FirstOrDefaultAsync(x => x.Id == id);
 
         if (goal == null)
@@ -55,7 +57,9 @@ public class GoalController : ControllerBase
             Id = goal.Id,
             UserId = goal.UserId,
             Information = goal.Information,
-            ClientId = goal.ClientId
+            ClientId = goal.ClientId,
+            ClientFirstName = goal.Client.FirstName,
+            ClientLastName = goal.Client.LastName,
         };
 
         response.Data = goalDto;
@@ -146,5 +150,24 @@ public class GoalController : ControllerBase
 
 
         return Ok(new { message = "Goal deleted successfully." });
+    }
+
+    [HttpGet("options/{clientId:int}")]
+    public async Task<IActionResult> GetOptions(int clientId)
+    {
+        var response = new Response();
+
+        var items = _dataContext.Set<Goal>()
+            .Where(x => x.ClientId == clientId)
+            .Select(x => new OptionItemDto
+            {
+                Value = x.Id,
+                Text = x.Information,
+            })
+            .ToList();
+
+        response.Data = items;
+
+        return Ok(response);
     }
 }

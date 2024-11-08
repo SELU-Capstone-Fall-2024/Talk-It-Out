@@ -22,12 +22,20 @@ public class ClientController : ControllerBase
         var response = new Response();
 
         var clients = _dataContext.Set<Client>()
+            .Include(x => x.Goals)
             .Select(x => new ClientGetDto
             {
                 Id = x.Id,
                 FirstName = x.FirstName,
                 LastName = x.LastName,
-                DateOfBirth = x.DateOfBirth
+                DateOfBirth = x.DateOfBirth,
+                Goals = _dataContext.Set<Goal>().Where(y => y.ClientId == x.Id).Select(y => new GoalGetDto
+                {
+                    Id = y.Id,
+                    Information = y.Information,
+                    ClientId = y.ClientId
+                }).ToList(),
+                GroupId = x.GroupId,
             })
             .ToList();
 
@@ -55,7 +63,8 @@ public class ClientController : ControllerBase
                 Id = client.Id,
                 FirstName = client.FirstName,
                 LastName = client.LastName,
-                DateOfBirth = client.DateOfBirth
+                DateOfBirth = client.DateOfBirth,
+                GroupId = client.GroupId,
             };
 
         response.Data = clientDto;
@@ -113,11 +122,12 @@ public class ClientController : ControllerBase
         {
             client.DateOfBirth = clientUpdateDto.DateOfBirth;
         }
+
         if (clientUpdateDto.UserId > 0)
         {
             client.UserId = clientUpdateDto.UserId;
         }
-        
+
         await _dataContext.SaveChangesAsync();
 
         response.Data = new ClientGetDto 
@@ -125,7 +135,8 @@ public class ClientController : ControllerBase
             Id = client.Id,
             FirstName = client.FirstName,
             LastName = client.LastName,
-            DateOfBirth = client.DateOfBirth
+            DateOfBirth = client.DateOfBirth,
+            GroupId = client.GroupId,
         };
 
         return Ok(response);

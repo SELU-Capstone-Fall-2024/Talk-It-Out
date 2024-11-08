@@ -1,34 +1,61 @@
-import React, { useState } from "react";
-import api from "../api/api"; // Adjust the import based on your project structure
-import { GoalCreateDto } from "../types"; // Adjust the import based on your types location
+import type React from "react";
+import { useState } from "react";
+import api from "../api/api";
+import type { GoalCreateDto } from "../types";
 import { useNavigate } from "react-router-dom";
-import { Input } from "tamagui";
+import { YStack, SizableText, Button, Input, Text, Form } from "tamagui";
 
 const GoalCreate: React.FC = () => {
   const navigate = useNavigate();
   const [goalData, setGoalData] = useState<GoalCreateDto>({
-    userId: 0,
-    goalInformation: "",
+    userId: 1,
+    information: "",
     clientId: 0,
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (field: keyof GoalCreateDto) => (value: string | number) => {
-    setGoalData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
+  const handleChange =
+    (field: keyof GoalCreateDto) => (value: string | number) => {
+      setGoalData((prevData) => ({
+        ...prevData,
+        [field]: value,
+      }));
+    };
+
+  const handleIdChange = (value: string) => {
+    const parsedId = Number.parseInt(value);
+    if (Number.isNaN(parsedId) || parsedId <= 0) {
+      setError("Please enter a valid Client ID.");
+      setGoalData((prevData) => ({
+        ...prevData,
+        clientId: 0,
+      }));
+    } else {
+      setGoalData((prevData) => ({
+        ...prevData,
+        clientId: parsedId,
+      }));
+      setError(null);
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    if (
+      goalData.userId === 0 ||
+      !goalData.information ||
+      goalData.clientId === 0
+    ) {
+      setError("Please fill out all required fields.");
+      return;
+    }
+
     setLoading(true);
     try {
-      const response = await api.post(`/goals`, goalData); // Adjust the endpoint as necessary
+      const response = await api.post("/goals", goalData);
       if (response.status === 201) {
-        navigate("/goals"); // Redirect to goals listing on success
+        navigate("/goals/listing");
       } else {
         setError("Failed to create goal. Please try again.");
       }
@@ -40,40 +67,85 @@ const GoalCreate: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Create Goal</h1>
-      {error && <div style={{ color: "red" }}>{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>User ID</label>
-          <Input
-            value={goalData.userId}
-            onChange={() => handleChange("userId")}
-            placeholder="Enter User ID"
-          />
-        </div>
-        <div>
-          <label>Goal Information</label>
-          <textarea
-            value={goalData.goalInformation}
-            onChange={(e) => handleChange("goalInformation")(e.target.value)}
-            placeholder="Enter goal information"
-            required
-          />
-        </div>
-        <div>
-          <label>Client ID</label>
-          <Input
-            value={goalData.clientId}
-            onChange={() => handleChange("clientId")}
-            placeholder="Enter Client ID"
-          />
-        </div>
-        <button type="submit" disabled={loading}>
-          {loading ? "Creating..." : "Create Goal"}
-        </button>
-      </form>
-    </div>
+    <YStack
+      flex={1}
+      justifyContent="center"
+      alignItems="center"
+      padding={20}
+      background="$darkBackground"
+      minHeight="100vh"
+      width="100vw"
+    >
+      <YStack
+        width="100%"
+        maxWidth={400}
+        padding={30}
+        borderRadius={15}
+        backgroundColor="$darkPrimary"
+        alignItems="center"
+        justifyContent="center"
+      >
+        <SizableText size={30} marginBottom={20} color="#e6f2ff">
+          Create Goal
+        </SizableText>
+
+        {error && (
+          <Text color="red" marginBottom={15}>
+            {error}
+          </Text>
+        )}
+
+        <Form onSubmit={handleSubmit} gap={20} width="100%">
+          <YStack gap={10}>
+            <SizableText size={18} color="#e6f2ff">
+              Client ID
+            </SizableText>
+            <Input
+              size={46}
+              flex={1}
+              padding={4}
+              value={goalData.clientId.toString()}
+              onChangeText={(text) => handleIdChange(text)}
+              placeholder="Enter Client ID"
+              placeholderTextColor="gray"
+              color="black"
+            />
+          </YStack>
+
+          <YStack gap={10}>
+            <SizableText size={18} color="#e6f2ff">
+              Goal Information
+            </SizableText>
+            <Input
+              size={46}
+              flex={1}
+              padding={4}
+              value={goalData.information}
+              onChangeText={(text) => handleChange("information")(text)}
+              placeholder="Enter goal information"
+              placeholderTextColor="gray"
+              color="black"
+              borderRadius={2}
+              multiline
+            />
+          </YStack>
+
+          <Button
+            width={150}
+            alignSelf="center"
+            size={30}
+            padding={12}
+            disabled={loading}
+            style={{ overflow: "hidden" }}
+            onPress={handleSubmit}
+            borderRadius={4}
+            marginTop={20}
+          >
+            <Text fontSize={18}>{loading ? "Creating..." : "Create Goal"}</Text>
+          </Button>
+        </Form>
+      </YStack>
+    </YStack>
   );
 };
 

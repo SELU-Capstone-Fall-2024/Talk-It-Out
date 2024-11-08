@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TalkItOut.Entities;
 
@@ -11,9 +12,11 @@ using TalkItOut.Entities;
 namespace TalkItOut.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20241024195641_addedClientToGoal")]
+    partial class addedClientToGoal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -201,10 +204,6 @@ namespace TalkItOut.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("GroupName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -254,6 +253,9 @@ namespace TalkItOut.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int?>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("DurationMinutes")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("EndTime")
@@ -419,7 +421,7 @@ namespace TalkItOut.Migrations
             modelBuilder.Entity("TalkItOut.Entities.Goal", b =>
                 {
                     b.HasOne("TalkItOut.Entities.Client", "Client")
-                        .WithMany("Goals")
+                        .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -481,11 +483,6 @@ namespace TalkItOut.Migrations
                     b.Navigation("Role");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TalkItOut.Entities.Client", b =>
-                {
-                    b.Navigation("Goals");
                 });
 
             modelBuilder.Entity("TalkItOut.Entities.Group", b =>
