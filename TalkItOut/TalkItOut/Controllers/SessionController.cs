@@ -27,7 +27,6 @@ namespace TalkItOut.Controllers;
                 {
                     Id = x.Id,
                     UserId = x.UserId,
-                    DurationMinutes = x.DurationMinutes,
                     StartTime = x.StartTime,
                     EndTime = x.EndTime,
                     GroupId = x.GroupId,
@@ -59,7 +58,6 @@ namespace TalkItOut.Controllers;
             {
                 Id = session.Id,
                 UserId = session.UserId,
-                DurationMinutes = session.DurationMinutes,
                 StartTime = session.StartTime,
                 EndTime = session.EndTime,
                 GroupId = session.GroupId,
@@ -78,19 +76,18 @@ namespace TalkItOut.Controllers;
             {
                 UserId = sessionCreateDto.UserId,
                 StartTime = sessionCreateDto.StartTime,
-                EndTime = sessionCreateDto.EndTime,
-                GroupId = sessionCreateDto.GroupId,
-                ClientId = sessionCreateDto.ClientId 
+                EndTime = sessionCreateDto.EndTime
             };
-            // if (sessionCreateDto.StartTime < sessionCreateDto.EndTime)
-            // {
-            //     sessionToCreate.DurationMinutes = (int)(sessionCreateDto.EndTime - sessionCreateDto.StartTime).TotalMinutes;
-            // }
-            // else
-            // {
-            //     response.AddError("Duration", "StartTime must be earlier than EndTime.");
-            //     return BadRequest(response);
-            // }
+            
+            if (sessionCreateDto.GroupId > 0)
+            {
+                sessionToCreate.GroupId = sessionCreateDto.GroupId;
+            }
+
+            if (sessionCreateDto.ClientId > 0)
+            {
+                sessionToCreate.ClientId = sessionCreateDto.ClientId;
+            }
 
             await _dataContext.Set<Session>().AddAsync(sessionToCreate);
             await _dataContext.SaveChangesAsync();
@@ -100,12 +97,12 @@ namespace TalkItOut.Controllers;
             {
                 Id = sessionToCreate.Id,
                 UserId = sessionToCreate.UserId,
-                DurationMinutes = sessionToCreate.DurationMinutes,
                 StartTime = sessionToCreate.StartTime,
                 EndTime = sessionToCreate.EndTime,
                 GroupId = sessionToCreate.GroupId,
                 ClientId = sessionToCreate.ClientId 
-            });        }
+            });        
+        }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] SessionUpdateDto sessionUpdateDto)
@@ -124,33 +121,40 @@ namespace TalkItOut.Controllers;
             {
                 session.UserId = sessionUpdateDto.UserId;
             }
-            if (sessionUpdateDto.StartTimeChanged | sessionUpdateDto.EndTimeChanged)
+            if (sessionUpdateDto.StartTime != session.StartTime || sessionUpdateDto.EndTime != session.EndTime)
             {
-                if (session.StartTime < session.EndTime)
-                {
-                    session.DurationMinutes = (int)(session.EndTime - session.StartTime).TotalMinutes;
-                }
-                else
+                if (sessionUpdateDto.EndTime <= sessionUpdateDto.StartTime)
                 {
                     response.AddError("Duration", "StartTime must be earlier than EndTime.");
                     return BadRequest(response);
                 }
             }
-            if(sessionUpdateDto.StartTimeChanged)
+            if(sessionUpdateDto.StartTime != session.StartTime)
             {
                 session.StartTime = sessionUpdateDto.StartTime;
             }
-            if(sessionUpdateDto.EndTimeChanged)
+            
+            if (sessionUpdateDto.EndTime != session.EndTime)
             {
                 session.EndTime = sessionUpdateDto.EndTime;
             }
+            
             if(sessionUpdateDto.GroupId > 0)
             {
                 session.GroupId = sessionUpdateDto.GroupId;
+                if (session.ClientId > 0)
+                {
+                    session.ClientId = 0;
+                }
             }
+            
             if(sessionUpdateDto.ClientId > 0)
             {
                 session.ClientId = sessionUpdateDto.ClientId;
+                if (session.GroupId > 0)
+                {
+                    session.GroupId = 0;
+                }
             }
 
             await _dataContext.SaveChangesAsync();
@@ -159,7 +163,6 @@ namespace TalkItOut.Controllers;
             {
                 Id = session.Id,
                 UserId = session.UserId,
-                DurationMinutes = session.DurationMinutes,
                 StartTime = session.StartTime,
                 EndTime = session.EndTime,
                 GroupId = session.GroupId,

@@ -104,7 +104,7 @@ public class UserController : ControllerBase
         return Ok(response);
     }
 
-    [HttpPost("user")]
+    [HttpPost]
     public async Task<IActionResult> Create([FromBody] UserCreateDto userCreateDto)
     {
         var response = new Response();
@@ -200,7 +200,7 @@ public class UserController : ControllerBase
         });
     }
     
-    [HttpPut("users/{id}/password-update")]
+    [HttpPut("password/{id}")]
     public async Task<IActionResult> UpdatePassword(int id, [FromBody] PasswordUpdateDto passwordUpdateDto)
     {
         var response = new Response();

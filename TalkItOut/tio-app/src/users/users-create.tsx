@@ -3,8 +3,9 @@ import { useState } from "react";
 import api from "../api/api";
 import type { UserCreateDto } from "../types";
 import { useNavigate } from "react-router-dom";
-import { SizableText, YStack, Text, Input, Button, Form } from "tamagui";
-//import { NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import { SizableText, YStack, Text, Input, Button, Form, View } from "tamagui";
+import { FiEye, FiEyeOff } from "react-icons/fi";
+import { TouchableOpacity } from "react-native";
 
 const UserCreate: React.FC = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const UserCreate: React.FC = () => {
     firstName: "",
     lastName: "",
     email: "",
-    username: "",
+    userName: "",
     password: "",
   });
 
@@ -26,12 +27,18 @@ const UserCreate: React.FC = () => {
     }));
   };
 
+  const [isPasswordVisible, setPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible((prev) => !prev);
+  };
+
   const handleSubmit = async () => {
     if (
       !userData.firstName ||
       !userData.lastName ||
       !userData.email ||
-      !userData.username ||
+      !userData.userName ||
       !userData.password
     ) {
       setError("Please fill out all required fields");
@@ -40,7 +47,7 @@ const UserCreate: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await api.post("/users/user", userData);
+      const response = await api.post("/users", userData);
       if (response.status === 201) {
         navigate("/users/listing");
       } else {
@@ -84,38 +91,34 @@ const UserCreate: React.FC = () => {
 
         <Form onSubmit={handleSubmit} gap={20} width="100%">
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color={"#e6f2ff"}>
               First Name
             </SizableText>
             <Input
+              value={userData.firstName}
+              onChangeText={(text) => handleChange("firstName")(text)}
+              placeholder="First Name"
               size={46}
               flex={1}
+              gap={20}
               padding={4}
-              value={userData.firstName}
-              onChange={() => handleChange("firstName")}
-              placeholder="First Name"
-              borderColor="#cce6ff"
-              background="#3d444d"
-              borderRadius={2}
-              placeholderTextColor="#e6f2ff"
+              placeholderTextColor="#b0b0b0"
             />
           </YStack>
 
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color={"#e6f2ff"}>
               Last Name
             </SizableText>
             <Input
+              value={userData.lastName}
+              onChangeText={(text) => handleChange("lastName")(text)}
+              placeholder="Last Name"
               size={46}
               flex={1}
+              gap={20}
               padding={4}
-              value={userData.lastName}
-              onChange={() => handleChange("lastName")}
-              placeholder="Last Name"
-              borderColor="#cce6ff"
-              background="#3d444d"
-              borderRadius={2}
-              placeholderTextColor="#e6f2ff"
+              placeholderTextColor="#b0b0b0"
             />
           </YStack>
 
@@ -124,16 +127,14 @@ const UserCreate: React.FC = () => {
               Email
             </SizableText>
             <Input
+              value={userData.email}
+              onChangeText={(text) => handleChange("email")(text)}
+              placeholder="Email"
               size={46}
               flex={1}
+              gap={20}
               padding={4}
-              value={userData.email}
-              onChange={() => handleChange("email")}
-              placeholder="Email"
-              borderColor="#cce6ff"
-              background="#3d444d"
-              borderRadius={2}
-              placeholderTextColor="#e6f2ff"
+              placeholderTextColor="#b0b0b0"
             />
           </YStack>
 
@@ -142,16 +143,14 @@ const UserCreate: React.FC = () => {
               Username
             </SizableText>
             <Input
+              value={userData.userName}
+              onChangeText={(text) => handleChange("userName")(text)}
+              placeholder="UserName"
               size={46}
               flex={1}
+              gap={20}
               padding={4}
-              value={userData.username}
-              onChange={() => handleChange("username")}
-              placeholder="Enter Username"
-              borderColor="#cce6ff"
-              background="#3d444d"
-              borderRadius={2}
-              placeholderTextColor="#e6f2ff"
+              placeholderTextColor="#b0b0b0"
             />
           </YStack>
 
@@ -159,19 +158,36 @@ const UserCreate: React.FC = () => {
             <SizableText size={18} color="#e6f2ff">
               Password
             </SizableText>
-            <Input
-              size={46}
-              flex={1}
-              padding={4}
-              value={userData.password}
-              onChange={() => handleChange("password")}
-              placeholder="Enter password"
-              borderColor="#cce6ff"
-              background="#3d444d"
-              borderRadius={2}
-              placeholderTextColor="#e6f2ff"
-              secureTextEntry
-            />
+            <View>
+              <Input
+                value={userData.password}
+                onChangeText={(text) => handleChange("password")(text)}
+                placeholder="Password"
+                size={46}
+                flex={1}
+                gap={20}
+                padding={4}
+                placeholderTextColor="#b0b0b0"
+                secureTextEntry={!isPasswordVisible}
+              />
+              <TouchableOpacity
+                onPress={togglePasswordVisibility}
+                style={{
+                  marginTop: 10,
+                  flexDirection: "row",
+                  alignItems: "center",
+                }}
+              >
+                {isPasswordVisible ? (
+                  <FiEyeOff color="#e6f2ff" size={20} />
+                ) : (
+                  <FiEye color="#e6f2ff" size={20} />
+                )}
+                <Text color="#e6f2ff" style={{ marginLeft: 5 }}>
+                  {isPasswordVisible ? "Hide" : "Show"}
+                </Text>
+              </TouchableOpacity>
+            </View>
           </YStack>
 
           <Button

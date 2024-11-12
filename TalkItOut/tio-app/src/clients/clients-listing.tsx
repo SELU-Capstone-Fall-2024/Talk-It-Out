@@ -1,6 +1,6 @@
-import React from "react";
+import type React from "react";
 import api from "../api/api";
-import { Response, ClientGetDto } from "../types";
+import type { Response, ClientGetDto } from "../types";
 import { useAsync } from "react-use";
 import { Spinner } from "tamagui";
 

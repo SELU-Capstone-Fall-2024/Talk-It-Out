@@ -1,6 +1,6 @@
-import React from "react";
+import type React from "react";
 import api from "../api/api";
-import { Response, UserGetDto } from "../types";
+import type { Response, UserGetDto } from "../types";
 import { useAsync } from "react-use";
 import { Spinner } from "tamagui";
 
@@ -9,6 +9,7 @@ const Users: React.FC = () => {
     const response = await api.get<Response<UserGetDto[]>>("/users");
     return response.data;
   });
+  console.log(users);
 
   return (
     <div>
@@ -20,12 +21,18 @@ const Users: React.FC = () => {
       )}
       {!loading && users && (
         <ul>
-          {users.data?.map((user) => (
-            <li key={user.id}>
-              {user.username}: Name: {user.firstName} {user.lastName}
-               Email: {user.email}
-            </li>
-          ))}
+          {users.data?.map((user) => {
+            console.log(user.userName);
+            return (
+              <li key={user.id}>
+                <h3>{user.userName}:</h3>
+                <div>
+                  Name: {user.firstName} {user.lastName}
+                </div>
+                <div>Email: {user.email}</div>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

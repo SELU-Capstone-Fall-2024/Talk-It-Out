@@ -8,7 +8,7 @@ import { YStack, SizableText, Button, Input, Text, Form } from "tamagui";
 const GoalCreate: React.FC = () => {
   const navigate = useNavigate();
   const [goalData, setGoalData] = useState<GoalCreateDto>({
-    userId: 0,
+    userId: 1,
     information: "",
     clientId: 0,
   });
@@ -24,24 +24,7 @@ const GoalCreate: React.FC = () => {
       }));
     };
 
-  const handleUserIdChange = (value: string) => {
-    const parsedId = Number.parseInt(value);
-    if (Number.isNaN(parsedId) || parsedId <= 0) {
-      setError("Please enter a valid User ID.");
-      setGoalData((prevData) => ({
-        ...prevData,
-        userId: 0,
-      }));
-    } else {
-      setGoalData((prevData) => ({
-        ...prevData,
-        userId: parsedId,
-      }));
-      setError(null);
-    }
-  };
-
-  const handleClientIdChange = (value: string) => {
+  const handleIdChange = (value: string) => {
     const parsedId = Number.parseInt(value);
     if (Number.isNaN(parsedId) || parsedId <= 0) {
       setError("Please enter a valid Client ID.");
@@ -58,9 +41,7 @@ const GoalCreate: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     if (
       goalData.userId === 0 ||
       !goalData.information ||
@@ -72,7 +53,7 @@ const GoalCreate: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await api.post("/goals", goalData); // Adjust the endpoint as necessary
+      const response = await api.post("/goals", goalData);
       if (response.status === 201) {
         navigate("/goals/listing");
       } else {
@@ -114,22 +95,20 @@ const GoalCreate: React.FC = () => {
           </Text>
         )}
 
-        <Form onSubmit={() => handleSubmit} gap={20} width="100%">
+        <Form onSubmit={handleSubmit} gap={20} width="100%">
           <YStack gap={10}>
             <SizableText size={18} color="#e6f2ff">
-              User ID
+              Client ID
             </SizableText>
             <Input
               size={46}
               flex={1}
               padding={4}
-              value={goalData.userId.toString()}
-              onChange={() => handleUserIdChange("userId")}
-              placeholder="Enter User ID"
-              borderColor="#cce6ff"
-              background="#3d444d"
-              borderRadius={2}
-              placeholderTextColor="#e6f2ff"
+              value={goalData.clientId.toString()}
+              onChangeText={(text) => handleIdChange(text)}
+              placeholder="Enter Client ID"
+              placeholderTextColor="gray"
+              color="black"
             />
           </YStack>
 
@@ -142,31 +121,12 @@ const GoalCreate: React.FC = () => {
               flex={1}
               padding={4}
               value={goalData.information}
-              onChange={() => handleChange("information")}
+              onChangeText={(text) => handleChange("information")(text)}
               placeholder="Enter goal information"
-              borderColor="#cce6ff"
-              background="#3d444d"
+              placeholderTextColor="gray"
+              color="black"
               borderRadius={2}
-              placeholderTextColor="#e6f2ff"
               multiline
-            />
-          </YStack>
-
-          <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
-              Client ID
-            </SizableText>
-            <Input
-              size={46}
-              flex={1}
-              padding={4}
-              value={goalData.clientId.toString()}
-              onChange={() => handleClientIdChange("clientId")}
-              placeholder="Enter Client ID"
-              borderColor="#cce6ff"
-              background="#3d444d"
-              borderRadius={2}
-              placeholderTextColor="#e6f2ff"
             />
           </YStack>
 
@@ -176,9 +136,8 @@ const GoalCreate: React.FC = () => {
             size={30}
             padding={12}
             disabled={loading}
-            background="#e6f2ff"
             style={{ overflow: "hidden" }}
-            onPress={() => handleSubmit}
+            onPress={handleSubmit}
             borderRadius={4}
             marginTop={20}
           >

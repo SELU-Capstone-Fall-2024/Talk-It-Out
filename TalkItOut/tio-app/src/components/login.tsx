@@ -8,8 +8,8 @@ import {useAuth} from '../auth/auth-context';
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState<UserLoginDto>({
-    username: '',
-    password: '',
+    userName: "",
+    password: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -28,8 +28,8 @@ const Login: React.FC = () => {
     setLoading(true);
     setError(null);
 
-    if (!userData.username || !userData.password) {
-      setError('Username and password are required.');
+    if (!userData.userName || !userData.password) {
+      setError("Username and password are required.");
       setLoading(false);
       return;
     }
@@ -84,8 +84,8 @@ const Login: React.FC = () => {
               flex={1}
               gap={20}
               padding={4}
-              value={userData.username}
-              onChange={handleChange('username')}
+              value={userData.userName}
+              onChange={handleChange("userName")}
               placeholder="Enter Username"
               borderColor="#cce6ff"
               background="#3d444d"
