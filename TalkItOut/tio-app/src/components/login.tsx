@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from 'react-router-dom';
-import {UserLoginDto} from '../types';
+import {UserLoginDto, Response} from '../types';
 import {YStack, Input, Button, Text, SizableText, Form} from 'tamagui';
 import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
 import {useAuth} from '../auth/auth-context';
@@ -8,12 +8,12 @@ import {useAuth} from '../auth/auth-context';
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState<UserLoginDto>({
-    userName: "",
-    password: "",
+    userName: '',
+    password: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const {user, login} = useAuth();
+  const {login} = useAuth();
 
   const handleChange =
     (field: keyof UserLoginDto) =>
@@ -29,12 +29,19 @@ const Login: React.FC = () => {
     setError(null);
 
     if (!userData.userName || !userData.password) {
-      setError("Username and password are required.");
+      setError('Username and password are required.');
       setLoading(false);
       return;
     }
 
-    login(userData);
+    const response = await login(userData);
+
+    if (response.errors.length > 0) {
+      setLoading(false);
+      setError(response.errors[0].message);
+      console.log(response.errors);
+      return;
+    } else navigate('/home');
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -85,7 +92,7 @@ const Login: React.FC = () => {
               gap={20}
               padding={4}
               value={userData.userName}
-              onChange={handleChange("userName")}
+              onChange={handleChange('userName')}
               placeholder="Enter Username"
               borderColor="#cce6ff"
               background="#3d444d"

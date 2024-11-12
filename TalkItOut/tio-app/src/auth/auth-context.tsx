@@ -1,10 +1,12 @@
 import React, {createContext, useContext, useState, ReactNode} from 'react';
 import api from '../api/api';
-import {UserLoginDto} from '../types';
+import {UserLoginDto, Response} from '../types';
+import {useAsyncFn} from 'react-use';
 
 type AuthContext = {
   user: User | null;
-  login: (userData: UserLoginDto) => void;
+  loginState: any;
+  login: (userData: UserLoginDto) => Promise<Response>;
   logout: () => void;
 };
 
@@ -17,25 +19,26 @@ const AuthContext = createContext<AuthContext | undefined>(undefined);
 export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [user, setUser] = useState<User | null>(null);
 
-  const login = async (userData: UserLoginDto) => {
+  const [loginState, login] = useAsyncFn(async (userData: UserLoginDto) => {
+    const response = await api.post<Response>('/users/authenticate', userData);
+    if (response.status === 200) {
+      setUser(userData);
+    }
+    console.log(response);
+    return response.data;
+  }, []);
+
+  const logout = async () => {
     try {
-      const response = await api.post('/users/authenticate', {
-        userData,
-      });
-      if (response.status === 200) {
-        setUser(userData);
-      }
-    } catch (_) {
-      throw new Error('Error logging in');
+      await api.post('/users/logout');
+      setUser(null);
+    } catch (error) {
+      console.error('An error occurred during logout:', error);
     }
   };
 
-  const logout = () => {
-    setUser(null);
-  };
-
   return (
-    <AuthContext.Provider value={{user, login, logout}}>
+    <AuthContext.Provider value={{user, loginState, login, logout}}>
       {children}
     </AuthContext.Provider>
   );
