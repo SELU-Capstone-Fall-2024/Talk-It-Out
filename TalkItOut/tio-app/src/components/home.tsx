@@ -1,5 +1,4 @@
 import {YStack, H1, ButtonFrame} from "tamagui";
-import { InputText } from "../../tamagui.config";
 
 const Home: React.FC = () => {
   return (
@@ -20,4 +19,7 @@ const Home: React.FC = () => {
 
   );
 };
+
+
+
 export default Home;

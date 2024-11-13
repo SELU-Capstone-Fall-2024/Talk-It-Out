@@ -53,10 +53,9 @@ const MyCalendar = () => {
       <View>
         <Text>Sessions:</Text>
         {sessions.map((session) => (
+          
           <Text key={session.id}>
-            {`User ID: ${session.userId}, Duration: ${
-              session.durationMinutes
-            } min, Start: ${new Date(
+            {`User ID: ${session.userId}, Start: ${new Date(
               session.startTime
             ).toLocaleString()}, End: ${new Date(
               session.endTime
