@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import Calendar, { CalendarProps } from "react-calendar";
+import Calendar, { type CalendarProps } from "react-calendar";
 import { View, Text } from "tamagui";
 import api from "../api/api";
-import { Response, SessionGetDto } from "../types";
+import type { Response, SessionGetDto } from "../types";
 import "./MyCalendar.css";
 
 const MyCalendar = () => {
   const [date, setDate] = useState<Date | [Date, Date] | null>(new Date());
-  const [sessions, setSessions] = useState<SessionGetDto[]>([]); // Initialize as an empty array
+  const [sessions, setSessions] = useState<SessionGetDto[]>([]);
 
   useEffect(() => {
     const fetchSessions = async () => {
@@ -31,10 +31,10 @@ const MyCalendar = () => {
   };
 
   const isDateInSession = (date: Date) => {
-    const dateString = date.toISOString().split("T")[0]; // Get date part only
+    const dateString = date.toDateString();
     return sessions.some((session) => {
-      const startDate = new Date(session.startTime).toISOString().split("T")[0];
-      const endDate = new Date(session.endTime).toISOString().split("T")[0];
+      const startDate = new Date(session.startTime).toDateString();
+      const endDate = new Date(session.endTime).toDateString();
       return dateString >= startDate && dateString <= endDate;
     });
   };
@@ -53,7 +53,6 @@ const MyCalendar = () => {
       <View>
         <Text>Sessions:</Text>
         {sessions.map((session) => (
-          
           <Text key={session.id}>
             {`User ID: ${session.userId}, Start: ${new Date(
               session.startTime
