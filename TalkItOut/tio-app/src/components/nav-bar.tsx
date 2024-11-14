@@ -1,4 +1,5 @@
-import React, { CSSProperties } from "react";
+import type React from "react";
+import type { CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import Logout from "./logout";
 
@@ -7,8 +8,8 @@ const Navbar: React.FC = () => {
     <nav style={styles.nav}>
       <ul style={styles.navList}>
         <li style={styles.navItem}>
-          <Link to="/home" style={styles.navLink}>
-            Home
+          <Link to="/calendar" style={styles.navLink}>
+            Calendar
           </Link>
         </li>
         <li style={styles.navItem}>
@@ -34,11 +35,6 @@ const Navbar: React.FC = () => {
         <li style={styles.navItem}>
           <Link to="/users/listing" style={styles.navLink}>
             Users
-          </Link>
-        </li>
-        <li style={styles.navItem}>
-          <Link to="/calendar" style={styles.navLink}>
-            Calendar
           </Link>
         </li>
         <li style={styles.navItem}>
