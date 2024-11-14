@@ -70,6 +70,7 @@ public class UserController : ControllerBase
             Data = await _userManager.Users
                 .Select(x => new UserGetDto
                 {
+                    Id = x.Id,
                     FirstName = x.FirstName,
                     LastName = x.LastName,
                     UserName = x.UserName,
