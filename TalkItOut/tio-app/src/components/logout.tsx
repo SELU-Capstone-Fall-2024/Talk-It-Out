@@ -1,17 +1,14 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api/api"; // Adjust the import based on your project structure
+import React from 'react';
+import {useNavigate} from 'react-router-dom';
+import {useAuth} from '../auth/auth-context';
 
 const Logout: React.FC = () => {
   const navigate = useNavigate();
+  const {logout} = useAuth();
 
   const handleLogout = async () => {
-    try {
-      await api.post("/users/logout");
-      navigate("/");
-    } catch (error) {
-      console.error("An error occurred during logout:", error);
-    }
+    logout();
+    navigate('/');
   };
 
   return (

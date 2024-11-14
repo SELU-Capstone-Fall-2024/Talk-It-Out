@@ -9,3 +9,12 @@
   font-size: 1.2em; /* Adjust size as needed */
   color: red; /* Change color if needed */
 }
+
+
+.react-calendar__tile.highlighted-session {
+  background-color: #ff0000; /* Highlighted color*/
+  color: white; /* Text color */
+  font-weight: bold; 
+  border-radius: 50%; /* Rounded corners */
+}
+
