@@ -1,19 +1,23 @@
-import React, {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import {UserLoginDto, Response} from '../types';
-import {YStack, Input, Button, Text, SizableText, Form} from 'tamagui';
-import {NativeSyntheticEvent, TextInputChangeEventData} from 'react-native';
-import {useAuth} from '../auth/auth-context';
+import type React from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { type UserLoginDto, Response } from "../types";
+import { YStack, Input, Button, Text, SizableText, Form } from "tamagui";
+import type {
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+} from "react-native";
+import { useAuth } from "../auth/auth-context";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState<UserLoginDto>({
-    userName: '',
-    password: '',
+    userName: "",
+    password: "",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const {login} = useAuth();
+  const { login } = useAuth();
 
   const handleChange =
     (field: keyof UserLoginDto) =>
@@ -29,7 +33,7 @@ const Login: React.FC = () => {
     setError(null);
 
     if (!userData.userName || !userData.password) {
-      setError('Username and password are required.');
+      setError("Username and password are required.");
       setLoading(false);
       return;
     }
@@ -41,7 +45,8 @@ const Login: React.FC = () => {
       setError(response.errors[0].message);
       console.log(response.errors);
       return;
-    } else navigate('/home');
+    }
+    navigate("/calendar");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -68,7 +73,7 @@ const Login: React.FC = () => {
         shadowColor="rgba(0, 0, 0, 0.5)"
         shadowRadius={10}
         shadowOpacity={0.5}
-        shadowOffset={{width: 0, height: 4}}
+        shadowOffset={{ width: 0, height: 4 }}
         alignItems="center"
         justifyContent="center"
       >
@@ -92,7 +97,7 @@ const Login: React.FC = () => {
               gap={20}
               padding={4}
               value={userData.userName}
-              onChange={handleChange('userName')}
+              onChange={handleChange("userName")}
               placeholder="Enter Username"
               borderColor="#cce6ff"
               background="#3d444d"
@@ -111,7 +116,7 @@ const Login: React.FC = () => {
               padding={4}
               secureTextEntry
               value={userData.password}
-              onChange={handleChange('password')}
+              onChange={handleChange("password")}
               placeholder="Enter Password"
               borderColor="#cce6ff"
               background="#3d444d"
@@ -127,12 +132,12 @@ const Login: React.FC = () => {
             padding={12}
             disabled={loading}
             background="#e6f2ff"
-            style={{overflow: 'hidden', textAlign: 'center'}}
-            theme={loading ? 'secondary' : 'primary'}
+            style={{ overflow: "hidden", textAlign: "center" }}
+            theme={loading ? "secondary" : "primary"}
             onPress={handleFormSubmit}
             borderRadius={4}
           >
-            <Text fontSize={18}>{loading ? 'Logging in...' : 'Login'}</Text>
+            <Text fontSize={18}>{loading ? "Logging in..." : "Login"}</Text>
           </Button>
         </Form>
       </YStack>

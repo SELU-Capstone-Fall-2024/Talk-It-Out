@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Calendar, { type CalendarProps } from "react-calendar";
-import { View, Text } from "tamagui";
+import { View, Text, SizableText } from "tamagui";
 import api from "../api/api";
 import type { Response, SessionGetDto } from "../types";
 import "./MyCalendar.css";
@@ -30,38 +30,47 @@ const MyCalendar = () => {
     }
   };
 
-  const isDateInSession = (date: Date) => {
-    const dateString = date.toDateString();
-    return sessions.some((session) => {
-      const startDate = new Date(session.startTime).toDateString();
-      const endDate = new Date(session.endTime).toDateString();
-      return dateString >= startDate && dateString <= endDate;
-    });
+  const getSessionTimeframes = (date: Date) => {
+    return sessions
+      .filter((session) => {
+        const sessionDate = new Date(session.startTime).toDateString();
+        return sessionDate === date.toDateString();
+      })
+      .map((session) => ({
+        id: session.id,
+        start: new Date(session.startTime).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        end: new Date(session.endTime).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      }));
   };
 
   return (
     <View style={{ padding: 16 }}>
-      <Text>Select a Date:</Text>
+      <SizableText size={50} color="black">
+        Calendar
+      </SizableText>
       <Calendar
         onChange={handleDateChange}
         value={date}
         className="custom-calendar"
-        tileClassName={({ date }) =>
-          isDateInSession(date) ? "highlighted-session" : ""
-        }
+        tileContent={({ date }) => {
+          const timeframes = getSessionTimeframes(date);
+          return (
+            <div className="session-timeframes">
+              {timeframes.map((timeframe) => (
+                <div key={timeframe.id} className="timeframe-box">
+                  {timeframe.start} - {timeframe.end}
+                </div>
+              ))}
+            </div>
+          );
+        }}
       />
-      <View>
-        <Text>Sessions:</Text>
-        {sessions.map((session) => (
-          <Text key={session.id}>
-            {`User ID: ${session.userId}, Start: ${new Date(
-              session.startTime
-            ).toLocaleString()}, End: ${new Date(
-              session.endTime
-            ).toLocaleString()}`}
-          </Text>
-        ))}
-      </View>
     </View>
   );
 };

@@ -8,10 +8,6 @@ import { useNavigate } from "react-router-dom";
 const Goals: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleCreateGoal = () => {
-    navigate("/goals/create");
-  };
-
   const handleDeleteGoal = async (goalId: number) => {
     if (window.confirm("Are you sure you want to delete this goal?")) {
       try {
@@ -52,7 +48,7 @@ const Goals: React.FC = () => {
           size={30}
           background="#e6f2ff"
           borderRadius={4}
-          onPress={handleCreateGoal}
+          onPress={() => navigate("/goals/create")}
         >
           <Text color="#000" fontSize={18}>
             Create A Goal

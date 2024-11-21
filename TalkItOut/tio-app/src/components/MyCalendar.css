@@ -1,20 +1,61 @@
 .custom-calendar {
-  border: 1px solid #ccc;
+  width: 100%;
+  border: none;
+  font-family: Arial, sans-serif;
+  color: #333;
+  background-color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  padding: 16px;
 }
 
-.session-indicator {
-  display: block;
-  text-align: center; /* Center the indicator */
-  font-size: 1.2em; /* Adjust size as needed */
-  color: red; /* Change color if needed */
+.react-calendar__navigation button {
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #4a90e2;
+  background: transparent;
+  border: none;
+  margin: 0 8px;
+  padding: 8px 16px;
+  cursor: pointer;
 }
 
-
-.react-calendar__tile.highlighted-session {
-  background-color: #ff0000; /* Highlighted color*/
-  color: white; /* Text color */
-  font-weight: bold; 
-  border-radius: 50%; /* Rounded corners */
+.react-calendar__navigation button:hover {
+  background-color: #e9f2fd;
+  border-radius: 6px;
 }
 
+.react-calendar__tile {
+  color: #333;
+  height: 100px;
+  position: relative;
+  padding: 8px;
+  border-radius: 6px;
+  background: #f4f6f9;
+  transition: background-color 0.3s;
+}
+
+.react-calendar__tile:hover {
+  background-color: #e1ebf5;
+}
+
+/* .react-calendar__tile--active {
+  background-color: #4a90e2;
+  color: #fff;
+  border-radius: 6px;
+} */
+
+.session-timeframes {
+  margin-top: 8px;
+}
+
+.timeframe-box {
+  background-color: #b8e986;
+  color: #333;
+  border-radius: 4px;
+  padding: 2px 4px;
+  font-size: 0.75em;
+  margin-top: 4px;
+  text-align: center;
+  font-weight: bold;
+}
