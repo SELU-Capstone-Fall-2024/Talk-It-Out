@@ -4,19 +4,17 @@ import MyCalendar from '../components/calendar';
 import Home from '../components/home';
 import Login from '../components/login';
 import Logout from '../components/logout';
-import Navbar from '../components/nav-bar';
 import NotFound from '../components/not-found';
 import {GoalRoutes} from '../goals/routes';
 import {GroupRoutes} from '../groups/routes';
 import {SessionRoutes} from '../sessions/routes';
 import {UserRoutes} from '../users/routes';
-import {useAuth} from '../auth/auth-context';
+import Header from '../components/header';
 
 export const BrowserRoutes: React.FC = () => {
-  const {user} = useAuth();
   return (
     <BrowserRouter>
-      {user && <Navbar />}
+    <Header/>
       <Routes>
         <Route path="/*">
           <Route index element={<Login />} />
