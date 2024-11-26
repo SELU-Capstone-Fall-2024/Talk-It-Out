@@ -1,8 +1,16 @@
 import type React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { type UserLoginDto, Response } from "../types";
-import { YStack, Input, Button, Text, SizableText, Form } from "tamagui";
+import type { UserLoginDto } from "../types";
+import {
+  YStack,
+  Input,
+  Button,
+  Text,
+  SizableText,
+  Form,
+  Spinner,
+} from "tamagui";
 import type {
   NativeSyntheticEvent,
   TextInputChangeEventData,
@@ -46,7 +54,7 @@ const Login: React.FC = () => {
       console.log(response.errors);
       return;
     }
-    navigate("/calendar");
+    navigate("/home");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -60,7 +68,7 @@ const Login: React.FC = () => {
       justifyContent="center"
       alignItems="center"
       padding={20}
-      background="$darkBackground"
+      background="white"
       minHeight="100vh"
       width="100vw"
     >
@@ -69,16 +77,15 @@ const Login: React.FC = () => {
         maxWidth={400}
         padding={30}
         borderRadius={15}
-        backgroundColor="$darkPrimary"
+        backgroundColor="white"
         shadowColor="rgba(0, 0, 0, 0.5)"
         shadowRadius={10}
-        shadowOpacity={0.5}
         shadowOffset={{ width: 0, height: 4 }}
         alignItems="center"
         justifyContent="center"
       >
-        <SizableText size={30} marginBottom={20} color="#e6f2ff">
-          Login
+        <SizableText size={30} marginBottom={20} color="#282E67">
+          Sign In
         </SizableText>
         {error && (
           <Text color="red" marginBottom={15}>
@@ -88,7 +95,7 @@ const Login: React.FC = () => {
 
         <Form onSubmit={() => handleSubmit} gap={20} width="100%">
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               Username
             </SizableText>
             <Input
@@ -99,15 +106,14 @@ const Login: React.FC = () => {
               value={userData.userName}
               onChange={handleChange("userName")}
               placeholder="Enter Username"
-              borderColor="#cce6ff"
-              background="#3d444d"
+              borderColor="gray"
               borderRadius={2}
-              placeholderTextColor="#e6f2ff"
+              placeholderTextColor="gray"
             />
           </YStack>
 
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               Password
             </SizableText>
             <Input
@@ -118,10 +124,9 @@ const Login: React.FC = () => {
               value={userData.password}
               onChange={handleChange("password")}
               placeholder="Enter Password"
-              borderColor="#cce6ff"
-              background="#3d444d"
+              borderColor="gray"
               borderRadius={2}
-              placeholderTextColor="#e6f2ff"
+              placeholderTextColor="gray"
             />
           </YStack>
 
@@ -131,13 +136,15 @@ const Login: React.FC = () => {
             size={30}
             padding={12}
             disabled={loading}
-            background="#e6f2ff"
+            background="#282E67"
             style={{ overflow: "hidden", textAlign: "center" }}
             theme={loading ? "secondary" : "primary"}
             onPress={handleFormSubmit}
             borderRadius={4}
           >
-            <Text fontSize={18}>{loading ? "Logging in..." : "Login"}</Text>
+            <Text fontSize={18} color="white">
+              {loading ? <Spinner /> : "Sign In"}
+            </Text>
           </Button>
         </Form>
       </YStack>

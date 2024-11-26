@@ -1,6 +1,7 @@
 import type React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/auth-context";
+import "./logout.css";
 
 const Logout: React.FC = () => {
   const navigate = useNavigate();
@@ -13,8 +14,9 @@ const Logout: React.FC = () => {
 
   return (
     <div>
-      {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-      <button onClick={handleLogout}>Logout</button>
+      <button onClick={handleLogout} className="logout-btn">
+        Sign Out
+      </button>
     </div>
   );
 };
