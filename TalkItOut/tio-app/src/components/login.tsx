@@ -54,7 +54,7 @@ const Login: React.FC = () => {
       console.log(response.errors);
       return;
     }
-    navigate("/calendar");
+    navigate("/home");
   };
 
   const handleSubmit = (e: React.FormEvent) => {
