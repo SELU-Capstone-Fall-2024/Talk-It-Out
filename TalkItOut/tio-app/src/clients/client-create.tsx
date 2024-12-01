@@ -1,18 +1,18 @@
-import type React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api/api";
-import type { ClientCreateDto } from "../types";
-import { Button, Input, SizableText, YStack, Text, Form } from "tamagui";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import type React from 'react';
+import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import api from '../api/api';
+import type {ClientCreateDto} from '../types';
+import {Button, Input, SizableText, YStack, Text, Form} from 'tamagui';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const ClientCreate: React.FC = () => {
   const navigate = useNavigate();
   const [clientData, setClientData] = useState<ClientCreateDto>({
-    firstName: "",
-    lastName: "",
-    dateOfBirth: "",
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
     userId: 1,
   });
   const [error, setError] = useState<string | null>(null);
@@ -30,10 +30,10 @@ const ClientCreate: React.FC = () => {
     setLoading(true);
 
     try {
-      await api.post("/clients", clientData);
-      navigate("/clients/listing");
+      await api.post('/clients', clientData);
+      navigate('/clients/listing');
     } catch (err) {
-      setError("Failed to create client. Please try again.");
+      setError('Failed to create client. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -46,7 +46,6 @@ const ClientCreate: React.FC = () => {
         justifyContent="center"
         alignItems="center"
         padding={20}
-        background="$darkBackground"
         minHeight="100vh"
         width="100vw"
       >
@@ -68,14 +67,14 @@ const ClientCreate: React.FC = () => {
               {error}
             </Text>
           )}
-          <Form onSubmit={handleSubmit} style={{ width: "100%" }}>
+          <Form onSubmit={handleSubmit} style={{width: '100%'}}>
             <YStack gap={10}>
-              <SizableText size={18} color={"#e6f2ff"}>
+              <SizableText size={18} color={'#e6f2ff'}>
                 First Name
               </SizableText>
               <Input
                 value={clientData.firstName}
-                onChangeText={(text) => handleChange("firstName")(text)}
+                onChangeText={(text) => handleChange('firstName')(text)}
                 placeholder="First Name"
                 size={46}
                 flex={1}
@@ -86,12 +85,12 @@ const ClientCreate: React.FC = () => {
             </YStack>
 
             <YStack gap={10}>
-              <SizableText size={18} color={"#e6f2ff"}>
+              <SizableText size={18} color={'#e6f2ff'}>
                 Last Name
               </SizableText>
               <Input
                 value={clientData.lastName}
-                onChangeText={(text) => handleChange("lastName")(text)}
+                onChangeText={(text) => handleChange('lastName')(text)}
                 placeholder="Last Name"
                 size={46}
                 flex={1}
@@ -112,7 +111,7 @@ const ClientCreate: React.FC = () => {
                     : null
                 }
                 onChange={(date) =>
-                  handleChange("dateOfBirth")(date || new Date())
+                  handleChange('dateOfBirth')(date || new Date())
                 }
                 dateFormat="MM/dd/yyyy"
                 placeholderText="Date of Birth"
@@ -130,7 +129,7 @@ const ClientCreate: React.FC = () => {
               onPress={handleSubmit}
             >
               <Text fontSize={18}>
-                {loading ? "Creating..." : "Create Client"}
+                {loading ? 'Creating...' : 'Create Client'}
               </Text>
             </Button>
           </Form>

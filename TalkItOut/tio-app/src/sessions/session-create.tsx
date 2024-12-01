@@ -1,20 +1,20 @@
-import type React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api/api";
-import type { ClientGetDto, GroupGetDto, Response } from "../types";
-import { YStack, SizableText, Button, Text, Form } from "tamagui";
-import ReactSelect from "react-select";
-import { useAsync } from "react-use";
-import DatePicker from "react-datepicker";
+import type React from 'react';
+import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import api from '../api/api';
+import type {ClientGetDto, GroupGetDto, Response} from '../types';
+import {YStack, SizableText, Button, Text, Form} from 'tamagui';
+import ReactSelect from 'react-select';
+import {useAsync} from 'react-use';
+import DatePicker from 'react-datepicker';
 
 const SessionCreate: React.FC = () => {
   const navigate = useNavigate();
 
   const [sessionData, setSessionData] = useState({
     userId: 1,
-    startTime: "",
-    endTime: "",
+    startTime: '',
+    endTime: '',
     groupId: 0,
     clientId: 0,
   });
@@ -22,13 +22,13 @@ const SessionCreate: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { value: clients } = useAsync(async () => {
-    const response = await api.get<Response<ClientGetDto[]>>("/clients");
+  const {value: clients} = useAsync(async () => {
+    const response = await api.get<Response<ClientGetDto[]>>('/clients');
     return response.data;
   });
 
-  const { value: groups } = useAsync(async () => {
-    const response = await api.get<Response<GroupGetDto[]>>("/groups");
+  const {value: groups} = useAsync(async () => {
+    const response = await api.get<Response<GroupGetDto[]>>('/groups');
     return response.data;
   });
 
@@ -52,27 +52,27 @@ const SessionCreate: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!sessionData.startTime || !sessionData.endTime) {
-      setError("Please select both start and end times.");
+      setError('Please select both start and end times.');
       return;
     }
 
     if (sessionData.clientId && sessionData.groupId) {
-      setError("Only select client or group, not both.");
+      setError('Only select client or group, not both.');
     }
 
     setLoading(true);
     try {
       const response = await api.post<Response<typeof sessionData>>(
-        "/sessions",
+        '/sessions',
         sessionData
       );
       if (response.status === 201 && !response.data.hasErrors) {
-        navigate("/sessions/listing");
+        navigate('/sessions/listing');
       } else {
-        setError("Failed to create session. Please try again.");
+        setError('Failed to create session. Please try again.');
       }
     } catch (err) {
-      setError("An error occurred while creating the session.");
+      setError('An error occurred while creating the session.');
     } finally {
       setLoading(false);
     }
@@ -84,7 +84,6 @@ const SessionCreate: React.FC = () => {
       justifyContent="center"
       alignItems="center"
       padding={20}
-      background="$darkBackground"
       minHeight="100vh"
       width="100vw"
     >
@@ -117,7 +116,7 @@ const SessionCreate: React.FC = () => {
                 sessionData.startTime ? new Date(sessionData.startTime) : null
               }
               onChange={(date) =>
-                handleChange("startTime")(date?.toISOString() || "")
+                handleChange('startTime')(date?.toISOString() || '')
               }
               showTimeSelect
               timeFormat="hh:mm aa"
@@ -137,7 +136,7 @@ const SessionCreate: React.FC = () => {
                 sessionData.endTime ? new Date(sessionData.endTime) : null
               }
               onChange={(date) =>
-                handleChange("endTime")(date?.toISOString() || "")
+                handleChange('endTime')(date?.toISOString() || '')
               }
               showTimeSelect
               timeFormat="hh:mm aa"
@@ -155,7 +154,7 @@ const SessionCreate: React.FC = () => {
             <ReactSelect
               options={clientOptions}
               onChange={(selectedOption) =>
-                handleChange("clientId")(Number(selectedOption?.value))
+                handleChange('clientId')(Number(selectedOption?.value))
               }
               value={clientOptions?.find(
                 (option) => Number(option.value) === sessionData.clientId
@@ -175,7 +174,7 @@ const SessionCreate: React.FC = () => {
             <ReactSelect
               options={groupOptions}
               onChange={(selectedOption) =>
-                handleChange("groupId")(Number(selectedOption?.value))
+                handleChange('groupId')(Number(selectedOption?.value))
               }
               value={groupOptions?.find(
                 (option) => Number(option.value) === sessionData.groupId
@@ -196,7 +195,7 @@ const SessionCreate: React.FC = () => {
             marginTop={20}
           >
             <Text fontSize={18}>
-              {loading ? "Creating..." : "Create Session"}
+              {loading ? 'Creating...' : 'Create Session'}
             </Text>
           </Button>
         </Form>

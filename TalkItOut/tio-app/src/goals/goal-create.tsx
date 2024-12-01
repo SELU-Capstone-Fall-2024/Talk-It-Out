@@ -1,15 +1,15 @@
-import type React from "react";
-import { useState } from "react";
-import api from "../api/api";
-import type { GoalCreateDto } from "../types";
-import { useNavigate } from "react-router-dom";
-import { YStack, SizableText, Button, Input, Text, Form } from "tamagui";
+import type React from 'react';
+import {useState} from 'react';
+import api from '../api/api';
+import type {GoalCreateDto} from '../types';
+import {useNavigate} from 'react-router-dom';
+import {YStack, SizableText, Button, Input, Text, Form} from 'tamagui';
 
 const GoalCreate: React.FC = () => {
   const navigate = useNavigate();
   const [goalData, setGoalData] = useState<GoalCreateDto>({
     userId: 1,
-    information: "",
+    information: '',
     clientId: 0,
   });
 
@@ -27,7 +27,7 @@ const GoalCreate: React.FC = () => {
   const handleIdChange = (value: string) => {
     const parsedId = Number.parseInt(value);
     if (Number.isNaN(parsedId) || parsedId <= 0) {
-      setError("Please enter a valid Client ID.");
+      setError('Please enter a valid Client ID.');
       setGoalData((prevData) => ({
         ...prevData,
         clientId: 0,
@@ -47,20 +47,20 @@ const GoalCreate: React.FC = () => {
       !goalData.information ||
       goalData.clientId === 0
     ) {
-      setError("Please fill out all required fields.");
+      setError('Please fill out all required fields.');
       return;
     }
 
     setLoading(true);
     try {
-      const response = await api.post("/goals", goalData);
+      const response = await api.post('/goals', goalData);
       if (response.status === 201) {
-        navigate("/goals/listing");
+        navigate('/goals/listing');
       } else {
-        setError("Failed to create goal. Please try again.");
+        setError('Failed to create goal. Please try again.');
       }
     } catch (err) {
-      setError("An error occurred while creating the goal.");
+      setError('An error occurred while creating the goal.');
     } finally {
       setLoading(false);
     }
@@ -72,7 +72,6 @@ const GoalCreate: React.FC = () => {
       justifyContent="center"
       alignItems="center"
       padding={20}
-      background="$darkBackground"
       minHeight="100vh"
       width="100vw"
     >
@@ -121,7 +120,7 @@ const GoalCreate: React.FC = () => {
               flex={1}
               padding={4}
               value={goalData.information}
-              onChangeText={(text) => handleChange("information")(text)}
+              onChangeText={(text) => handleChange('information')(text)}
               placeholder="Enter goal information"
               placeholderTextColor="gray"
               color="black"
@@ -136,12 +135,12 @@ const GoalCreate: React.FC = () => {
             size={30}
             padding={12}
             disabled={loading}
-            style={{ overflow: "hidden" }}
+            style={{overflow: 'hidden'}}
             onPress={handleSubmit}
             borderRadius={4}
             marginTop={20}
           >
-            <Text fontSize={18}>{loading ? "Creating..." : "Create Goal"}</Text>
+            <Text fontSize={18}>{loading ? 'Creating...' : 'Create Goal'}</Text>
           </Button>
         </Form>
       </YStack>

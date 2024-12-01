@@ -1,24 +1,17 @@
-import type React from "react";
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/api";
-import type { GoalGetDto, GoalUpdateDto } from "../types";
-import {
-  Button,
-  Form,
-  Input,
-  SizableText,
-  Text,
-  YStack,
-} from "tamagui";
+import type React from 'react';
+import {useEffect, useState} from 'react';
+import {useParams, useNavigate} from 'react-router-dom';
+import api from '../api/api';
+import type {GoalGetDto, GoalUpdateDto} from '../types';
+import {Button, Form, Input, SizableText, Text, YStack} from 'tamagui';
 
 const GoalUpdate: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
 
   const [goalData, setGoalData] = useState<GoalUpdateDto>({
     userId: 1,
-    information: "",
+    information: '',
     clientId: 0,
   });
 
@@ -31,17 +24,17 @@ const GoalUpdate: React.FC = () => {
       try {
         const response = await api.get<GoalGetDto>(`/goals/${id}`);
         if (response.status === 200) {
-          const { userId, information, clientId } = response.data;
+          const {userId, information, clientId} = response.data;
           setGoalData({
             userId: userId,
             information: information,
             clientId: clientId,
           });
         } else {
-          setError("Failed to load goal.");
+          setError('Failed to load goal.');
         }
       } catch (err) {
-        setError("An error occurred while loading the goal.");
+        setError('An error occurred while loading the goal.');
       } finally {
         setLoading(false);
       }
@@ -49,25 +42,24 @@ const GoalUpdate: React.FC = () => {
     fetchGoal();
   }, [id]);
 
-  const handleChange = 
-    (field: keyof GoalUpdateDto) => (value: string) => {
-      setGoalData((prevData) => ({
-        ...prevData,
-        [field]: value,
-      }));
-    };
-    
+  const handleChange = (field: keyof GoalUpdateDto) => (value: string) => {
+    setGoalData((prevData) => ({
+      ...prevData,
+      [field]: value,
+    }));
+  };
+
   const handleSubmit = async () => {
     setLoading(true);
     try {
       const response = await api.put(`/goals/${id}`, goalData);
       if (response.status === 200) {
-        navigate("/goals/listing");
+        navigate('/goals/listing');
       } else {
-        setError("Failed to update goal. Please try again.");
+        setError('Failed to update goal. Please try again.');
       }
     } catch (err) {
-      setError("An error occurred while updating the goal.");
+      setError('An error occurred while updating the goal.');
     } finally {
       setLoading(false);
     }
@@ -79,7 +71,6 @@ const GoalUpdate: React.FC = () => {
       justifyContent="center"
       alignItems="center"
       padding={20}
-      background="$darkBackground"
       minHeight="100vh"
       width="100vw"
     >
@@ -102,7 +93,7 @@ const GoalUpdate: React.FC = () => {
           </Text>
         )}
         {goalData && (
-          <Form onSubmit={handleSubmit} style={{ width: "100%" }}>
+          <Form onSubmit={handleSubmit} style={{width: '100%'}}>
             <YStack gap={10}>
               <SizableText size={18} color="#e6f2ff">
                 Goal Information
@@ -112,7 +103,7 @@ const GoalUpdate: React.FC = () => {
                 flex={1}
                 padding={4}
                 value={goalData.information}
-                onChangeText={(text) => handleChange("information")(text)}
+                onChangeText={(text) => handleChange('information')(text)}
                 placeholder="Enter goal information"
                 placeholderTextColor="gray"
                 color="black"
@@ -127,13 +118,13 @@ const GoalUpdate: React.FC = () => {
               size={30}
               padding={12}
               disabled={loading}
-              style={{ overflow: "hidden" }}
+              style={{overflow: 'hidden'}}
               onPress={handleSubmit}
               borderRadius={4}
               marginTop={20}
             >
               <Text fontSize={18}>
-                {loading ? "Updating..." : "Update Goal"}
+                {loading ? 'Updating...' : 'Update Goal'}
               </Text>
             </Button>
           </Form>

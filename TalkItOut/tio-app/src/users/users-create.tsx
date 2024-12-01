@@ -1,20 +1,20 @@
-import type React from "react";
-import { useState } from "react";
-import api from "../api/api";
-import type { UserCreateDto } from "../types";
-import { useNavigate } from "react-router-dom";
-import { SizableText, YStack, Text, Input, Button, Form, View } from "tamagui";
-import { FiEye, FiEyeOff } from "react-icons/fi";
-import { TouchableOpacity } from "react-native";
+import type React from 'react';
+import {useState} from 'react';
+import api from '../api/api';
+import type {UserCreateDto} from '../types';
+import {useNavigate} from 'react-router-dom';
+import {SizableText, YStack, Text, Input, Button, Form, View} from 'tamagui';
+import {FiEye, FiEyeOff} from 'react-icons/fi';
+import {TouchableOpacity} from 'react-native';
 
 const UserCreate: React.FC = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState<UserCreateDto>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    userName: "",
-    password: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    userName: '',
+    password: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -41,20 +41,20 @@ const UserCreate: React.FC = () => {
       !userData.userName ||
       !userData.password
     ) {
-      setError("Please fill out all required fields");
+      setError('Please fill out all required fields');
       return;
     }
 
     setLoading(true);
     try {
-      const response = await api.post("/users", userData);
+      const response = await api.post('/users', userData);
       if (response.status === 201) {
-        navigate("/users/listing");
+        navigate('/users/listing');
       } else {
-        setError("Failed to create user. Please try again.");
+        setError('Failed to create user. Please try again.');
       }
     } catch (err) {
-      setError("An error occurred while creating the user.");
+      setError('An error occurred while creating the user.');
     } finally {
       setLoading(false);
     }
@@ -66,7 +66,6 @@ const UserCreate: React.FC = () => {
       justifyContent="center"
       alignItems="center"
       padding={20}
-      background="$darkBackground"
       minHeight="100vh"
       width="100vw"
     >
@@ -91,12 +90,12 @@ const UserCreate: React.FC = () => {
 
         <Form onSubmit={handleSubmit} gap={20} width="100%">
           <YStack gap={10}>
-            <SizableText size={18} color={"#e6f2ff"}>
+            <SizableText size={18} color={'#e6f2ff'}>
               First Name
             </SizableText>
             <Input
               value={userData.firstName}
-              onChangeText={(text) => handleChange("firstName")(text)}
+              onChangeText={(text) => handleChange('firstName')(text)}
               placeholder="First Name"
               size={46}
               flex={1}
@@ -107,12 +106,12 @@ const UserCreate: React.FC = () => {
           </YStack>
 
           <YStack gap={10}>
-            <SizableText size={18} color={"#e6f2ff"}>
+            <SizableText size={18} color={'#e6f2ff'}>
               Last Name
             </SizableText>
             <Input
               value={userData.lastName}
-              onChangeText={(text) => handleChange("lastName")(text)}
+              onChangeText={(text) => handleChange('lastName')(text)}
               placeholder="Last Name"
               size={46}
               flex={1}
@@ -128,7 +127,7 @@ const UserCreate: React.FC = () => {
             </SizableText>
             <Input
               value={userData.email}
-              onChangeText={(text) => handleChange("email")(text)}
+              onChangeText={(text) => handleChange('email')(text)}
               placeholder="Email"
               size={46}
               flex={1}
@@ -144,7 +143,7 @@ const UserCreate: React.FC = () => {
             </SizableText>
             <Input
               value={userData.userName}
-              onChangeText={(text) => handleChange("userName")(text)}
+              onChangeText={(text) => handleChange('userName')(text)}
               placeholder="UserName"
               size={46}
               flex={1}
@@ -161,7 +160,7 @@ const UserCreate: React.FC = () => {
             <View>
               <Input
                 value={userData.password}
-                onChangeText={(text) => handleChange("password")(text)}
+                onChangeText={(text) => handleChange('password')(text)}
                 placeholder="Password"
                 size={46}
                 flex={1}
@@ -174,8 +173,8 @@ const UserCreate: React.FC = () => {
                 onPress={togglePasswordVisibility}
                 style={{
                   marginTop: 10,
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                 }}
               >
                 {isPasswordVisible ? (
@@ -183,8 +182,8 @@ const UserCreate: React.FC = () => {
                 ) : (
                   <FiEye color="#e6f2ff" size={20} />
                 )}
-                <Text color="#e6f2ff" style={{ marginLeft: 5 }}>
-                  {isPasswordVisible ? "Hide" : "Show"}
+                <Text color="#e6f2ff" style={{marginLeft: 5}}>
+                  {isPasswordVisible ? 'Hide' : 'Show'}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -198,12 +197,12 @@ const UserCreate: React.FC = () => {
             padding={12}
             disabled={loading}
             background="#e6f2ff"
-            style={{ overflow: "hidden" }}
-            theme={loading ? "secondary" : "primary"}
+            style={{overflow: 'hidden'}}
+            theme={loading ? 'secondary' : 'primary'}
             onPress={handleSubmit}
             borderRadius={4}
           >
-            <Text fontSize={18}>{loading ? "Creating..." : "Create User"}</Text>
+            <Text fontSize={18}>{loading ? 'Creating...' : 'Create User'}</Text>
           </Button>
         </Form>
       </YStack>

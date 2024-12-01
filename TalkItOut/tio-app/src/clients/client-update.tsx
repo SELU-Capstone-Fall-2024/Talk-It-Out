@@ -1,19 +1,19 @@
-import type React from "react";
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/api";
-import type { ClientGetDto, ClientCreateDto } from "../types";
-import { Input, SizableText, YStack, Text, Button, Form } from "tamagui";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import type React from 'react';
+import {useEffect, useState} from 'react';
+import {useParams, useNavigate} from 'react-router-dom';
+import api from '../api/api';
+import type {ClientGetDto, ClientCreateDto} from '../types';
+import {Input, SizableText, YStack, Text, Button, Form} from 'tamagui';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const ClientUpdate: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
   const [clientData, setClientData] = useState<ClientCreateDto>({
-    firstName: "",
-    lastName: "",
-    dateOfBirth: "",
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
     userId: 1,
   });
   const [error, setError] = useState<string | null>(null);
@@ -24,15 +24,15 @@ const ClientUpdate: React.FC = () => {
       setLoading(true);
       try {
         const response = await api.get<ClientGetDto>(`/clients/${id}`);
-        const { firstName, lastName, dateOfBirth, userId } = response.data;
+        const {firstName, lastName, dateOfBirth, userId} = response.data;
         setClientData({
           firstName,
           lastName,
-          dateOfBirth: dateOfBirth ? new Date(dateOfBirth).toISOString() : "",
+          dateOfBirth: dateOfBirth ? new Date(dateOfBirth).toISOString() : '',
           userId,
         });
       } catch (err) {
-        setError("Failed to load client data.");
+        setError('Failed to load client data.');
       } finally {
         setLoading(false);
       }
@@ -52,9 +52,9 @@ const ClientUpdate: React.FC = () => {
     setLoading(true);
     try {
       await api.put(`/clients/${id}`, clientData);
-      navigate("/clients/listing");
+      navigate('/clients/listing');
     } catch (err) {
-      setError("Failed to update client. Please try again.");
+      setError('Failed to update client. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -67,7 +67,6 @@ const ClientUpdate: React.FC = () => {
         justifyContent="center"
         alignItems="center"
         padding={20}
-        background="$darkBackground"
         minHeight="100vh"
         width="100vw"
       >
@@ -89,14 +88,14 @@ const ClientUpdate: React.FC = () => {
               {error}
             </Text>
           )}
-          <Form onSubmit={handleSubmit} style={{ width: "100%" }}>
+          <Form onSubmit={handleSubmit} style={{width: '100%'}}>
             <YStack gap={10}>
-              <SizableText size={18} color={"#e6f2ff"}>
+              <SizableText size={18} color={'#e6f2ff'}>
                 First Name
               </SizableText>
               <Input
                 value={clientData.firstName}
-                onChangeText={(text) => handleChange("firstName")(text)}
+                onChangeText={(text) => handleChange('firstName')(text)}
                 size={46}
                 flex={1}
                 gap={20}
@@ -105,12 +104,12 @@ const ClientUpdate: React.FC = () => {
             </YStack>
 
             <YStack gap={10}>
-              <SizableText size={18} color={"#e6f2ff"}>
+              <SizableText size={18} color={'#e6f2ff'}>
                 Last Name
               </SizableText>
               <Input
                 value={clientData.lastName}
-                onChangeText={(text) => handleChange("lastName")(text)}
+                onChangeText={(text) => handleChange('lastName')(text)}
                 size={46}
                 flex={1}
                 gap={20}
@@ -129,7 +128,7 @@ const ClientUpdate: React.FC = () => {
                     : null
                 }
                 onChange={(date) =>
-                  handleChange("dateOfBirth")(date || new Date())
+                  handleChange('dateOfBirth')(date || new Date())
                 }
                 dateFormat="MM/dd/yyyy"
               />
@@ -146,7 +145,7 @@ const ClientUpdate: React.FC = () => {
               onPress={handleSubmit}
             >
               <Text fontSize={18}>
-                {loading ? "Updating..." : "Update Client"}
+                {loading ? 'Updating...' : 'Update Client'}
               </Text>
             </Button>
           </Form>
