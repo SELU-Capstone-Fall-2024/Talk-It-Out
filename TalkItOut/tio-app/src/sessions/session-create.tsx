@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import type { ClientGetDto, GroupGetDto, Response } from "../types";
-import { YStack, SizableText, Button, Text, Form } from "tamagui";
+import { YStack, SizableText, Button, Text, Form, Spinner } from "tamagui";
 import ReactSelect from "react-select";
 import { useAsync } from "react-use";
 import DatePicker from "react-datepicker";
@@ -67,7 +67,7 @@ const SessionCreate: React.FC = () => {
         sessionData
       );
       if (response.status === 201 && !response.data.hasErrors) {
-        navigate("/sessions/listing");
+        navigate("/week");
       } else {
         setError("Failed to create session. Please try again.");
       }
@@ -81,10 +81,9 @@ const SessionCreate: React.FC = () => {
   return (
     <YStack
       flex={1}
-      justifyContent="center"
-      alignItems="center"
+      justifyContent="flex-start"
+      alignItems="flex-start"
       padding={20}
-      background="$darkBackground"
       minHeight="100vh"
       width="100vw"
     >
@@ -93,12 +92,11 @@ const SessionCreate: React.FC = () => {
         maxWidth={400}
         padding={30}
         borderRadius={15}
-        backgroundColor="$darkPrimary"
-        alignItems="center"
+        alignItems="flex-start"
         justifyContent="center"
       >
-        <SizableText size={30} marginBottom={20} color="#e6f2ff">
-          Create New Session
+        <SizableText size={30} marginBottom={20} color="black">
+          Create a New Session
         </SizableText>
 
         {error && (
@@ -109,7 +107,7 @@ const SessionCreate: React.FC = () => {
 
         <Form onSubmit={handleSubmit} gap={20} width="100%">
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               Start Time
             </SizableText>
             <DatePicker
@@ -129,7 +127,7 @@ const SessionCreate: React.FC = () => {
           </YStack>
 
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               End Time
             </SizableText>
             <DatePicker
@@ -149,7 +147,7 @@ const SessionCreate: React.FC = () => {
           </YStack>
 
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               Select Client
             </SizableText>
             <ReactSelect
@@ -164,12 +162,12 @@ const SessionCreate: React.FC = () => {
               isClearable={true}
             />
           </YStack>
-          <SizableText size={18} color="#e6f2ff">
+          <SizableText size={18} color="black">
             Or
           </SizableText>
 
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               Select Group
             </SizableText>
             <ReactSelect
@@ -194,9 +192,10 @@ const SessionCreate: React.FC = () => {
             onPress={handleSubmit}
             borderRadius={4}
             marginTop={20}
+            background="#282e67"
           >
-            <Text fontSize={18}>
-              {loading ? "Creating..." : "Create Session"}
+            <Text fontSize={18} color="white">
+              {loading ? <Spinner /> : "Add Session"}
             </Text>
           </Button>
         </Form>
