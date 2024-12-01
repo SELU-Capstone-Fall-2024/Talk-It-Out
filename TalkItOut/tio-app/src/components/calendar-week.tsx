@@ -85,19 +85,19 @@ const CalendarWeek = () => {
       <XStack justifyContent="flex-end" gap={15}>
         <Button
           size={30}
-          background="#282e67"
           borderRadius={4}
           onPress={() => navigate("/sessions/create")}
           width={175}
+          style={{ background: "#282e67" }}
         >
           <Text style={{ color: "white", fontSize: 18 }}>Add A Session</Text>
         </Button>
         <Button
           size={30}
-          background="#282e67"
           borderRadius={4}
           onPress={() => navigate("/month")}
           width={175}
+          style={{ background: "#282e67" }}
         >
           <Text style={{ color: "white", fontSize: 18 }}>Monthly View</Text>
         </Button>
@@ -116,7 +116,7 @@ const CalendarWeek = () => {
           max={new Date(0, 0, 0, 19, 0, 0)}
           views={["work_week"]}
         />
-      </div>
+      </div>{" "}
     </View>
   );
 };

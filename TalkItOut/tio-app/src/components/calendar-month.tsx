@@ -56,7 +56,7 @@ const CalendarMonth = () => {
       <XStack justifyContent="flex-end" gap={15}>
         <Button
           size={30}
-          background="#282e67"
+          style={{ background: "#282e67" }}
           borderRadius={4}
           onPress={() => navigate("/sessions/create")}
           width={175}
@@ -65,7 +65,7 @@ const CalendarMonth = () => {
         </Button>
         <Button
           size={30}
-          background="#282e67"
+          style={{ background: "#282e67" }}
           borderRadius={4}
           onPress={() => navigate("/week")}
           width={175}
