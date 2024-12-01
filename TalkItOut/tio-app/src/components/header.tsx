@@ -30,7 +30,7 @@ const Header: React.FC = () => {
           <Link to="/calendar" className="nav-btn">
             Calendar View
           </Link>
-          <Link to="/clients" className="nav-btn">
+          <Link to="/clients/listing" className="nav-btn">
             Student List
           </Link>
           <Link to="/schedule" className="nav-btn">
