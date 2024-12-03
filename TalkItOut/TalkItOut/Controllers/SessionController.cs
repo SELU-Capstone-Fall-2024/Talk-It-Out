@@ -40,6 +40,31 @@ namespace TalkItOut.Controllers;
             return Ok(response);
         }
 
+        [HttpGet("todays-sessions")]
+        public async Task<IActionResult> GetTodaysSessions()
+        {
+            var response = new Response();
+            
+            var sessions = _dataContext.Set<Session>()
+                .Include(x => x.Client)
+                .Where(x => x.StartTime.Date.Equals(DateTime.Today))
+                .Select(x => new SessionGetDto
+                {
+                    Id = x.Id,
+                    UserId = x.UserId,
+                    StartTime = x.StartTime,
+                    EndTime = x.EndTime,
+                    GroupId = x.GroupId,
+                    ClientId = x.ClientId,
+                    ClientName = x.Client.FirstName + " " + x.Client.LastName
+                })
+                .ToList();
+            
+            response.Data = sessions;
+
+            return Ok(response);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
