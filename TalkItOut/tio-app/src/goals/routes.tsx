@@ -7,7 +7,7 @@ export const GoalRoutes: React.FC = () => {
   return (
     <Routes>
       <Route index path="listing" element={<Goals />} />
-      <Route path="create" element={<GoalCreate />} />
+      <Route path="create/:id" element={<GoalCreate />} />
       <Route path=":id" element={<GoalUpdate />} />
     </Routes>
   );
