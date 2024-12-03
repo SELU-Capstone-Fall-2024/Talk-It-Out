@@ -101,40 +101,51 @@ const Clients: React.FC = () => {
             borderBottomWidth={2}
             borderColor="black"
             backgroundColor="#282e67"
-            gap={15}
             justifyContent="space-between"
             alignItems="center"
           >
-            <Text fontSize={18} color="white">
-              Name
-            </Text>
-            <Text fontSize={18} color="white">
-              Date of Birth
-            </Text>
-            <Text fontSize={18} color="white">
-              Actions
-            </Text>
+            <YStack width="33%" alignItems="flex-start">
+              <Text fontSize={18} color="white">
+                Name
+              </Text>
+            </YStack>
+            <YStack width="33%" alignItems="center">
+              <Text fontSize={18} color="white">
+                Date of Birth
+              </Text>
+            </YStack>
+            <YStack width="33%" alignItems="flex-end">
+              <Text fontSize={18} color="white">
+                Actions
+              </Text>
+            </YStack>
           </XStack>
 
           {displayedClients?.map((client) => {
             const dateOfBirth = new Date(client.dateOfBirth);
+
             return (
-              <YStack
+              <XStack
                 key={client.id}
-                padding={15}
+                padding={10}
                 borderWidth={1}
                 borderColor="black"
                 backgroundColor="white"
                 width="100%"
-                gap={10}
               >
-                <XStack justifyContent="space-between" alignItems="center">
+                <YStack width="33%" alignItems="flex-start">
                   <Text style={{ color: "black" }}>
                     {client.firstName} {client.lastName}
                   </Text>
+                </YStack>
+
+                <YStack width="33%" alignItems="center">
                   <Text style={{ color: "black" }}>
                     {formatDate(dateOfBirth)}
                   </Text>
+                </YStack>
+
+                <YStack width="33%" alignItems="flex-end">
                   <XStack gap={10}>
                     <Button
                       size={25}
@@ -155,8 +166,8 @@ const Clients: React.FC = () => {
                       </Text>
                     </Button>
                   </XStack>
-                </XStack>
-              </YStack>
+                </YStack>
+              </XStack>
             );
           })}
         </YStack>
