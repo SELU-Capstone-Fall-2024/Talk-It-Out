@@ -10,15 +10,31 @@ import {
   Text,
   XStack,
   Input,
+  View,
 } from "tamagui";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "../components/format-date";
+import { useState } from "react";
 
 const Clients: React.FC = () => {
   const navigate = useNavigate();
+
+  const [searchTerm, setSearchTerm] = useState("");
+
   const { loading, value: clients } = useAsync(async () => {
     const response = await api.get<Response<ClientGetDto[]>>("/clients");
     return response.data;
   });
+
+  const filteredClients = clients?.data?.filter((client) => {
+    const fullName = `${client.firstName} ${client.lastName}`.toLowerCase();
+    const dob = formatDate(new Date(client.dateOfBirth)).toLowerCase();
+    const search = searchTerm.toLowerCase();
+
+    return fullName.includes(search) || dob.includes(search);
+  });
+
+  const displayedClients = filteredClients ?? clients?.data;
 
   const handleDeleteClient = async (clientId: number) => {
     if (window.confirm("Are you sure you want to delete this client?")) {
@@ -33,28 +49,35 @@ const Clients: React.FC = () => {
   };
 
   return (
-    <YStack padding={20}>
-      <SizableText size={50} color="black" textAlign="left">
-        Students
+    <View padding={20}>
+      <SizableText size={44} color="black" textAlign="left">
+        Clients
       </SizableText>
 
-      <XStack alignItems="flex-start" marginBottom={15} gap={30}>
+      <XStack
+        alignItems="center"
+        justifyContent="space-between"
+        marginBottom={30}
+        padding={10}
+      >
         <Input
-          placeholder="Find a Student: Search..."
+          placeholder="Search by Name or DOB..."
+          placeholderTextColor="#b0b0b0"
           style={{
             padding: 10,
             width: 300,
             borderRadius: 8,
-            marginBottom: 20,
           }}
+          value={searchTerm}
+          onChangeText={setSearchTerm}
         />
         <Button
           size={30}
-          style={{background: "#282e67"}}
+          style={{ background: "#282e67" }}
           borderRadius={4}
           onPress={() => navigate("/clients/create")}
         >
-          <Text style={{ color: "white", fontSize: 18 }}>Create A Client</Text>
+          <Text style={{ color: "white", fontSize: 18 }}>Add A Client</Text>
         </Button>
       </XStack>
 
@@ -72,66 +95,73 @@ const Clients: React.FC = () => {
 
       {!loading && clients && (
         <YStack width="100%" padding={0} gap={10}>
-          <YStack
+          <XStack
             width="100%"
             padding={10}
             borderBottomWidth={2}
             borderColor="black"
-            backgroundColor="#e6f2ff"
+            backgroundColor="#282e67"
             gap={15}
-            justifyContent="center"
+            justifyContent="space-between"
             alignItems="center"
           >
-            <Text fontSize={18} color="black">
+            <Text fontSize={18} color="white">
               Name
             </Text>
-            <Text fontSize={18} color="black">
+            <Text fontSize={18} color="white">
               Date of Birth
             </Text>
-            <Text fontSize={18} color="black">
+            <Text fontSize={18} color="white">
               Actions
             </Text>
-          </YStack>
+          </XStack>
 
-          {clients.data?.map((client) => (
-            <YStack
-              key={client.id}
-              padding={15}
-              borderWidth={1}
-              borderColor="black"
-              backgroundColor="white"
-              width="100%"
-              gap={10}
-            >
-              <XStack justifyContent="space-between" alignItems="center">
-                <Text style={{ color: "black" }}>
-                  {client.firstName} {client.lastName}
-                </Text>
-                <Text style={{ color: "black" }}>{client.dateOfBirth}</Text>
-                <XStack gap={10}>
-                  <Button
-                    size={25}
-                    background="#e6f2ff"
-                    borderRadius={4}
-                    onPress={() => navigate(`/clients/${client.id}`)}
-                  >
-                    <Text style={{ color: "#000", fontSize: 16 }}>View</Text>
-                  </Button>
-                  <Button
-                    size={25}
-                    background="#b32d00"
-                    borderRadius={4}
-                    onPress={() => handleDeleteClient(client.id)}
-                  >
-                    <Text style={{ color: "white", fontSize: 16 }}>Delete</Text>
-                  </Button>
+          {displayedClients?.map((client) => {
+            const dateOfBirth = new Date(client.dateOfBirth);
+            return (
+              <YStack
+                key={client.id}
+                padding={15}
+                borderWidth={1}
+                borderColor="black"
+                backgroundColor="white"
+                width="100%"
+                gap={10}
+              >
+                <XStack justifyContent="space-between" alignItems="center">
+                  <Text style={{ color: "black" }}>
+                    {client.firstName} {client.lastName}
+                  </Text>
+                  <Text style={{ color: "black" }}>
+                    {formatDate(dateOfBirth)}
+                  </Text>
+                  <XStack gap={10}>
+                    <Button
+                      size={25}
+                      style={{ background: "gray" }}
+                      borderRadius={4}
+                      onPress={() => navigate(`/clients/${client.id}/view`)}
+                    >
+                      <Text style={{ color: "white", fontSize: 16 }}>View</Text>
+                    </Button>
+                    <Button
+                      size={25}
+                      style={{ background: "#b32d00" }}
+                      borderRadius={4}
+                      onPress={() => handleDeleteClient(client.id)}
+                    >
+                      <Text style={{ color: "white", fontSize: 16 }}>
+                        Delete
+                      </Text>
+                    </Button>
+                  </XStack>
                 </XStack>
-              </XStack>
-            </YStack>
-          ))}
+              </YStack>
+            );
+          })}
         </YStack>
       )}
-    </YStack>
+    </View>
   );
 };
 

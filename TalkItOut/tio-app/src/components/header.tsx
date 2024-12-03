@@ -31,7 +31,7 @@ const Header: React.FC = () => {
             Calendar View
           </Link>
           <Link to="/clients/listing" className="nav-btn">
-            Student List
+            Client List
           </Link>
           <Link to="/schedule" className="nav-btn">
             Edit Your Schedule
