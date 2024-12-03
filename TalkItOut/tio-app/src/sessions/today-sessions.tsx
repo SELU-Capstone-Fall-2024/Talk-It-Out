@@ -1,13 +1,11 @@
 import {useAsync} from 'react-use';
-import {YStack, Text, Button, XStack} from 'tamagui';
+import {YStack, Text, Button, XStack, Header} from 'tamagui';
 import api from '../api/api';
 import {SessionGetDto, Response} from '../types';
-import formatDate from '../components/format-date';
 import {useNavigate} from 'react-router-dom';
+import {formatDate} from '../components/format-date';
 
 export const TodaySessions: React.FC = () => {
-  const navigate = useNavigate();
-
   const {loading: loadingSessions, value: sessions} = useAsync(async () => {
     const response = await api.get<Response<SessionGetDto[]>>('/sessions');
     return response.data;
@@ -23,51 +21,47 @@ export const TodaySessions: React.FC = () => {
           alignItems="center"
           overflow="scroll"
         >
+          <Header width="100%" background="gray">
+            <Text justifyContent="center">Today's Schedule</Text>
+          </Header>
           {sessions.data?.map((session) => {
-            const startTime = new Date(session.startTime);
-            const endTime = new Date(session.endTime);
-            const durationMinutes = Math.floor(
-              (endTime.getTime() - startTime.getTime()) / (1000 * 60)
-            );
-
-            return (
-              <YStack
-                key={session.id}
-                padding={15}
-                borderWidth={1}
-                borderColor="black"
-                backgroundColor="white"
-                width="100%"
-                gap={10}
-              >
-                <Text style={{color: 'black'}}>Session Id: {session.id}</Text>
-                <Text style={{color: 'black'}}>
-                  Duration: {durationMinutes} minutes
-                </Text>
-                <Text style={{color: 'black'}}>
-                  Start Time: {formatDate(startTime)}
-                </Text>
-                <Text style={{color: 'black'}}>
-                  End Time: {formatDate(endTime)}
-                </Text>
-
-                <XStack gap={10}>
-                  <Button
-                    size={25}
-                    background="#e6f2ff"
-                    borderRadius={4}
-                    onPress={() => navigate(`/sessions/${session.id}`)}
-                  >
-                    <Text style={{color: '#000', fontSize: 16}}>
-                      Edit Session
-                    </Text>
-                  </Button>
-                </XStack>
-              </YStack>
-            );
+            return <ScheduleCard session={session} />;
           })}
         </YStack>
       )}
     </YStack>
+  );
+};
+
+const ScheduleCard: React.FC<{session: SessionGetDto}> = ({session}) => {
+  const navigate = useNavigate();
+  return (
+    <XStack
+      key={session.id}
+      padding={15}
+      borderWidth={1}
+      backgroundColor="white"
+      width="100%"
+    >
+      <XStack width="20%">
+        <Text style={{color: 'black'}}>
+          {formatDate(new Date(session.startTime))} -
+        </Text>
+        <Text style={{color: 'black'}}>
+          {formatDate(new Date(session.endTime))}
+        </Text>
+      </XStack>
+      <YStack width="70%"></YStack>
+      <XStack gap={10} width="10%">
+        <Button
+          size={25}
+          background="#e6f2ff"
+          borderRadius={4}
+          onPress={() => navigate(`/sessions/${session.id}`)}
+        >
+          <Text style={{color: '#000', fontSize: 16}}>Session Data</Text>
+        </Button>
+      </XStack>
+    </XStack>
   );
 };
