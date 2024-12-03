@@ -8,7 +8,7 @@ import type {
 } from "../types";
 import { useAsync } from "react-use";
 import { Button, YStack, SizableText, Spinner, Text, XStack } from "tamagui";
-import formatDate from "../components/format-date";
+import { formatDateTime } from "../components/format-date";
 import { useNavigate } from "react-router-dom";
 
 export const Sessions: React.FC = () => {
@@ -117,10 +117,10 @@ export const Sessions: React.FC = () => {
                   Duration: {durationMinutes} minutes
                 </Text>
                 <Text style={{ color: "black" }}>
-                  Start Time: {formatDate(startTime)}
+                  Start Time: {formatDateTime(startTime)}
                 </Text>
-                <Text style={{ color: "black" }}>
-                  End Time: {formatDate(endTime)}
+                <Text  style={{ color: "black" }}>
+                  End Time: {formatDateTime(endTime)}
                 </Text>
                 <Text style={{ color: "black" }}>
                   {group
