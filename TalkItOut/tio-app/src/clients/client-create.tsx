@@ -3,7 +3,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import type { ClientCreateDto } from "../types";
-import { Button, Input, SizableText, YStack, Text, Form } from "tamagui";
+import {
+  Button,
+  Input,
+  SizableText,
+  YStack,
+  Text,
+  Form,
+  Spinner,
+  XStack,
+} from "tamagui";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -43,10 +52,9 @@ const ClientCreate: React.FC = () => {
     <>
       <YStack
         flex={1}
-        justifyContent="center"
-        alignItems="center"
+        justifyContent="flex-start"
+        alignItems="flex-start"
         padding={20}
-        background="$darkBackground"
         minHeight="100vh"
         width="100vw"
       >
@@ -55,22 +63,32 @@ const ClientCreate: React.FC = () => {
           maxWidth={400}
           padding={30}
           borderRadius={15}
-          backgroundColor="$darkPrimary"
           alignItems="center"
-          justifyContent="center"
+          justifyContent="flex-start"
         >
-          <SizableText size={30} marginBottom={20} color="#e6f2ff">
-            Create Client
-          </SizableText>
+          <XStack alignItems="center" justifyContent="space-between" width="100%">
+            <SizableText size={30} marginBottom={20} color="black">
+              Create Client
+            </SizableText>
 
+            <Button
+              //justifyContent="flex-end"
+              size={25}
+              style={{ background: "#282e67" }}
+              borderRadius={4}
+              onPress={() => navigate("/clients/listing")}
+            >
+              <Text color={"white"}>Back</Text>
+            </Button>
+          </XStack>
           {error && (
             <Text color="red" marginBottom={15}>
               {error}
             </Text>
           )}
-          <Form onSubmit={handleSubmit} style={{ width: "100%" }}>
+          <Form onSubmit={handleSubmit} style={{ width: "100%" }} gap={10}>
             <YStack gap={10}>
-              <SizableText size={18} color={"#e6f2ff"}>
+              <SizableText size={18} color={"black"}>
                 First Name
               </SizableText>
               <Input
@@ -86,7 +104,7 @@ const ClientCreate: React.FC = () => {
             </YStack>
 
             <YStack gap={10}>
-              <SizableText size={18} color={"#e6f2ff"}>
+              <SizableText size={18} color={"black"}>
                 Last Name
               </SizableText>
               <Input
@@ -102,7 +120,7 @@ const ClientCreate: React.FC = () => {
             </YStack>
 
             <YStack gap={10}>
-              <SizableText size={18} color="#e6f2ff">
+              <SizableText size={18} color="black">
                 Date of Birth
               </SizableText>
               <DatePicker
@@ -124,13 +142,13 @@ const ClientCreate: React.FC = () => {
               alignSelf="center"
               size={30}
               padding={12}
-              background="#e6f2ff"
+              style={{ background: "#282e67" }}
               borderRadius={4}
               marginTop={20}
               onPress={handleSubmit}
             >
-              <Text fontSize={18}>
-                {loading ? "Creating..." : "Create Client"}
+              <Text fontSize={18} color={"white"}>
+                {loading ? <Spinner /> : "Create Client"}
               </Text>
             </Button>
           </Form>
