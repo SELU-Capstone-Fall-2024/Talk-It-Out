@@ -27,11 +27,11 @@ const Header: React.FC = () => {
       </div>
       {user && (
         <nav className="navbar">
-          <Link to="/calendar" className="nav-btn">
+          <Link to="/week" className="nav-btn">
             Calendar View
           </Link>
-          <Link to="/students" className="nav-btn">
-            Student List
+          <Link to="/clients/listing" className="nav-btn">
+            Client List
           </Link>
           <Link to="/schedule" className="nav-btn">
             Edit Your Schedule

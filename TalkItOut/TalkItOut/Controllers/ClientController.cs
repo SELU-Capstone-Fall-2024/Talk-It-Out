@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using TalkItOut.Common;
 using TalkItOut.Entities;
 
@@ -146,9 +147,23 @@ public class ClientController : ControllerBase
     public async Task<IActionResult> Delete(int id)
     {
         var response = new Response();
+        
+        var sessionsToDelete = await _dataContext.Set<Session>().Where(x => x.ClientId == id).ToListAsync();
+        
+        var goalsToDelete = await _dataContext.Set<Goal>().Where(x => x.ClientId == id).ToListAsync();
 
         var clientToDelete = await _dataContext.Set<Client>()
             .FirstOrDefaultAsync(x => x.Id == id);
+
+        if (!(sessionsToDelete.IsNullOrEmpty()))
+        {
+            _dataContext.Set<Session>().RemoveRange(sessionsToDelete);
+        }
+
+        if (!(goalsToDelete.IsNullOrEmpty()))
+        {
+            _dataContext.Set<Goal>().RemoveRange(goalsToDelete);
+        }
 
         if (clientToDelete == null)
         {
