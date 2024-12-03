@@ -1,4 +1,4 @@
-const formatDate = (date: Date) => {
+export const formatDateTime = (date: Date) => {
   const formatter = new Intl.DateTimeFormat("en-US", {
     month: "2-digit",
     day: "2-digit",
@@ -9,4 +9,12 @@ const formatDate = (date: Date) => {
   });
   return formatter.format(date);
 };
-export default formatDate;
+
+export const formatDate = (date: Date) => {
+  const formatter = new Intl.DateTimeFormat("en-us", {
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+  });
+  return formatter.format(date);
+};
