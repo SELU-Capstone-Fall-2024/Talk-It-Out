@@ -5,7 +5,7 @@ export const formatDateTime = (date: Date) => {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: true, // for AM/PM
+    hour12: true,
   });
   return formatter.format(date);
 };
@@ -17,4 +17,29 @@ export const formatDate = (date: Date) => {
     year: "numeric",
   });
   return formatter.format(date);
+};
+
+export const formatSessionTime = (start: string, end: string) => {
+  const startDate = new Date(start);
+  const endDate = new Date(end);
+
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  };
+
+  const dayOptions: Intl.DateTimeFormatOptions = {
+    weekday: "long",
+  };
+
+  const dayOfWeek = new Intl.DateTimeFormat("en-US", dayOptions).format(
+    startDate
+  );
+  const startTime = new Intl.DateTimeFormat("en-US", timeOptions).format(
+    startDate
+  );
+  const endTime = new Intl.DateTimeFormat("en-US", timeOptions).format(endDate);
+
+  return `${dayOfWeek} ${startTime} - ${endTime}`;
 };

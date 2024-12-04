@@ -61,6 +61,7 @@
 
 .navbar {
   display: flex;
+  gap: 40px;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
