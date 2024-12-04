@@ -7,7 +7,9 @@ import {formatDate} from '../components/format-date';
 
 export const TodaySessions: React.FC = () => {
   const {loading: loadingSessions, value: sessions} = useAsync(async () => {
-    const response = await api.get<Response<SessionGetDto[]>>('/sessions');
+    const response = await api.get<Response<SessionGetDto[]>>(
+      '/sessions/todays-sessions'
+    );
     return response.data;
   });
   return (
@@ -22,7 +24,9 @@ export const TodaySessions: React.FC = () => {
           overflow="scroll"
         >
           <Header width="100%" background="gray">
-            <Text justifyContent="center">Today's Schedule</Text>
+            <Text fontSize={30} fontWeight={600} justifyContent="center">
+              Today's Schedule
+            </Text>
           </Header>
           {sessions.data?.map((session) => {
             return <ScheduleCard session={session} />;
@@ -51,7 +55,16 @@ const ScheduleCard: React.FC<{session: SessionGetDto}> = ({session}) => {
           {formatDate(new Date(session.endTime))}
         </Text>
       </XStack>
-      <YStack width="70%"></YStack>
+      <YStack width="70%">
+        <Text style={{color: 'black'}}>{session.group.groupName}</Text>
+        <XStack>
+          {session.group.clients.map((client) => (
+            <Text style={{color: 'black'}}>
+              {client.firstName} + {client.lastName}
+            </Text>
+          ))}
+        </XStack>
+      </YStack>
       <XStack gap={10} width="10%">
         <Button
           size={25}

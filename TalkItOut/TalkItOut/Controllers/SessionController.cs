@@ -47,6 +47,7 @@ namespace TalkItOut.Controllers;
             
             var sessions = _dataContext.Set<Session>()
                 .Include(x => x.Client)
+                .Include(x => x.Group)
                 .Where(x => x.StartTime.Date.Equals(DateTime.Today))
                 .Select(x => new SessionGetDto
                 {
@@ -55,6 +56,15 @@ namespace TalkItOut.Controllers;
                     StartTime = x.StartTime,
                     EndTime = x.EndTime,
                     GroupId = x.GroupId,
+                    Group = new GroupGetDto
+                    {
+                        Clients = x.Group.Clients.Select(y => new ClientGetDto
+                        {
+                            DateOfBirth = y.DateOfBirth,
+                            FirstName = y.FirstName,
+                            LastName = y.LastName,
+                        }).ToList()
+                    },
                     ClientId = x.ClientId,
                     ClientName = x.Client.FirstName + " " + x.Client.LastName
                 })
