@@ -10,7 +10,7 @@ import type {
 } from "../types";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import "./calendar-week.css";
-import { Button, Text, View, XStack, YStack } from "tamagui";
+import { Button, Text, View, XStack } from "tamagui";
 import { useNavigate } from "react-router-dom";
 
 const CalendarWeek = () => {
@@ -115,9 +115,11 @@ const CalendarWeek = () => {
           min={new Date(0, 0, 0, 7, 0, 0)}
           max={new Date(0, 0, 0, 19, 0, 0)}
           views={["work_week"]}
+          onSelectEvent={(event) => navigate(`/sessions/${event.id}/view`)} // Navigate to session view
         />
-      </div>{" "}
+      </div>
     </View>
   );
 };
+
 export default CalendarWeek;

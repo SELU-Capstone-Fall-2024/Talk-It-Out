@@ -9,7 +9,7 @@ import type {
   GroupGetDto,
   ClientGetDto,
 } from "../types";
-import { Button, Form, SizableText, YStack, Text } from "tamagui";
+import { Button, Form, SizableText, YStack, Text, Spinner } from "tamagui";
 import ReactSelect from "react-select";
 import DatePicker from "react-datepicker";
 import { useAsync } from "react-use";
@@ -96,7 +96,7 @@ const SessionUpdate: React.FC = () => {
         sessionData
       );
       if (response.status === 200 && !response.data.hasErrors) {
-        navigate("/sessions/listing");
+        navigate(`/sessions/${id}/view`);
       } else {
         setError("Failed to update session. Please try again.");
       }
@@ -118,10 +118,9 @@ const SessionUpdate: React.FC = () => {
   return (
     <YStack
       flex={1}
-      justifyContent="center"
-      alignItems="center"
+      justifyContent="flex-start"
+      alignItems="flex-start"
       padding={20}
-      background="$darkBackground"
       minHeight="100vh"
       width="100vw"
     >
@@ -130,11 +129,9 @@ const SessionUpdate: React.FC = () => {
         maxWidth={400}
         padding={30}
         borderRadius={15}
-        backgroundColor="$darkPrimary"
-        alignItems="center"
-        justifyContent="center"
+        alignItems="flex-start"
       >
-        <SizableText size={30} marginBottom={20} color="#e6f2ff">
+        <SizableText size={30} marginBottom={20} color="black">
           Update Session
         </SizableText>
 
@@ -146,7 +143,7 @@ const SessionUpdate: React.FC = () => {
 
         <Form onSubmit={handleSubmit} gap={20} width="100%">
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               Start Time
             </SizableText>
             <DatePicker
@@ -161,12 +158,11 @@ const SessionUpdate: React.FC = () => {
               timeIntervals={15}
               timeCaption="Time"
               dateFormat="MM/dd/yyyy h:mm aa"
-              placeholderText="Select Start Time"
             />
           </YStack>
 
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               End Time
             </SizableText>
             <DatePicker
@@ -181,12 +177,11 @@ const SessionUpdate: React.FC = () => {
               timeIntervals={15}
               timeCaption="Time"
               dateFormat="MM/dd/yyyy h:mm aa"
-              placeholderText="Select End Time"
             />
           </YStack>
 
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               Select Client
             </SizableText>
             <ReactSelect
@@ -202,12 +197,12 @@ const SessionUpdate: React.FC = () => {
             />
           </YStack>
 
-          <SizableText size={18} color="#e6f2ff">
+          <SizableText size={18} color="black">
             Or
           </SizableText>
 
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               Select Group
             </SizableText>
             <ReactSelect
@@ -232,9 +227,10 @@ const SessionUpdate: React.FC = () => {
             onPress={handleSubmit}
             borderRadius={4}
             marginTop={20}
+            style={{ background: "#282e67" }}
           >
-            <Text fontSize={16}>
-              {loading ? "Updating..." : "Update Session"}
+            <Text fontSize={16} color="white">
+              {loading ? <Spinner /> : "Update Session"}
             </Text>
           </Button>
         </Form>
