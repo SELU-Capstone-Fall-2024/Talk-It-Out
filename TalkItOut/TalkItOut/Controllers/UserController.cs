@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using IdentityModel;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,15 +17,18 @@ public class UserController : ControllerBase
     private readonly UserManager<User> _userManager;
     private readonly SignInManager<User> _signInManager;
     private readonly DataContext _dataContext;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public UserController(
         UserManager<User> userManager,
         SignInManager<User> signInManager,
-        DataContext dataContext)
+        DataContext dataContext,
+        IHttpContextAccessor httpContextAccessor)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _dataContext = dataContext;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     [AllowAnonymous]
@@ -55,6 +61,63 @@ public class UserController : ControllerBase
         return Ok(response);
     }
     
+    private ClaimsPrincipal RequestingUser
+    {
+        get
+        {
+            var httpContext = _httpContextAccessor.HttpContext;
+            var identity = httpContext?.User.Identity;
+
+            if (identity == null)
+            {
+                return null;
+            }
+
+            return !identity.IsAuthenticated
+                ? null
+                : httpContext.User;
+        }
+    }
+
+    private bool IsUserLoggedIn()
+    {
+        return _httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
+    }
+    
+    [Authorize]
+    [HttpGet("get-current-user")]
+    public IActionResult GetLoggedInUser()
+    {
+        var response = new Response();
+        
+        if (!IsUserLoggedIn())
+            return null;
+
+        var id = RequestingUser.FindFirstValue(JwtClaimTypes.Subject);
+
+        var user = id == null
+            ? null
+            : _dataContext.Users.SingleOrDefault(x => x.Id == Int32.Parse(id));
+
+        if (user == null)
+        {
+            response.AddError(string.Empty, "There was an issue getting the logged in user.");
+            return NotFound(response);
+        }
+
+        var userGetDto = new UserGetDto
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            UserName = user.UserName,
+        };
+
+        response.Data = userGetDto;
+
+        return Ok(response);
+    }
+
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
