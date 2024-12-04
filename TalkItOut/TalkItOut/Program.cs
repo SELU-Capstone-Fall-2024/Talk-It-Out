@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using QuestPDF.Infrastructure;
 using TalkItOut.Entities;
 using TalkItOut.Extensions;
 
@@ -24,6 +26,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "TalkItOutAPI", Version = "v1" });
+    c.MapType<FileContentResult>(() => new OpenApiSchema { Type = "string", Format = "binary" });
 });
 
 builder.Services.AddAuthorization();
@@ -69,6 +72,6 @@ app.UseAuthorization();
 app.UseHttpsRedirection();
 
 app.MapControllers();
-
+QuestPDF.Settings.License = LicenseType.Community;
 
 app.Run();
