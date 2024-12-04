@@ -54,7 +54,7 @@ public class UserController : ControllerBase
         response.Data = result.Succeeded;
         return Ok(response);
     }
-
+    
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {

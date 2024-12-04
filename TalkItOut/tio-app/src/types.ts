@@ -142,3 +142,7 @@ export type OptionType = {
   label: string;
   value: string;
 };
+
+export type UserDto = {
+  id: number;
+};

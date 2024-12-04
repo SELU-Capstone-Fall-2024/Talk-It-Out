@@ -3,7 +3,7 @@ import api from '../api/api';
 import {UserLoginDto, Response} from '../types';
 import {useAsyncFn} from 'react-use';
 
-type AuthContext = {
+type AuthType = {
   user: User | null;
   loginState: any;
   login: (userData: UserLoginDto) => Promise<Response>;
@@ -14,7 +14,14 @@ type User = {
   username: string;
 };
 
-const AuthContext = createContext<AuthContext | undefined>(undefined);
+const INITIAL_STATE: AuthType = {
+  user: null,
+  loginState: undefined as any,
+  login: undefined as any,
+  logout: undefined as any,
+};
+
+const AuthContext = createContext<AuthType>(INITIAL_STATE);
 
 export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [user, setUser] = useState<User | null>(null);
@@ -43,10 +50,10 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
   );
 };
 
-export const useAuth = (): AuthContext => {
+export const useAuth = (): AuthType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
-  return context;
+  return useContext(AuthContext);
 };
