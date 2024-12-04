@@ -9,7 +9,15 @@ import type {
   GroupGetDto,
   ClientGetDto,
 } from "../types";
-import { Button, Form, SizableText, YStack, Text, Spinner } from "tamagui";
+import {
+  Button,
+  Form,
+  SizableText,
+  YStack,
+  Text,
+  Spinner,
+  XStack,
+} from "tamagui";
 import ReactSelect from "react-select";
 import DatePicker from "react-datepicker";
 import { useAsync } from "react-use";
@@ -119,21 +127,32 @@ const SessionUpdate: React.FC = () => {
     <YStack
       flex={1}
       justifyContent="flex-start"
-      alignItems="flex-start"
+      alignItems="center"
       padding={20}
       minHeight="100vh"
       width="100vw"
     >
       <YStack
         width="100%"
-        maxWidth={400}
+        maxWidth={500}
         padding={30}
         borderRadius={15}
-        alignItems="flex-start"
+        alignItems="center"
       >
-        <SizableText size={30} marginBottom={20} color="black">
-          Update Session
-        </SizableText>
+        <XStack alignItems="center" justifyContent="space-between" width="100%">
+          <SizableText size={30} marginBottom={20} color="black">
+            Update Session
+          </SizableText>
+
+          <Button
+            size={25}
+            style={{ background: "#282e67" }}
+            borderRadius={4}
+            onPress={() => navigate(`/sessions/${id}/view`)}
+          >
+            <Text color={"white"}>Back</Text>
+          </Button>
+        </XStack>
 
         {error && (
           <Text color="red" marginBottom={15}>

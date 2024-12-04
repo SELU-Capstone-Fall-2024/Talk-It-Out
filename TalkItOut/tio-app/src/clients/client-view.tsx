@@ -127,29 +127,29 @@ const ClientView = () => {
   }
 
   return (
-    <View padding={20}>
-      <XStack
-        alignItems="center"
-        justifyContent="space-between"
-        width="100%"
-        marginBottom={20}
-      >
-        <SizableText size={30} color="black">
-          Client Details
-        </SizableText>
-        <Button
-          size={30}
-          style={{ background: "#282e67" }}
-          borderRadius={4}
-          onPress={() => navigate("/clients/listing")}
-        >
-          <Text color="white">Back</Text>
-        </Button>
-      </XStack>
+    <YStack
+      flex={1}
+      alignItems="center"
+      padding={20}
+      minHeight="100vh"
+      width="100vw"
+    >
+      <YStack width="100%" maxWidth={800} marginTop={30} borderRadius={15}>
+        <XStack alignItems="center" justifyContent="flex-end">
+          <Button
+            size={30}
+            style={{ background: "#282e67" }}
+            borderRadius={4}
+            onPress={() => navigate("/clients/listing")}
+          >
+            <Text color="white">Back</Text>
+          </Button>
+        </XStack>
+      </YStack>
       {client && (
         <View marginBottom={20}>
-          <SizableText size={24} color="black">
-            Name: {client.firstName} {client.lastName}
+          <SizableText size={30} color="black">
+            {client.firstName} {client.lastName}
           </SizableText>
           <SizableText size={18} color="black" marginTop={10}>
             Date of Birth: {formatDate(new Date(client.dateOfBirth))}
@@ -158,7 +158,7 @@ const ClientView = () => {
       )}
       <YStack maxWidth={800}>
         <XStack alignItems="center" gap={20} justifyContent="space-between">
-          <SizableText size={30} color="black" marginBottom={10}>
+          <SizableText size={24} color="black" marginBottom={10}>
             Goals
           </SizableText>
           <Button
@@ -193,7 +193,12 @@ const ClientView = () => {
                     {goal.information}
                   </Text>
                 </YStack>
-                <XStack width="10%" gap={6} justifyContent="space-between">
+                <XStack
+                  width="10%"
+                  gap={6}
+                  justifyContent="space-between"
+                  alignItems="flex-end"
+                >
                   <YStack alignItems="flex-end">
                     <Button
                       size={30}
@@ -226,27 +231,39 @@ const ClientView = () => {
           )
         )}
       </YStack>
-      <XStack alignItems="flex-start" marginTop={20}>
-        <Button
-          size={30}
-          style={{ background: "#282e67" }}
-          borderRadius={4}
-          onPress={() => navigate(`/clients/${id}`)}
-          marginRight={20}
+        <XStack
+          width="100%"
+          alignItems="center"
+          marginTop={20}
+          justifyContent="flex-start"
+          maxWidth={800}
         >
-          <Text color={"white"}>Edit Client</Text>
-        </Button>
+          <YStack
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            alignContent="flex-start"
+          >
+            <Button
+              size={30}
+              style={{ background: "#282e67" }}
+              borderRadius={4}
+              onPress={() => navigate(`/clients/${id}`)}
+              marginRight={10}
+            >
+              <Text color={"white"}>Edit Client</Text>
+            </Button>
+          </YStack>
 
-        <Button
-          size={30}
-          style={{ background: "#b32d00" }}
-          borderRadius={4}
-          onPress={() => handleDeleteClient(id ?? "")}
-        >
-          <Text color={"white"}>Delete Client</Text>
-        </Button>
-      </XStack>
-    </View>
+          <Button
+            size={30}
+            style={{ background: "#b32d00" }}
+            borderRadius={4}
+            onPress={() => handleDeleteClient(id ?? "")}
+          >
+            <Text color={"white"}>Delete Client</Text>
+          </Button>
+        </XStack>
+    </YStack>
   );
 };
 

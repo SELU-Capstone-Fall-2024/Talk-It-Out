@@ -11,6 +11,7 @@ import {
   Button,
   Form,
   Spinner,
+  XStack,
 } from "tamagui";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -89,22 +90,32 @@ const ClientUpdate: React.FC = () => {
       <YStack
         flex={1}
         justifyContent="flex-start"
-        alignItems="flex-start"
+        alignItems="center"
         padding={20}
         minHeight="100vh"
         width="100vw"
       >
         <YStack
           width="100%"
-          maxWidth={800}
+          maxWidth={500}
           padding={30}
           borderRadius={15}
           alignItems="center"
-          justifyContent="center"
         >
-          <SizableText size={30} marginBottom={20} color="black">
-            Edit Client
-          </SizableText>
+          <XStack alignItems="center" justifyContent="space-between" width="100%">
+            <SizableText size={30} marginBottom={20} color="black">
+              Edit Client
+            </SizableText>
+
+            <Button
+              size={25}
+              style={{ background: "#282e67" }}
+              borderRadius={4}
+              onPress={() => navigate(`/clients/${id}/view`)}
+            >
+              <Text color={"white"}>Back</Text>
+            </Button>
+          </XStack>
 
           {error && (
             <Text color="red" marginBottom={15}>

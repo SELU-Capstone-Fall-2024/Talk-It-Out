@@ -53,18 +53,17 @@ const ClientCreate: React.FC = () => {
       <YStack
         flex={1}
         justifyContent="flex-start"
-        alignItems="flex-start"
+        alignItems="center"
         padding={20}
         minHeight="100vh"
         width="100vw"
       >
         <YStack
           width="100%"
-          maxWidth={400}
+          maxWidth={500}
           padding={30}
           borderRadius={15}
           alignItems="center"
-          justifyContent="flex-start"
         >
           <XStack alignItems="center" justifyContent="space-between" width="100%">
             <SizableText size={30} marginBottom={20} color="black">

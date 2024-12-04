@@ -3,7 +3,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import type { ClientGetDto, GroupGetDto, Response } from "../types";
-import { YStack, SizableText, Button, Text, Form, Spinner } from "tamagui";
+import {
+  YStack,
+  SizableText,
+  Button,
+  Text,
+  Form,
+  Spinner,
+  XStack,
+} from "tamagui";
 import ReactSelect from "react-select";
 import { useAsync } from "react-use";
 import DatePicker from "react-datepicker";
@@ -82,22 +90,32 @@ const SessionCreate: React.FC = () => {
     <YStack
       flex={1}
       justifyContent="flex-start"
-      alignItems="flex-start"
+      alignItems="center"
       padding={20}
       minHeight="100vh"
       width="100vw"
     >
       <YStack
         width="100%"
-        maxWidth={400}
+        maxWidth={500}
         padding={30}
         borderRadius={15}
-        alignItems="flex-start"
-        justifyContent="center"
+        alignItems="center"
       >
-        <SizableText size={30} marginBottom={20} color="black">
-          Create a New Session
-        </SizableText>
+        <XStack alignItems="center" justifyContent="space-between" width="100%">
+          <SizableText size={30} marginBottom={20} color="black">
+            Create a New Session
+          </SizableText>
+
+          <Button
+            size={25}
+            style={{ background: "#282e67" }}
+            borderRadius={4}
+            onPress={() => navigate(`/week`)}
+          >
+            <Text color={"white"}>Back</Text>
+          </Button>
+        </XStack>
 
         {error && (
           <Text color="red" marginBottom={15}>
@@ -192,7 +210,7 @@ const SessionCreate: React.FC = () => {
             onPress={handleSubmit}
             borderRadius={4}
             marginTop={20}
-            background="#282e67"
+            style={{ background: "#282e67" }}
           >
             <Text fontSize={18} color="white">
               {loading ? <Spinner /> : "Add Session"}
