@@ -90,7 +90,7 @@ const GroupUpdate: React.FC = () => {
       if (response.status === 200) {
         navigate('/groups/listing');
       } else {
-        setError('Failed to update group. Please try again.');
+        setError("Failed to update group. Please try again.");
       }
     } catch (err) {
       console.error(err);

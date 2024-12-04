@@ -20,7 +20,7 @@ const Header: React.FC = () => {
             {/* <span>Welcome, {user.username}</span> */}
             <button className="settings-btn">
               <FaCog className="settings-icon" size={30} color="#282e67" />
-            </button>
+            </Link>
             <Logout />
           </div>
         )}
@@ -28,13 +28,10 @@ const Header: React.FC = () => {
       {user && (
         <nav className="navbar">
           <Link to="/week" className="nav-btn">
-            Calendar View
+            Calendar
           </Link>
           <Link to="/clients/listing" className="nav-btn">
             Client List
-          </Link>
-          <Link to="/schedule" className="nav-btn">
-            Edit Your Schedule
           </Link>
           {!isHome && (
             <Link to="/home" className="nav-btn back-btn">

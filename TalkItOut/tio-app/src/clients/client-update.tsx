@@ -1,11 +1,20 @@
-import type React from 'react';
-import {useEffect, useState} from 'react';
-import {useParams, useNavigate} from 'react-router-dom';
-import api from '../api/api';
-import type {ClientGetDto, ClientCreateDto} from '../types';
-import {Input, SizableText, YStack, Text, Button, Form} from 'tamagui';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import type React from "react";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import api from "../api/api";
+import type { ClientGetDto, ClientCreateDto, Response } from "../types";
+import {
+  Input,
+  SizableText,
+  YStack,
+  Text,
+  Button,
+  Form,
+  Spinner,
+  XStack,
+} from "tamagui";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const ClientUpdate: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -23,14 +32,19 @@ const ClientUpdate: React.FC = () => {
     const fetchClient = async () => {
       setLoading(true);
       try {
-        const response = await api.get<ClientGetDto>(`/clients/${id}`);
-        const {firstName, lastName, dateOfBirth, userId} = response.data;
-        setClientData({
-          firstName,
-          lastName,
-          dateOfBirth: dateOfBirth ? new Date(dateOfBirth).toISOString() : '',
-          userId,
-        });
+        const response = await api.get<Response<ClientGetDto>>(
+          `/clients/${id}`
+        );
+        if (response.status === 200 && response.data.data) {
+          const { firstName, lastName, dateOfBirth, userId } =
+            response.data.data;
+          setClientData({
+            firstName,
+            lastName,
+            dateOfBirth: dateOfBirth,
+            userId,
+          });
+        }
       } catch (err) {
         setError('Failed to load client data.');
       } finally {
@@ -51,10 +65,21 @@ const ClientUpdate: React.FC = () => {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      await api.put(`/clients/${id}`, clientData);
-      navigate('/clients/listing');
+      const formattedClientData = {
+        ...clientData,
+        dateOfBirth: clientData.dateOfBirth
+          ? new Date(clientData.dateOfBirth).toISOString()
+          : "",
+      };
+      const response = await api.put(`/clients/${id}`, formattedClientData);
+      if (response.status === 200) {
+        navigate(`/clients/${id}/view`);
+      } else {
+        throw new Error("Update failed.");
+      }
     } catch (err) {
-      setError('Failed to update client. Please try again.');
+      console.error("Error updating client:", err);
+      setError("Failed to update client. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -64,7 +89,7 @@ const ClientUpdate: React.FC = () => {
     <>
       <YStack
         flex={1}
-        justifyContent="center"
+        justifyContent="flex-start"
         alignItems="center"
         padding={20}
         minHeight="100vh"
@@ -72,16 +97,25 @@ const ClientUpdate: React.FC = () => {
       >
         <YStack
           width="100%"
-          maxWidth={400}
+          maxWidth={500}
           padding={30}
           borderRadius={15}
-          backgroundColor="$darkPrimary"
           alignItems="center"
-          justifyContent="center"
         >
-          <SizableText size={30} marginBottom={20} color="#e6f2ff">
-            Update Client
-          </SizableText>
+          <XStack alignItems="center" justifyContent="space-between" width="100%">
+            <SizableText size={30} marginBottom={20} color="black">
+              Edit Client
+            </SizableText>
+
+            <Button
+              size={25}
+              style={{ background: "#282e67" }}
+              borderRadius={4}
+              onPress={() => navigate(`/clients/${id}/view`)}
+            >
+              <Text color={"white"}>Back</Text>
+            </Button>
+          </XStack>
 
           {error && (
             <Text color="red" marginBottom={15}>
@@ -90,7 +124,7 @@ const ClientUpdate: React.FC = () => {
           )}
           <Form onSubmit={handleSubmit} style={{width: '100%'}}>
             <YStack gap={10}>
-              <SizableText size={18} color={'#e6f2ff'}>
+              <SizableText size={18} color={"black"}>
                 First Name
               </SizableText>
               <Input
@@ -104,7 +138,7 @@ const ClientUpdate: React.FC = () => {
             </YStack>
 
             <YStack gap={10}>
-              <SizableText size={18} color={'#e6f2ff'}>
+              <SizableText size={18} color={"black"}>
                 Last Name
               </SizableText>
               <Input
@@ -118,7 +152,7 @@ const ClientUpdate: React.FC = () => {
             </YStack>
 
             <YStack gap={10}>
-              <SizableText size={18} color="#e6f2ff">
+              <SizableText size={18} color="black">
                 Date of Birth
               </SizableText>
               <DatePicker
@@ -139,13 +173,13 @@ const ClientUpdate: React.FC = () => {
               alignSelf="center"
               size={30}
               padding={12}
-              background="#e6f2ff"
+              style={{ background: "#282e67" }}
               borderRadius={4}
               marginTop={20}
               onPress={handleSubmit}
             >
-              <Text fontSize={18}>
-                {loading ? 'Updating...' : 'Update Client'}
+              <Text fontSize={18} color={"white"}>
+                {loading ? <Spinner /> : "Update Client"}
               </Text>
             </Button>
           </Form>

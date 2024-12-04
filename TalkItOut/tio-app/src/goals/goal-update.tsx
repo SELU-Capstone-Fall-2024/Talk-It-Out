@@ -1,9 +1,23 @@
-import type React from 'react';
-import {useEffect, useState} from 'react';
-import {useParams, useNavigate} from 'react-router-dom';
-import api from '../api/api';
-import type {GoalGetDto, GoalUpdateDto} from '../types';
-import {Button, Form, Input, SizableText, Text, YStack} from 'tamagui';
+import type React from "react";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import api from "../api/api";
+import type {
+  ClientGetDto,
+  GoalGetDto,
+  GoalUpdateDto,
+  Response,
+} from "../types";
+import {
+  Button,
+  Form,
+  Input,
+  SizableText,
+  Spinner,
+  Text,
+  XStack,
+  YStack,
+} from "tamagui";
 
 const GoalUpdate: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -17,14 +31,16 @@ const GoalUpdate: React.FC = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [client, setClient] = useState<ClientGetDto | null>(null);
+  const [loadingClient, setLoadingClient] = useState(false);
 
   useEffect(() => {
     const fetchGoal = async () => {
       setLoading(true);
       try {
-        const response = await api.get<GoalGetDto>(`/goals/${id}`);
-        if (response.status === 200) {
-          const {userId, information, clientId} = response.data;
+        const response = await api.get<Response<GoalGetDto>>(`/goals/${id}`);
+        if (response.status === 200 && response.data.data) {
+          const { userId, information, clientId } = response.data.data;
           setGoalData({
             userId: userId,
             information: information,
@@ -42,6 +58,26 @@ const GoalUpdate: React.FC = () => {
     fetchGoal();
   }, [id]);
 
+  useEffect(() => {
+    const fetchClient = async () => {
+      setLoadingClient(true);
+      try {
+        const response = await api.get<Response<ClientGetDto>>(
+          `/clients/${goalData.clientId}`
+        );
+        setClient(response.data.data);
+      } catch (err) {
+        console.error("Failed to load client data:", err);
+      } finally {
+        setLoadingClient(false);
+      }
+    };
+
+    if (goalData.clientId) {
+      fetchClient();
+    }
+  }, [goalData.clientId]);
+
   const handleChange = (field: keyof GoalUpdateDto) => (value: string) => {
     setGoalData((prevData) => ({
       ...prevData,
@@ -54,7 +90,7 @@ const GoalUpdate: React.FC = () => {
     try {
       const response = await api.put(`/goals/${id}`, goalData);
       if (response.status === 200) {
-        navigate('/goals/listing');
+        navigate(`/clients/${goalData.clientId}/view`);
       } else {
         setError('Failed to update goal. Please try again.');
       }
@@ -68,7 +104,7 @@ const GoalUpdate: React.FC = () => {
   return (
     <YStack
       flex={1}
-      justifyContent="center"
+      justifyContent="flex-start"
       alignItems="center"
       padding={20}
       minHeight="100vh"
@@ -76,16 +112,25 @@ const GoalUpdate: React.FC = () => {
     >
       <YStack
         width="100%"
-        maxWidth={400}
+        maxWidth={500}
         padding={30}
         borderRadius={15}
-        backgroundColor="$darkPrimary"
         alignItems="center"
-        justifyContent="center"
       >
-        <SizableText size={30} marginBottom={20} color="#e6f2ff">
-          Update Goal
-        </SizableText>
+        <XStack alignItems="center" justifyContent="space-between" width="100%">
+          <SizableText size={30} marginBottom={20} color="black">
+            Edit {client?.firstName} {client?.lastName}'s Goal
+          </SizableText>
+
+          <Button
+            size={25}
+            style={{ background: "#282e67" }}
+            borderRadius={4}
+            onPress={() => navigate(`/clients/${goalData.clientId}/view`)}
+          >
+            <Text color={"white"}>Back</Text>
+          </Button>
+        </XStack>
 
         {error && (
           <Text color="red" marginBottom={15}>
@@ -95,17 +140,13 @@ const GoalUpdate: React.FC = () => {
         {goalData && (
           <Form onSubmit={handleSubmit} style={{width: '100%'}}>
             <YStack gap={10}>
-              <SizableText size={18} color="#e6f2ff">
-                Goal Information
-              </SizableText>
               <Input
                 size={46}
+                minHeight={100}
                 flex={1}
                 padding={4}
                 value={goalData.information}
-                onChangeText={(text) => handleChange('information')(text)}
-                placeholder="Enter goal information"
-                placeholderTextColor="gray"
+                onChangeText={(text) => handleChange("information")(text)}
                 color="black"
                 borderRadius={2}
                 multiline
@@ -118,13 +159,13 @@ const GoalUpdate: React.FC = () => {
               size={30}
               padding={12}
               disabled={loading}
-              style={{overflow: 'hidden'}}
+              style={{ overflow: "hidden", background: "#282e67" }}
               onPress={handleSubmit}
               borderRadius={4}
               marginTop={20}
             >
-              <Text fontSize={18}>
-                {loading ? 'Updating...' : 'Update Goal'}
+              <Text fontSize={18} color="white">
+                {loading ? <Spinner /> : "Update Goal"}
               </Text>
             </Button>
           </Form>
