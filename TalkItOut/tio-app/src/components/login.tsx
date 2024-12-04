@@ -1,24 +1,24 @@
 import type React from 'react';
 import {useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-import type {UserLoginDto} from '../types';
+// import {useNavigate} from 'react-router-dom';
+import type {UserLoginDto, Response} from '../types';
 import {YStack, Input, Button, Text, SizableText, Form, Spinner} from 'tamagui';
 import type {
   NativeSyntheticEvent,
   TextInputChangeEventData,
 } from "react-native";
 import { useAuth } from "../auth/auth-context";
-import { Link } from "react-router-dom";
+import api from '../api/api';
 
 const Login: React.FC = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [userData, setUserData] = useState<UserLoginDto>({
     userName: '',
     password: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const {login} = useAuth();
+  const {user,setUser, login} = useAuth();
 
   const handleChange =
     (field: keyof UserLoginDto) =>
@@ -39,14 +39,20 @@ const Login: React.FC = () => {
       return;
     }
 
-    const response = await login(userData);
+    const response = await api.post<Response>('/users/authenticate', userData);
+    if (response.status === 200) {
+      sessionStorage.getItem("currentUser")
+      setUser(response.data.data)
+    }
 
-    if (response.errors.length > 0) {
+    if (response.data.errors.length > 0) {
       setLoading(false);
-      setError(response.errors[0].message);
+      setError(response.data.errors[0].message);
       return;
     }
-    navigate('/home');
+    console.log(user)
+    setLoading(false)
+    // navigate('/home');
   };
 
   const handleSubmit = (e: React.FormEvent) => {

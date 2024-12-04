@@ -81,17 +81,23 @@ public class UserController : ControllerBase
 
     private bool IsUserLoggedIn()
     {
-        return _httpContextAccessor.HttpContext?.User.Identity?.IsAuthenticated ?? false;
+        var context = _httpContextAccessor.HttpContext;
+        var contextUser = context.User;
+        var userIdentity = contextUser.Identity;
+        var authenticated = userIdentity.IsAuthenticated;
+        return authenticated;
     }
     
-    [Authorize]
     [HttpGet("get-current-user")]
     public IActionResult GetLoggedInUser()
     {
         var response = new Response();
-        
+
         if (!IsUserLoggedIn())
-            return null;
+        {
+            response.AddError("","not logged in");
+            return BadRequest(response);
+        }
 
         var id = RequestingUser.FindFirstValue(JwtClaimTypes.Subject);
 
