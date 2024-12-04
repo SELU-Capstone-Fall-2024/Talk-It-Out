@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Button,
@@ -14,6 +14,7 @@ import api from "../api/api";
 import { formatDate } from "../components/format-date";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import DeleteModal from "../components/delete-modal";
 
 const ClientView = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +26,8 @@ const ClientView = () => {
   const [client, setClient] = useState<ClientGetDto | null>(null);
   const [allGoals, setAllGoals] = useState<GoalGetDto[] | null>(null);
   const [filteredGoals, setFilteredGoals] = useState<GoalGetDto[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteAction, setDeleteAction] = useState<() => void>(() => {});
 
   useEffect(() => {
     const fetchClient = async () => {
@@ -69,30 +72,42 @@ const ClientView = () => {
     }
   }, [allGoals, id]);
 
-  const handleDeleteGoal = async (goalId: number) => {
-    if (window.confirm("Are you sure you want to delete this goal?")) {
+  const handleDeleteGoal = (goalId: number) => {
+    setDeleteAction(() => async () => {
       try {
         await api.delete(`/goals/${goalId}`);
         setFilteredGoals((prev) => prev.filter((goal) => goal.id !== goalId));
       } catch {
         alert("Failed to delete goal. Please try again.");
+      } finally {
+        setIsModalOpen(false);
       }
-    }
+    });
+    setIsModalOpen(true);
   };
 
-  const handleDeleteClient = async () => {
-    if (window.confirm("Are you sure you want to delete this client?")) {
+  const handleDeleteClient = () => {
+    setDeleteAction(() => async () => {
       try {
         await api.delete(`/clients/${id}`);
         navigate("/clients/listing");
       } catch {
         alert("Failed to delete client. Please try again.");
+      } finally {
+        setIsModalOpen(false);
       }
-    }
+    });
+    setIsModalOpen(true);
   };
 
   return (
     <View padding={20}>
+      <DeleteModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={deleteAction}
+      />
+
       <XStack
         alignItems="center"
         justifyContent="space-between"
@@ -175,7 +190,7 @@ const ClientView = () => {
                 <XStack justifyContent="flex-end" gap={10} marginTop={10}>
                   <Button
                     size={30}
-                    style={{background: "#f0f0f0"}}
+                    style={{ background: "#f0f0f0" }}
                     onPress={() => navigate(`/goals/${goal.id}`)}
                   >
                     <Text color="black">...</Text>
