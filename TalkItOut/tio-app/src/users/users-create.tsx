@@ -20,11 +20,11 @@ import api from "../api/api";
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState<UserCreateDto>({
-    firstName: "",
-    lastName: "",
-    email: "",
-    userName: "",
-    password: "",
+    firstName: '',
+    lastName: '',
+    email: '',
+    userName: '',
+    password: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -59,10 +59,10 @@ const SignUp: React.FC = () => {
       if (response.status === 201) {
         navigate("/home");
       } else {
-        setError("Failed to create user. Please try again.");
+        setError('Failed to create user. Please try again.');
       }
     } catch (err) {
-      setError("An error occurred while creating the user.");
+      setError('An error occurred while creating the user.');
     } finally {
       setLoading(false);
     }

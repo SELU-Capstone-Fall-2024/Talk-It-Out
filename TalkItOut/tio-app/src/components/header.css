@@ -63,7 +63,6 @@
   display: flex;
   gap: 40px;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
   background-color: #e0e0e0;
   padding: 10px 20px;

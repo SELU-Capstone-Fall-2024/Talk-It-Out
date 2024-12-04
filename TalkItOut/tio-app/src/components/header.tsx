@@ -1,15 +1,15 @@
-import React from "react";
-import { Link, useLocation } from "react-router-dom";
-import { useAuth } from "../auth/auth-context";
-import "./header.css";
-import { FaCog } from "react-icons/fa";
-import Logout from "./logout";
+import React from 'react';
+import {Link, useLocation} from 'react-router-dom';
+import {useAuth} from '../auth/auth-context';
+import './header.css';
+import {FaCog} from 'react-icons/fa';
+import Logout from './logout';
 
 const Header: React.FC = () => {
-  const { user } = useAuth();
+  const {user} = useAuth();
   const location = useLocation();
 
-  const isHome = location.pathname === "/" || location.pathname === "/home";
+  const isHome = location.pathname === '/' || location.pathname === '/home';
 
   return (
     <header className="header">
@@ -17,10 +17,10 @@ const Header: React.FC = () => {
         <h1 className="title">Talk It Out</h1>
         {user && (
           <div className="user-info">
-            <span>Welcome</span>
-            <Link to="/home" className="settings-btn">
+            {/* <span>Welcome, {user.username}</span> */}
+            <button className="settings-btn">
               <FaCog className="settings-icon" size={30} color="#282e67" />
-            </Link>
+            </button>
             <Logout />
           </div>
         )}

@@ -19,6 +19,7 @@ public class GroupGetDto
 
     public List<int> ClientIds { get; set; }
     public int UserId { get; set; }
+    public List<ClientGetDto> Clients { get; set; }
     
 }
 

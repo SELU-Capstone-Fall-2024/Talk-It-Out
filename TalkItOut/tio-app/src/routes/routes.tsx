@@ -1,16 +1,17 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { ClientRoutes } from "../clients/routes";
-import CalendarMonth from "../components/calendar-month";
-import Home from "../components/home";
-import Login from "../components/login";
-import Logout from "../components/logout";
-import NotFound from "../components/not-found";
-import { GoalRoutes } from "../goals/routes";
-import { GroupRoutes } from "../groups/routes";
-import { SessionRoutes } from "../sessions/routes";
-import { UserRoutes } from "../users/routes";
-import Header from "../components/header";
-import CalendarWeek from "../components/calendar-week";
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
+import {ClientRoutes} from '../clients/routes';
+import CalendarMonth from '../components/calendar-month';
+import Home from '../components/home';
+import Login from '../components/login';
+import Logout from '../components/logout';
+import NotFound from '../components/not-found';
+import {GoalRoutes} from '../goals/routes';
+import {GroupRoutes} from '../groups/routes';
+import {SessionRoutes} from '../sessions/routes';
+import {UserRoutes} from '../users/routes';
+import Header from '../components/header';
+import CalendarWeek from '../components/calendar-week';
+import {TodaySessions} from '../sessions/today-sessions';
 
 export const BrowserRoutes: React.FC = () => {
   return (
@@ -19,6 +20,8 @@ export const BrowserRoutes: React.FC = () => {
       <Routes>
         <Route path="/*">
           <Route index element={<Login />} />
+          <Route path="home" element={<TodaySessions />} />
+          {/* <Route path="calendar/*" element={<MyCalendar />} /> */}
           <Route path="sessions/*" element={<SessionRoutes />} />
           <Route path="month" element={<CalendarMonth />} />
           <Route path="clients/*" element={<ClientRoutes />} />

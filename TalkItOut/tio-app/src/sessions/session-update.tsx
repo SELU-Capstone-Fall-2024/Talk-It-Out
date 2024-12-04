@@ -1,14 +1,14 @@
-import type React from "react";
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/api";
+import type React from 'react';
+import {useState, useEffect} from 'react';
+import {useParams, useNavigate} from 'react-router-dom';
+import api from '../api/api';
 import type {
   Response,
   SessionUpdateDto,
   SessionGetDto,
   GroupGetDto,
   ClientGetDto,
-} from "../types";
+} from '../types';
 import {
   Button,
   Form,
@@ -17,21 +17,23 @@ import {
   Text,
   Spinner,
   XStack,
-} from "tamagui";
-import ReactSelect from "react-select";
-import DatePicker from "react-datepicker";
-import { useAsync } from "react-use";
+  Input,
+} from 'tamagui';
+import ReactSelect from 'react-select';
+import DatePicker from 'react-datepicker';
+import {useAsync} from 'react-use';
 
 const SessionUpdate: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
 
   const [sessionData, setSessionData] = useState<SessionUpdateDto>({
     userId: 1,
-    startTime: "",
-    endTime: "",
+    startTime: '',
+    endTime: '',
     groupId: 0,
     clientId: 0,
+    notes: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -45,7 +47,7 @@ const SessionUpdate: React.FC = () => {
           `/sessions/${id}`
         );
         if (response.data.data && !response.data.hasErrors) {
-          const { userId, startTime, endTime, groupId, clientId } =
+          const {userId, startTime, endTime, groupId, clientId, notes} =
             response.data.data;
           setSessionData({
             userId,
@@ -53,12 +55,13 @@ const SessionUpdate: React.FC = () => {
             endTime,
             groupId,
             clientId,
+            notes,
           });
         } else {
-          setError("Failed to load session.");
+          setError('Failed to load session.');
         }
       } catch (err) {
-        setError("An error occurred while loading the session.");
+        setError('An error occurred while loading the session.');
       } finally {
         setLoading(false);
       }
@@ -66,8 +69,8 @@ const SessionUpdate: React.FC = () => {
     fetchSession();
   }, [id]);
 
-  const { value: clients } = useAsync(async () => {
-    const response = await api.get<Response<ClientGetDto[]>>("/clients");
+  const {value: clients} = useAsync(async () => {
+    const response = await api.get<Response<ClientGetDto[]>>('/clients');
     return response.data;
   });
   const clientOptions = clients?.data?.map((client) => ({
@@ -75,8 +78,8 @@ const SessionUpdate: React.FC = () => {
     value: client.id.toString(),
   }));
 
-  const { value: groups } = useAsync(async () => {
-    const response = await api.get<Response<GroupGetDto[]>>("/groups");
+  const {value: groups} = useAsync(async () => {
+    const response = await api.get<Response<GroupGetDto[]>>('/groups');
     return response.data;
   });
   const groupOptions = groups?.data?.map((group) => ({
@@ -95,7 +98,7 @@ const SessionUpdate: React.FC = () => {
   const handleSubmit = async () => {
     setLoading(true);
     if (sessionData.clientId && sessionData.groupId) {
-      setError("Only select client or group, not both.");
+      setError('Only select client or group, not both.');
     }
 
     try {
@@ -106,10 +109,10 @@ const SessionUpdate: React.FC = () => {
       if (response.status === 200 && !response.data.hasErrors) {
         navigate(`/sessions/${id}/view`);
       } else {
-        setError("Failed to update session. Please try again.");
+        setError('Failed to update session. Please try again.');
       }
     } catch (err) {
-      setError("An error occurred while updating the session.");
+      setError('An error occurred while updating the session.');
     } finally {
       setLoading(false);
     }
@@ -120,7 +123,7 @@ const SessionUpdate: React.FC = () => {
   }
 
   if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
+    return <p style={{color: 'red'}}>{error}</p>;
   }
 
   return (
@@ -146,11 +149,11 @@ const SessionUpdate: React.FC = () => {
 
           <Button
             size={25}
-            style={{ background: "#282e67" }}
+            style={{background: '#282e67'}}
             borderRadius={4}
             onPress={() => navigate(`/sessions/${id}/view`)}
           >
-            <Text color={"white"}>Back</Text>
+            <Text color={'white'}>Back</Text>
           </Button>
         </XStack>
 
@@ -170,7 +173,7 @@ const SessionUpdate: React.FC = () => {
                 sessionData.startTime ? new Date(sessionData.startTime) : null
               }
               onChange={(date) =>
-                handleChange("startTime")(date?.toISOString() || "")
+                handleChange('startTime')(date?.toISOString() || '')
               }
               showTimeSelect
               timeFormat="hh:mm aa"
@@ -189,7 +192,7 @@ const SessionUpdate: React.FC = () => {
                 sessionData.endTime ? new Date(sessionData.endTime) : null
               }
               onChange={(date) =>
-                handleChange("endTime")(date?.toISOString() || "")
+                handleChange('endTime')(date?.toISOString() || '')
               }
               showTimeSelect
               timeFormat="hh:mm aa"
@@ -206,7 +209,7 @@ const SessionUpdate: React.FC = () => {
             <ReactSelect
               options={clientOptions}
               onChange={(selectedOption) =>
-                handleChange("clientId")(Number(selectedOption?.value))
+                handleChange('clientId')(Number(selectedOption?.value))
               }
               value={clientOptions?.find(
                 (option) => Number(option.value) === sessionData.clientId
@@ -227,13 +230,30 @@ const SessionUpdate: React.FC = () => {
             <ReactSelect
               options={groupOptions}
               onChange={(selectedOption) =>
-                handleChange("groupId")(Number(selectedOption?.value))
+                handleChange('groupId')(Number(selectedOption?.value))
               }
               value={groupOptions?.find(
                 (option) => Number(option.value) === sessionData.groupId
               )}
               placeholder="Select Group"
               isClearable={true}
+            />
+          </YStack>
+
+          <YStack gap={10}>
+            <SizableText size={18} color="black">
+              Notes
+            </SizableText>
+            <Input
+              size={46}
+              flex={1}
+              padding={4}
+              value={sessionData.notes}
+              onChangeText={(text) => handleChange('notes')(text)}
+              placeholder="Notes"
+              placeholderTextColor="gray"
+              color="black"
+              borderRadius={2}
             />
           </YStack>
 
@@ -246,10 +266,10 @@ const SessionUpdate: React.FC = () => {
             onPress={handleSubmit}
             borderRadius={4}
             marginTop={20}
-            style={{ background: "#282e67" }}
+            style={{background: '#282e67'}}
           >
             <Text fontSize={16} color="white">
-              {loading ? <Spinner /> : "Update Session"}
+              {loading ? <Spinner /> : 'Update Session'}
             </Text>
           </Button>
         </Form>

@@ -62,14 +62,14 @@ const GoalCreate: React.FC = () => {
 
     setLoading(true);
     try {
-      const response = await api.post("/goals", goalData);
+      const response = await api.post('/goals', goalData);
       if (response.status === 201) {
         navigate(`/clients/${clientId}/view`);
       } else {
-        setError("Failed to create goal. Please try again.");
+        setError('Failed to create goal. Please try again.');
       }
     } catch (err) {
-      setError("An error occurred while creating the goal.");
+      setError('An error occurred while creating the goal.');
     } finally {
       setLoading(false);
     }

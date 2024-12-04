@@ -19,9 +19,9 @@ import "react-datepicker/dist/react-datepicker.css";
 const ClientCreate: React.FC = () => {
   const navigate = useNavigate();
   const [clientData, setClientData] = useState<ClientCreateDto>({
-    firstName: "",
-    lastName: "",
-    dateOfBirth: "",
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
     userId: 1,
   });
   const [error, setError] = useState<string | null>(null);
@@ -39,10 +39,10 @@ const ClientCreate: React.FC = () => {
     setLoading(true);
 
     try {
-      await api.post("/clients", clientData);
-      navigate("/clients/listing");
+      await api.post('/clients', clientData);
+      navigate('/clients/listing');
     } catch (err) {
-      setError("Failed to create client. Please try again.");
+      setError('Failed to create client. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -91,7 +91,7 @@ const ClientCreate: React.FC = () => {
               </SizableText>
               <Input
                 value={clientData.firstName}
-                onChangeText={(text) => handleChange("firstName")(text)}
+                onChangeText={(text) => handleChange('firstName')(text)}
                 placeholder="First Name"
                 size={46}
                 flex={1}
@@ -107,7 +107,7 @@ const ClientCreate: React.FC = () => {
               </SizableText>
               <Input
                 value={clientData.lastName}
-                onChangeText={(text) => handleChange("lastName")(text)}
+                onChangeText={(text) => handleChange('lastName')(text)}
                 placeholder="Last Name"
                 size={46}
                 flex={1}
@@ -128,7 +128,7 @@ const ClientCreate: React.FC = () => {
                     : null
                 }
                 onChange={(date) =>
-                  handleChange("dateOfBirth")(date || new Date())
+                  handleChange('dateOfBirth')(date || new Date())
                 }
                 dateFormat="MM/dd/yyyy"
                 placeholderText="Date of Birth"

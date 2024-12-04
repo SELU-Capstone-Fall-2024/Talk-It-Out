@@ -1,21 +1,21 @@
-import type React from "react";
-import api from "../api/api";
-import type { Response, GoalGetDto } from "../types";
-import { useAsync } from "react-use";
-import { Button, Spinner, YStack, Text, SizableText, XStack } from "tamagui";
-import { useNavigate } from "react-router-dom";
+import type React from 'react';
+import api from '../api/api';
+import type {Response, GoalGetDto} from '../types';
+import {useAsync} from 'react-use';
+import {Button, Spinner, YStack, Text, SizableText, XStack} from 'tamagui';
+import {useNavigate} from 'react-router-dom';
 
 const Goals: React.FC = () => {
   const navigate = useNavigate();
 
   const handleDeleteGoal = async (goalId: number) => {
-    if (window.confirm("Are you sure you want to delete this goal?")) {
+    if (window.confirm('Are you sure you want to delete this goal?')) {
       try {
         await api.delete(`/goals/${goalId}`);
         window.location.reload();
       } catch (error) {
-        console.error("Failed to delete goal:", error);
-        alert("Failed to delete goal. Please try again.");
+        console.error('Failed to delete goal:', error);
+        alert('Failed to delete goal. Please try again.');
       }
     }
   };
@@ -25,7 +25,7 @@ const Goals: React.FC = () => {
     value: goals,
     error: fetchError,
   } = useAsync(async () => {
-    const response = await api.get<Response<GoalGetDto[]>>("/goals");
+    const response = await api.get<Response<GoalGetDto[]>>('/goals');
     return response.data;
   });
 
@@ -35,11 +35,10 @@ const Goals: React.FC = () => {
       justifyContent="center"
       alignItems="center"
       padding={20}
-      background="$darkBackground"
       minHeight="100vh"
       width="100vw"
     >
-      {" "}
+      {' '}
       <XStack marginTop={-200} alignItems="center" gap={650} width="600">
         <SizableText size={50} color="#e6f2ff">
           Goals
@@ -48,7 +47,7 @@ const Goals: React.FC = () => {
           size={30}
           background="#e6f2ff"
           borderRadius={4}
-          onPress={() => navigate("/goals/create")}
+          onPress={() => navigate('/goals/create')}
         >
           <Text color="#000" fontSize={18}>
             Create A Goal
@@ -98,7 +97,7 @@ const Goals: React.FC = () => {
                 shadowColor="rgba(0, 0, 0, 0.2)"
                 shadowRadius={5}
                 shadowOpacity={0.3}
-                shadowOffset={{ width: 0, height: 2 }}
+                shadowOffset={{width: 0, height: 2}}
                 gap={10}
               >
                 <SizableText size={20} color="#e6f2ff">

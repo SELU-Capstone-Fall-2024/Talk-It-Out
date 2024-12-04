@@ -17,12 +17,12 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const ClientUpdate: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
   const [clientData, setClientData] = useState<ClientCreateDto>({
-    firstName: "",
-    lastName: "",
-    dateOfBirth: "",
+    firstName: '',
+    lastName: '',
+    dateOfBirth: '',
     userId: 1,
   });
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +46,7 @@ const ClientUpdate: React.FC = () => {
           });
         }
       } catch (err) {
-        setError("Failed to load client data.");
+        setError('Failed to load client data.');
       } finally {
         setLoading(false);
       }
@@ -122,14 +122,14 @@ const ClientUpdate: React.FC = () => {
               {error}
             </Text>
           )}
-          <Form onSubmit={handleSubmit} style={{ width: "100%" }}>
+          <Form onSubmit={handleSubmit} style={{width: '100%'}}>
             <YStack gap={10}>
               <SizableText size={18} color={"black"}>
                 First Name
               </SizableText>
               <Input
                 value={clientData.firstName}
-                onChangeText={(text) => handleChange("firstName")(text)}
+                onChangeText={(text) => handleChange('firstName')(text)}
                 size={46}
                 flex={1}
                 gap={20}
@@ -143,7 +143,7 @@ const ClientUpdate: React.FC = () => {
               </SizableText>
               <Input
                 value={clientData.lastName}
-                onChangeText={(text) => handleChange("lastName")(text)}
+                onChangeText={(text) => handleChange('lastName')(text)}
                 size={46}
                 flex={1}
                 gap={20}
@@ -162,7 +162,7 @@ const ClientUpdate: React.FC = () => {
                     : null
                 }
                 onChange={(date) =>
-                  handleChange("dateOfBirth")(date || new Date())
+                  handleChange('dateOfBirth')(date || new Date())
                 }
                 dateFormat="MM/dd/yyyy"
               />

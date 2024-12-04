@@ -20,12 +20,12 @@ import {
 } from "tamagui";
 
 const GoalUpdate: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
 
   const [goalData, setGoalData] = useState<GoalUpdateDto>({
     userId: 1,
-    information: "",
+    information: '',
     clientId: 0,
   });
 
@@ -47,10 +47,10 @@ const GoalUpdate: React.FC = () => {
             clientId: clientId,
           });
         } else {
-          setError("Failed to load goal.");
+          setError('Failed to load goal.');
         }
       } catch (err) {
-        setError("An error occurred while loading the goal.");
+        setError('An error occurred while loading the goal.');
       } finally {
         setLoading(false);
       }
@@ -92,10 +92,10 @@ const GoalUpdate: React.FC = () => {
       if (response.status === 200) {
         navigate(`/clients/${goalData.clientId}/view`);
       } else {
-        setError("Failed to update goal. Please try again.");
+        setError('Failed to update goal. Please try again.');
       }
     } catch (err) {
-      setError("An error occurred while updating the goal.");
+      setError('An error occurred while updating the goal.');
     } finally {
       setLoading(false);
     }
@@ -138,7 +138,7 @@ const GoalUpdate: React.FC = () => {
           </Text>
         )}
         {goalData && (
-          <Form onSubmit={handleSubmit} style={{ width: "100%" }}>
+          <Form onSubmit={handleSubmit} style={{width: '100%'}}>
             <YStack gap={10}>
               <Input
                 size={46}
