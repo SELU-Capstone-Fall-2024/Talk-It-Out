@@ -5,7 +5,7 @@ export const formatDateTime = (date: Date) => {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-    hour12: true, // for AM/PM
+    hour12: true,
   });
   return formatter.format(date);
 };

@@ -72,7 +72,6 @@ const ClientCreate: React.FC = () => {
             </SizableText>
 
             <Button
-              //justifyContent="flex-end"
               size={25}
               style={{ background: "#282e67" }}
               borderRadius={4}

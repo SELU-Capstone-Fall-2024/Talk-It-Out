@@ -115,7 +115,7 @@ const CalendarWeek = () => {
           min={new Date(0, 0, 0, 7, 0, 0)}
           max={new Date(0, 0, 0, 19, 0, 0)}
           views={["work_week"]}
-          onSelectEvent={(event) => navigate(`/sessions/${event.id}/view`)} // Navigate to session view
+          onSelectEvent={(event) => navigate(`/sessions/${event.id}/view`)}
         />
       </div>
     </View>
