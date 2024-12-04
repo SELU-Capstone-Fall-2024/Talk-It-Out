@@ -29,39 +29,34 @@ const ClientView = () => {
   useEffect(() => {
     const fetchClient = async () => {
       setLoadingClient(true);
-      setErrorClient(null);
       try {
         const response = await api.get<Response<ClientGetDto>>(
           `/clients/${id}`
         );
         setClient(response.data.data);
-      } catch (err) {
-        console.error("Failed to load client data:", err);
+      } catch {
         setErrorClient("Failed to load client data. Please try again.");
       } finally {
         setLoadingClient(false);
       }
     };
 
-    if (id) {
-      fetchClient();
-    }
+    if (id) fetchClient();
   }, [id]);
 
   useEffect(() => {
     const fetchAllGoals = async () => {
       setLoadingGoals(true);
-      setErrorGoals(null);
       try {
         const response = await api.get<Response<GoalGetDto[]>>(`/goals`);
         setAllGoals(response.data.data);
-      } catch (err) {
-        console.error("Failed to load goals data:", err);
-        setErrorGoals("Failed to load client goals. Please try again.");
+      } catch {
+        setErrorGoals("Failed to load goals data. Please try again.");
       } finally {
         setLoadingGoals(false);
       }
     };
+
     fetchAllGoals();
   }, []);
 
@@ -78,192 +73,148 @@ const ClientView = () => {
     if (window.confirm("Are you sure you want to delete this goal?")) {
       try {
         await api.delete(`/goals/${goalId}`);
-        window.location.reload();
-      } catch (error) {
-        console.error("Failed to delete goal:", error);
+        setFilteredGoals((prev) => prev.filter((goal) => goal.id !== goalId));
+      } catch {
         alert("Failed to delete goal. Please try again.");
       }
     }
   };
 
-  const handleDeleteClient = async (id: string) => {
+  const handleDeleteClient = async () => {
     if (window.confirm("Are you sure you want to delete this client?")) {
       try {
         await api.delete(`/clients/${id}`);
         navigate("/clients/listing");
-      } catch (error) {
-        console.error("Failed to delete client:", error);
-        alert("Failed to delete goal. Please try again.");
+      } catch {
+        alert("Failed to delete client. Please try again.");
       }
     }
   };
 
-  if (loadingClient) {
-    return (
-      <View padding={20}>
-        <SizableText size={25} color="black">
-          Loading client details...
-        </SizableText>
-      </View>
-    );
-  }
-
-  if (errorClient) {
-    return (
-      <View padding={20}>
-        <SizableText size={25} color="red">
-          {errorClient}
+  return (
+    <View padding={20}>
+      <XStack
+        alignItems="center"
+        justifyContent="space-between"
+        marginBottom={20}
+      >
+        <SizableText size={30} color="black">
+          Client Details
         </SizableText>
         <Button
           size={30}
-          style={{ background: "#282e67", marginTop: 20 }}
-          borderRadius={4}
+          style={{ background: "#282e67" }}
           onPress={() => navigate("/clients/listing")}
         >
           <Text color="white">Back</Text>
         </Button>
-      </View>
-    );
-  }
+      </XStack>
 
-  return (
-    <YStack
-      flex={1}
-      alignItems="center"
-      padding={20}
-      minHeight="100vh"
-      width="100vw"
-    >
-      <YStack width="100%" maxWidth={800} marginTop={30} borderRadius={15}>
-        <XStack alignItems="center" justifyContent="flex-end">
-          <Button
-            size={30}
-            style={{ background: "#282e67" }}
-            borderRadius={4}
-            onPress={() => navigate("/clients/listing")}
-          >
-            <Text color="white">Back</Text>
-          </Button>
-        </XStack>
-      </YStack>
+      {loadingClient && <Spinner color="black" size="large" />}
+      {errorClient && (
+        <SizableText size={20} color="red">
+          {errorClient}
+        </SizableText>
+      )}
+
       {client && (
-        <View marginBottom={20}>
-          <SizableText size={30} color="black">
+        <YStack
+          padding={20}
+          borderWidth={1}
+          borderColor="gray"
+          backgroundColor="white"
+          borderRadius={8}
+          marginBottom={20}
+        >
+          <SizableText size={24} color="black">
             {client.firstName} {client.lastName}
           </SizableText>
-          <SizableText size={18} color="black" marginTop={10}>
+          <Text color="black">
             Date of Birth: {formatDate(new Date(client.dateOfBirth))}
-          </SizableText>
-        </View>
+          </Text>
+        </YStack>
       )}
-      <YStack maxWidth={800}>
-        <XStack alignItems="center" gap={20} justifyContent="space-between">
-          <SizableText size={24} color="black" marginBottom={10}>
+
+      <YStack marginBottom={20}>
+        <XStack
+          alignItems="center"
+          justifyContent="space-between"
+          marginBottom={10}
+        >
+          <SizableText size={24} color="black">
             Goals
           </SizableText>
           <Button
             size={30}
             style={{ background: "#282e67" }}
-            borderRadius={4}
             onPress={() => navigate(`/goals/create/${id}`)}
           >
             <Text color="white">Add a Goal</Text>
           </Button>
         </XStack>
+
         {loadingGoals && <Spinner color="black" size="large" />}
         {errorGoals && (
           <SizableText size={20} color="red">
             {errorGoals}
           </SizableText>
         )}
-        {filteredGoals && filteredGoals.length > 0 ? (
-          <YStack gap={15}>
+
+        {filteredGoals.length > 0 ? (
+          <YStack gap={10}>
             {filteredGoals.map((goal) => (
-              <XStack
+              <YStack
                 key={goal.id}
+                padding={15}
                 borderWidth={1}
                 borderColor="gray"
                 background="#f0f0f0"
-                borderRadius={10}
-                width="100%"
-                padding={15}
+                borderRadius={8}
               >
-                <YStack width="90%" gap={10}>
-                  <Text color="black" fontSize={18}>
-                    {goal.information}
-                  </Text>
-                </YStack>
-                <XStack
-                  width="10%"
-                  gap={6}
-                  justifyContent="space-between"
-                  alignItems="flex-end"
-                >
-                  <YStack alignItems="flex-end">
-                    <Button
-                      size={30}
-                      style={{ background: "#f0f0f0" }}
-                      borderRadius={4}
-                      onPress={() => navigate(`/goals/${goal.id}`)}
-                    >
-                      <Text color="black">...</Text>
-                    </Button>
-                  </YStack>
-                  <YStack alignItems="flex-end">
-                    <Button
-                      size={30}
-                      style={{ background: "#f0f0f0" }}
-                      borderRadius={4}
-                      onPress={() => handleDeleteGoal(goal.id)}
-                    >
-                      <FontAwesomeIcon color="#b32d00" icon={faTrash} />
-                    </Button>
-                  </YStack>
+                <Text color="black">{goal.information}</Text>
+                <XStack justifyContent="flex-end" gap={10} marginTop={10}>
+                  <Button
+                    size={30}
+                    style={{background: "#f0f0f0"}}
+                    onPress={() => navigate(`/goals/${goal.id}`)}
+                  >
+                    <Text color="black">...</Text>
+                  </Button>
+                  <Button
+                    size={30}
+                    style={{ background: "#f0f0f0" }}
+                    onPress={() => handleDeleteGoal(goal.id)}
+                  >
+                    <FontAwesomeIcon color="#b32d00" icon={faTrash} />
+                  </Button>
                 </XStack>
-              </XStack>
+              </YStack>
             ))}
           </YStack>
         ) : (
-          !loadingGoals && (
-            <SizableText size={20} color="black">
-              No goals found for this client.
-            </SizableText>
-          )
+          <SizableText size={20} color="black">
+            No goals found for this client.
+          </SizableText>
         )}
       </YStack>
-        <XStack
-          width="100%"
-          alignItems="center"
-          marginTop={20}
-          justifyContent="flex-start"
-          maxWidth={800}
-        >
-          <YStack
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            alignContent="flex-start"
-          >
-            <Button
-              size={30}
-              style={{ background: "#282e67" }}
-              borderRadius={4}
-              onPress={() => navigate(`/clients/${id}`)}
-              marginRight={10}
-            >
-              <Text color={"white"}>Edit Client</Text>
-            </Button>
-          </YStack>
 
-          <Button
-            size={30}
-            style={{ background: "#b32d00" }}
-            borderRadius={4}
-            onPress={() => handleDeleteClient(id ?? "")}
-          >
-            <Text color={"white"}>Delete Client</Text>
-          </Button>
-        </XStack>
-    </YStack>
+      <XStack gap={10}>
+        <Button
+          size={30}
+          style={{ background: "#282e67" }}
+          onPress={() => navigate(`/clients/${id}`)}
+        >
+          <Text color="white">Edit Client</Text>
+        </Button>
+        <Button
+          size={30}
+          style={{ background: "#b32d00" }}
+          onPress={handleDeleteClient}
+        >
+          <Text color="white">Delete Client</Text>
+        </Button>
+      </XStack>
+    </View>
   );
 };
 
