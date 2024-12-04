@@ -42,7 +42,6 @@ const GroupUpdate: React.FC = () => {
             groupName: groupName,
             clientIds: clientIds,
           });
-          console.log(response);
         } else {
           setError("Failed to load group.");
         }
@@ -91,7 +90,6 @@ const GroupUpdate: React.FC = () => {
       if (response.status === 200) {
         navigate("/groups/listing");
       } else {
-        console.log(response);
         setError("Failed to update group. Please try again.");
       }
     } catch (err) {

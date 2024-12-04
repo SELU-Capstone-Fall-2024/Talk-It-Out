@@ -70,11 +70,7 @@ const ClientUpdate: React.FC = () => {
           ? new Date(clientData.dateOfBirth).toISOString()
           : "",
       };
-
-      console.log(formattedClientData);
       const response = await api.put(`/clients/${id}`, formattedClientData);
-      console.log("API response:", response);
-
       if (response.status === 200) {
         navigate(`/clients/${id}/view`);
       } else {

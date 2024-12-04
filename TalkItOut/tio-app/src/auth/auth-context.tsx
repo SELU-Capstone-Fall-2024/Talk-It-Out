@@ -24,7 +24,6 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
     if (response.status === 200) {
       setUser(userData);
     }
-    console.log(response);
     return response.data;
   }, []);
 

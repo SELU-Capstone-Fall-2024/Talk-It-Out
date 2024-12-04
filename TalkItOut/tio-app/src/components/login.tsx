@@ -51,7 +51,6 @@ const Login: React.FC = () => {
     if (response.errors.length > 0) {
       setLoading(false);
       setError(response.errors[0].message);
-      console.log(response.errors);
       return;
     }
     navigate("/home");
