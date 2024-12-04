@@ -1,13 +1,23 @@
 import type React from "react";
 import { useState } from "react";
-import api from "../api/api";
-import type { UserCreateDto } from "../types";
 import { useNavigate } from "react-router-dom";
-import { SizableText, YStack, Text, Input, Button, Form, View } from "tamagui";
-import { FiEye, FiEyeOff } from "react-icons/fi";
-import { TouchableOpacity } from "react-native";
+import type { UserCreateDto } from "../types";
+import {
+  YStack,
+  Input,
+  Button,
+  Text,
+  SizableText,
+  Form,
+  Spinner,
+} from "tamagui";
+import type {
+  NativeSyntheticEvent,
+  TextInputChangeEventData,
+} from "react-native";
+import api from "../api/api";
 
-const UserCreate: React.FC = () => {
+const SignUp: React.FC = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState<UserCreateDto>({
     firstName: "",
@@ -16,24 +26,19 @@ const UserCreate: React.FC = () => {
     userName: "",
     password: "",
   });
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleChange = (field: keyof UserCreateDto) => (value: string) => {
-    setUserData((prevData) => ({
-      ...prevData,
-      [field]: value,
-    }));
-  };
+  const handleChange =
+    (field: keyof UserCreateDto) =>
+    (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+      setUserData((prevData) => ({
+        ...prevData,
+        [field]: e.nativeEvent.text,
+      }));
+    };
 
-  const [isPasswordVisible, setPasswordVisible] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setPasswordVisible((prev) => !prev);
-  };
-
-  const handleSubmit = async () => {
+  const handleFormSubmit = async () => {
     if (
       !userData.firstName ||
       !userData.lastName ||
@@ -41,15 +46,18 @@ const UserCreate: React.FC = () => {
       !userData.userName ||
       !userData.password
     ) {
-      setError("Please fill out all required fields");
+      setError("All fields are required.");
       return;
     }
 
     setLoading(true);
+    setError(null);
+
     try {
       const response = await api.post("/users", userData);
+
       if (response.status === 201) {
-        navigate("/users/listing");
+        navigate("/home");
       } else {
         setError("Failed to create user. Please try again.");
       }
@@ -60,13 +68,18 @@ const UserCreate: React.FC = () => {
     }
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleFormSubmit();
+  };
+
   return (
     <YStack
       flex={1}
       justifyContent="center"
       alignItems="center"
       padding={20}
-      background="$darkBackground"
+      background="white"
       minHeight="100vh"
       width="100vw"
     >
@@ -75,135 +88,123 @@ const UserCreate: React.FC = () => {
         maxWidth={400}
         padding={30}
         borderRadius={15}
-        backgroundColor="$darkBackground"
+        backgroundColor="white"
+        shadowColor="rgba(0, 0, 0, 0.5)"
+        shadowRadius={10}
+        shadowOffset={{ width: 0, height: 4 }}
         alignItems="center"
         justifyContent="center"
       >
-        <SizableText size={30} marginBottom={20} color="#e6f2ff">
-          Create User
+        <SizableText size={30} marginBottom={20} color="#282E67">
+          Sign Up
         </SizableText>
-
         {error && (
           <Text color="red" marginBottom={15}>
             {error}
           </Text>
         )}
 
-        <Form onSubmit={handleSubmit} gap={20} width="100%">
+        <Form onSubmit={() => handleSubmit} gap={20} width="100%">
           <YStack gap={10}>
-            <SizableText size={18} color={"#e6f2ff"}>
+            <SizableText size={18} color="black">
               First Name
             </SizableText>
             <Input
-              value={userData.firstName}
-              onChangeText={(text) => handleChange("firstName")(text)}
-              placeholder="First Name"
               size={46}
               flex={1}
-              gap={20}
               padding={4}
-              placeholderTextColor="#b0b0b0"
+              value={userData.firstName}
+              onChange={handleChange("firstName")}
+              placeholder="Enter First Name"
+              borderColor="gray"
+              borderRadius={2}
+              placeholderTextColor="gray"
             />
           </YStack>
 
           <YStack gap={10}>
-            <SizableText size={18} color={"#e6f2ff"}>
+            <SizableText size={18} color="black">
               Last Name
             </SizableText>
             <Input
-              value={userData.lastName}
-              onChangeText={(text) => handleChange("lastName")(text)}
-              placeholder="Last Name"
               size={46}
               flex={1}
-              gap={20}
               padding={4}
-              placeholderTextColor="#b0b0b0"
+              value={userData.lastName}
+              onChange={handleChange("lastName")}
+              placeholder="Enter Last Name"
+              borderColor="gray"
+              borderRadius={2}
+              placeholderTextColor="gray"
             />
           </YStack>
 
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               Email
             </SizableText>
             <Input
-              value={userData.email}
-              onChangeText={(text) => handleChange("email")(text)}
-              placeholder="Email"
               size={46}
               flex={1}
-              gap={20}
               padding={4}
-              placeholderTextColor="#b0b0b0"
+              value={userData.email}
+              onChange={handleChange("email")}
+              placeholder="Enter Email"
+              borderColor="gray"
+              borderRadius={2}
+              placeholderTextColor="gray"
             />
           </YStack>
 
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               Username
             </SizableText>
             <Input
-              value={userData.userName}
-              onChangeText={(text) => handleChange("userName")(text)}
-              placeholder="UserName"
               size={46}
               flex={1}
-              gap={20}
               padding={4}
-              placeholderTextColor="#b0b0b0"
+              value={userData.userName}
+              onChange={handleChange("userName")}
+              placeholder="Enter Username"
+              borderColor="gray"
+              borderRadius={2}
+              placeholderTextColor="gray"
             />
           </YStack>
 
           <YStack gap={10}>
-            <SizableText size={18} color="#e6f2ff">
+            <SizableText size={18} color="black">
               Password
             </SizableText>
-            <View>
-              <Input
-                value={userData.password}
-                onChangeText={(text) => handleChange("password")(text)}
-                placeholder="Password"
-                size={46}
-                flex={1}
-                gap={20}
-                padding={4}
-                placeholderTextColor="#b0b0b0"
-                secureTextEntry={!isPasswordVisible}
-              />
-              <TouchableOpacity
-                onPress={togglePasswordVisibility}
-                style={{
-                  marginTop: 10,
-                  flexDirection: "row",
-                  alignItems: "center",
-                }}
-              >
-                {isPasswordVisible ? (
-                  <FiEyeOff color="#e6f2ff" size={20} />
-                ) : (
-                  <FiEye color="#e6f2ff" size={20} />
-                )}
-                <Text color="#e6f2ff" style={{ marginLeft: 5 }}>
-                  {isPasswordVisible ? "Hide" : "Show"}
-                </Text>
-              </TouchableOpacity>
-            </View>
+            <Input
+              size={46}
+              flex={1}
+              padding={4}
+              secureTextEntry
+              value={userData.password}
+              onChange={handleChange("password")}
+              placeholder="Enter Password"
+              borderColor="gray"
+              borderRadius={2}
+              placeholderTextColor="gray"
+            />
           </YStack>
 
           <Button
-            gap={10}
-            width={150}
+            width={100}
             alignSelf="center"
             size={30}
             padding={12}
             disabled={loading}
-            background="#e6f2ff"
-            style={{ overflow: "hidden" }}
+            background="#282E67"
             theme={loading ? "secondary" : "primary"}
-            onPress={handleSubmit}
+            onPress={handleFormSubmit}
             borderRadius={4}
           >
-            <Text fontSize={18}>{loading ? "Creating..." : "Create User"}</Text>
+            <Text fontSize={18} color="white">
+              {loading ? <Spinner /> : "Sign Up"}
+            </Text>
           </Button>
         </Form>
       </YStack>
@@ -211,4 +212,4 @@ const UserCreate: React.FC = () => {
   );
 };
 
-export default UserCreate;
+export default SignUp;
