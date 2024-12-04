@@ -1,22 +1,28 @@
-import type React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api/api";
-import type { ClientGetDto, GroupGetDto, Response } from "../types";
-import { YStack, SizableText, Button, Text, Form, Spinner } from "tamagui";
-import ReactSelect from "react-select";
-import { useAsync } from "react-use";
-import DatePicker from "react-datepicker";
+import type React from 'react';
+import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import api from '../api/api';
+import {
+  SessionCreateDto,
+  type ClientGetDto,
+  type GroupGetDto,
+  type Response,
+} from '../types';
+import {YStack, SizableText, Button, Text, Form, Spinner, Input} from 'tamagui';
+import ReactSelect from 'react-select';
+import {useAsync} from 'react-use';
+import DatePicker from 'react-datepicker';
 
 const SessionCreate: React.FC = () => {
   const navigate = useNavigate();
 
-  const [sessionData, setSessionData] = useState({
+  const [sessionData, setSessionData] = useState<SessionCreateDto>({
     userId: 1,
     startTime: '',
     endTime: '',
     groupId: 0,
     clientId: 0,
+    notes: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -67,7 +73,7 @@ const SessionCreate: React.FC = () => {
         sessionData
       );
       if (response.status === 201 && !response.data.hasErrors) {
-        navigate("/week");
+        navigate('/week');
       } else {
         setError('Failed to create session. Please try again.');
       }
@@ -183,6 +189,23 @@ const SessionCreate: React.FC = () => {
             />
           </YStack>
 
+          <YStack gap={10}>
+            <SizableText size={18} color="black">
+              Notes
+            </SizableText>
+            <Input
+              size={46}
+              flex={1}
+              padding={4}
+              value={sessionData.notes}
+              onChangeText={(text) => handleChange('notes')(text)}
+              placeholder="Notes"
+              placeholderTextColor="gray"
+              color="black"
+              borderRadius={2}
+            />
+          </YStack>
+
           <Button
             width={150}
             alignSelf="center"
@@ -195,7 +218,7 @@ const SessionCreate: React.FC = () => {
             background="#282e67"
           >
             <Text fontSize={18} color="white">
-              {loading ? <Spinner /> : "Add Session"}
+              {loading ? <Spinner /> : 'Add Session'}
             </Text>
           </Button>
         </Form>

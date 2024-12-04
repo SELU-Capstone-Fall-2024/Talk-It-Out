@@ -9,7 +9,7 @@ import type {
   GroupGetDto,
   ClientGetDto,
 } from '../types';
-import {Button, Form, SizableText, YStack, Text} from 'tamagui';
+import {Button, Form, SizableText, YStack, Text, Input} from 'tamagui';
 import ReactSelect from 'react-select';
 import DatePicker from 'react-datepicker';
 import {useAsync} from 'react-use';
@@ -24,6 +24,7 @@ const SessionUpdate: React.FC = () => {
     endTime: '',
     groupId: 0,
     clientId: 0,
+    notes: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -37,7 +38,7 @@ const SessionUpdate: React.FC = () => {
           `/sessions/${id}`
         );
         if (response.data.data && !response.data.hasErrors) {
-          const {userId, startTime, endTime, groupId, clientId} =
+          const {userId, startTime, endTime, groupId, clientId, notes} =
             response.data.data;
           setSessionData({
             userId,
@@ -45,6 +46,7 @@ const SessionUpdate: React.FC = () => {
             endTime,
             groupId,
             clientId,
+            notes,
           });
         } else {
           setError('Failed to load session.');
@@ -219,6 +221,23 @@ const SessionUpdate: React.FC = () => {
               )}
               placeholder="Select Group"
               isClearable={true}
+            />
+          </YStack>
+
+          <YStack gap={10}>
+            <SizableText size={18} color="black">
+              Notes
+            </SizableText>
+            <Input
+              size={46}
+              flex={1}
+              padding={4}
+              value={sessionData.notes}
+              onChangeText={(text) => handleChange('notes')(text)}
+              placeholder="Notes"
+              placeholderTextColor="gray"
+              color="black"
+              borderRadius={2}
             />
           </YStack>
 

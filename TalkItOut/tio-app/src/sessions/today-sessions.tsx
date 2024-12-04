@@ -3,7 +3,7 @@ import {YStack, Text, Button, XStack, Header} from 'tamagui';
 import api from '../api/api';
 import {SessionGetDto, Response} from '../types';
 import {useNavigate} from 'react-router-dom';
-import {formatDate} from '../components/format-date';
+import {formatTime} from '../components/format-date';
 
 export const TodaySessions: React.FC = () => {
   const {loading: loadingSessions, value: sessions} = useAsync(async () => {
@@ -23,7 +23,7 @@ export const TodaySessions: React.FC = () => {
           alignItems="center"
           overflow="scroll"
         >
-          <Header width="100%" background="gray">
+          <Header width="100%" background="lightgray">
             <Text fontSize={30} fontWeight={600} justifyContent="center">
               Today's Schedule
             </Text>
@@ -49,21 +49,25 @@ const ScheduleCard: React.FC<{session: SessionGetDto}> = ({session}) => {
     >
       <XStack width="20%">
         <Text style={{color: 'black'}}>
-          {formatDate(new Date(session.startTime))} -
+          {formatTime(new Date(session.startTime))} -
         </Text>
         <Text style={{color: 'black'}}>
-          {formatDate(new Date(session.endTime))}
+          {' '}
+          {formatTime(new Date(session.endTime))}
         </Text>
       </XStack>
       <YStack width="70%">
-        <Text style={{color: 'black'}}>{session.group.groupName}</Text>
-        <XStack>
+        <Text style={{color: 'black'}} fontWeight={600}>
+          {session.group.groupName}
+        </Text>
+        <XStack gap={5}>
           {session.group.clients.map((client) => (
             <Text style={{color: 'black'}}>
-              {client.firstName} + {client.lastName}
+              {client.firstName} {client.lastName}
             </Text>
           ))}
         </XStack>
+        <Text>{session.notes}</Text>
       </YStack>
       <XStack gap={10} width="10%">
         <Button

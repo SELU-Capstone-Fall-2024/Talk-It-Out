@@ -31,7 +31,8 @@ namespace TalkItOut.Controllers;
                     EndTime = x.EndTime,
                     GroupId = x.GroupId,
                     ClientId = x.ClientId,
-                    ClientName = x.Client.FirstName + " " + x.Client.LastName
+                    ClientName = x.Client.FirstName + " " + x.Client.LastName,
+                    Notes = x.Notes,
                 })
                 .ToList();
 
@@ -58,6 +59,7 @@ namespace TalkItOut.Controllers;
                     GroupId = x.GroupId,
                     Group = new GroupGetDto
                     {
+                        GroupName = x.Group.GroupName,
                         Clients = x.Group.Clients.Select(y => new ClientGetDto
                         {
                             DateOfBirth = y.DateOfBirth,
@@ -66,7 +68,8 @@ namespace TalkItOut.Controllers;
                         }).ToList()
                     },
                     ClientId = x.ClientId,
-                    ClientName = x.Client.FirstName + " " + x.Client.LastName
+                    ClientName = x.Client.FirstName + " " + x.Client.LastName,
+                    Notes = x.Notes,
                 })
                 .ToList();
             
@@ -96,7 +99,8 @@ namespace TalkItOut.Controllers;
                 StartTime = session.StartTime,
                 EndTime = session.EndTime,
                 GroupId = session.GroupId,
-                ClientId = session.ClientId
+                ClientId = session.ClientId,
+                Notes = session.Notes
             };
             
             return Ok(response);
@@ -111,7 +115,8 @@ namespace TalkItOut.Controllers;
             {
                 UserId = sessionCreateDto.UserId,
                 StartTime = sessionCreateDto.StartTime,
-                EndTime = sessionCreateDto.EndTime
+                EndTime = sessionCreateDto.EndTime,
+                Notes = sessionCreateDto.Notes,
             };
             
             if (sessionCreateDto.GroupId > 0)
@@ -135,7 +140,8 @@ namespace TalkItOut.Controllers;
                 StartTime = sessionToCreate.StartTime,
                 EndTime = sessionToCreate.EndTime,
                 GroupId = sessionToCreate.GroupId,
-                ClientId = sessionToCreate.ClientId 
+                ClientId = sessionToCreate.ClientId,
+                Notes = sessionToCreate.Notes,
             });        
         }
 
@@ -192,6 +198,8 @@ namespace TalkItOut.Controllers;
                 }
             }
 
+            session.Notes = sessionUpdateDto.Notes;
+
             await _dataContext.SaveChangesAsync();
 
             response.Data = new SessionGetDto
@@ -201,7 +209,8 @@ namespace TalkItOut.Controllers;
                 StartTime = session.StartTime,
                 EndTime = session.EndTime,
                 GroupId = session.GroupId,
-                ClientId = session.ClientId
+                ClientId = session.ClientId,
+                Notes = session.Notes
             };
 
             return Ok(response);
