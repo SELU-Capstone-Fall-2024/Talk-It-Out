@@ -217,7 +217,7 @@ export const SessionView: React.FC = () => {
                             borderRadius={4}
                             onPress={() => navigate(`/goals/${goal.id}`)}
                           >
-                            <Text color="white">...</Text>
+                            <Text color="black">...</Text>
                           </Button>
                         </YStack>
                         <YStack alignItems="flex-end">
