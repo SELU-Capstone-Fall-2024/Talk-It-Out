@@ -12,6 +12,8 @@ import {
 import { ClientGetDto, GoalGetDto, Response } from "../types";
 import api from "../api/api";
 import { formatDate } from "../components/format-date";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const ClientView = () => {
   const { id } = useParams<{ id: string }>();
@@ -186,30 +188,30 @@ const ClientView = () => {
                 width="100%"
                 padding={15}
               >
-                <YStack width="80%" gap={10}>
+                <YStack width="90%" gap={10}>
                   <Text color="black" fontSize={18}>
                     {goal.information}
                   </Text>
                 </YStack>
-                <XStack width="20%" justifyContent="space-between">
+                <XStack width="10%" gap={6} justifyContent="space-between">
                   <YStack alignItems="flex-end">
                     <Button
                       size={30}
-                      style={{ background: "#282e67" }}
+                      style={{ background: "#f0f0f0" }}
                       borderRadius={4}
                       onPress={() => navigate(`/goals/${goal.id}`)}
                     >
-                      <Text color="white">Edit</Text>
+                      <Text color="black">...</Text>
                     </Button>
                   </YStack>
                   <YStack alignItems="flex-end">
                     <Button
                       size={30}
-                      style={{ background: "#b32d00" }}
+                      style={{ background: "#f0f0f0" }}
                       borderRadius={4}
                       onPress={() => handleDeleteGoal(goal.id)}
                     >
-                      <Text color={"white"}>Delete</Text>
+                      <FontAwesomeIcon color="#b32d00" icon={faTrash} />
                     </Button>
                   </YStack>
                 </XStack>
