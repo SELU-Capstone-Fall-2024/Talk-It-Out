@@ -1,8 +1,13 @@
-import type React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api/api";
-import type { ClientGetDto, GroupGetDto, Response } from "../types";
+import type React from 'react';
+import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import api from '../api/api';
+import type {
+  ClientGetDto,
+  GroupGetDto,
+  Response,
+  SessionCreateDto,
+} from '../types';
 import {
   YStack,
   SizableText,
@@ -11,10 +16,11 @@ import {
   Form,
   Spinner,
   XStack,
-} from "tamagui";
-import ReactSelect from "react-select";
-import { useAsync } from "react-use";
-import DatePicker from "react-datepicker";
+  Input,
+} from 'tamagui';
+import ReactSelect from 'react-select';
+import {useAsync} from 'react-use';
+import DatePicker from 'react-datepicker';
 
 const SessionCreate: React.FC = () => {
   const navigate = useNavigate();
@@ -110,11 +116,11 @@ const SessionCreate: React.FC = () => {
 
           <Button
             size={25}
-            style={{ background: "#282e67" }}
+            style={{background: '#282e67'}}
             borderRadius={4}
             onPress={() => navigate(`/week`)}
           >
-            <Text color={"white"}>Back</Text>
+            <Text color={'white'}>Back</Text>
           </Button>
         </XStack>
 
@@ -228,7 +234,7 @@ const SessionCreate: React.FC = () => {
             onPress={handleSubmit}
             borderRadius={4}
             marginTop={20}
-            style={{ background: "#282e67" }}
+            style={{background: '#282e67'}}
           >
             <Text fontSize={18} color="white">
               {loading ? <Spinner /> : 'Add Session'}

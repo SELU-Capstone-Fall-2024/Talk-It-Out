@@ -20,7 +20,7 @@ const Header: React.FC = () => {
             {/* <span>Welcome, {user.username}</span> */}
             <button className="settings-btn">
               <FaCog className="settings-icon" size={30} color="#282e67" />
-            </Link>
+            </button>
             <Logout />
           </div>
         )}

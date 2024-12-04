@@ -8,7 +8,7 @@ import type {
   SessionGetDto,
   GroupGetDto,
   ClientGetDto,
-} from "../types";
+} from '../types';
 import {
   Button,
   Form,
@@ -17,10 +17,11 @@ import {
   Text,
   Spinner,
   XStack,
-} from "tamagui";
-import ReactSelect from "react-select";
-import DatePicker from "react-datepicker";
-import { useAsync } from "react-use";
+  Input,
+} from 'tamagui';
+import ReactSelect from 'react-select';
+import DatePicker from 'react-datepicker';
+import {useAsync} from 'react-use';
 
 const SessionUpdate: React.FC = () => {
   const {id} = useParams<{id: string}>();
@@ -148,11 +149,11 @@ const SessionUpdate: React.FC = () => {
 
           <Button
             size={25}
-            style={{ background: "#282e67" }}
+            style={{background: '#282e67'}}
             borderRadius={4}
             onPress={() => navigate(`/sessions/${id}/view`)}
           >
-            <Text color={"white"}>Back</Text>
+            <Text color={'white'}>Back</Text>
           </Button>
         </XStack>
 
@@ -265,10 +266,10 @@ const SessionUpdate: React.FC = () => {
             onPress={handleSubmit}
             borderRadius={4}
             marginTop={20}
-            style={{ background: "#282e67" }}
+            style={{background: '#282e67'}}
           >
             <Text fontSize={16} color="white">
-              {loading ? <Spinner /> : "Update Session"}
+              {loading ? <Spinner /> : 'Update Session'}
             </Text>
           </Button>
         </Form>
