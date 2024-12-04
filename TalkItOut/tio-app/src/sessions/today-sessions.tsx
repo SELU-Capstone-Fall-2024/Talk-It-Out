@@ -21,15 +21,14 @@ export const TodaySessions: React.FC = () => {
           margin={0}
           gap={15}
           alignItems="center"
-          overflow="scroll"
         >
-          <Header width="100%" background="lightgray">
+          <Header width="90%" background="lightgray">
             <Text fontSize={30} fontWeight={600} justifyContent="center">
               Today's Schedule
             </Text>
           </Header>
           {sessions.data?.map((session) => {
-            return <ScheduleCard session={session} />;
+            return <ScheduleCard session={session} key={session.id} />;
           })}
         </YStack>
       )}
@@ -45,7 +44,7 @@ const ScheduleCard: React.FC<{session: SessionGetDto}> = ({session}) => {
       padding={15}
       borderWidth={1}
       backgroundColor="white"
-      width="100%"
+      width="90%"
     >
       <XStack width="20%">
         <Text style={{color: 'black'}}>
@@ -58,16 +57,21 @@ const ScheduleCard: React.FC<{session: SessionGetDto}> = ({session}) => {
       </XStack>
       <YStack width="70%">
         <Text style={{color: 'black'}} fontWeight={600}>
+          <Text>Group: </Text>
           {session.group.groupName}
         </Text>
         <XStack gap={5}>
+          <Text>Clients:</Text>
           {session.group.clients.map((client) => (
-            <Text style={{color: 'black'}}>
+            <Text style={{color: 'black'}} key={client.id}>
               {client.firstName} {client.lastName}
             </Text>
           ))}
         </XStack>
-        <Text>{session.notes}</Text>
+        <XStack>
+          <Text>Notes: </Text>
+          <Text> {session.notes}</Text>
+        </XStack>
       </YStack>
       <XStack gap={10} width="10%">
         <Button

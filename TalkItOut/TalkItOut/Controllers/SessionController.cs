@@ -56,20 +56,21 @@ namespace TalkItOut.Controllers;
                     UserId = x.UserId,
                     StartTime = x.StartTime,
                     EndTime = x.EndTime,
+                    ClientId = x.ClientId,
+                    ClientName = x.Client.FirstName + " " + x.Client.LastName,
+                    Notes = x.Notes,
                     GroupId = x.GroupId,
                     Group = new GroupGetDto
                     {
                         GroupName = x.Group.GroupName,
                         Clients = x.Group.Clients.Select(y => new ClientGetDto
                         {
+                            Id = y.Id,
                             DateOfBirth = y.DateOfBirth,
                             FirstName = y.FirstName,
                             LastName = y.LastName,
                         }).ToList()
                     },
-                    ClientId = x.ClientId,
-                    ClientName = x.Client.FirstName + " " + x.Client.LastName,
-                    Notes = x.Notes,
                 })
                 .ToList();
             
