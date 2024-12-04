@@ -18,7 +18,7 @@ export const TodaySessions: React.FC = () => {
         <YStack
           width="100%"
           padding={0}
-          margin={0}
+          margin={5}
           gap={15}
           alignItems="center"
         >
@@ -47,35 +47,74 @@ const ScheduleCard: React.FC<{session: SessionGetDto}> = ({session}) => {
       width="90%"
     >
       <XStack width="20%">
-        <Text style={{color: 'black'}}>
+        <Text style={{color: 'black'}} fontSize={20}>
           {formatTime(new Date(session.startTime))} -
         </Text>
-        <Text style={{color: 'black'}}>
+        <Text style={{color: 'black'}} fontSize={20}>
           {' '}
           {formatTime(new Date(session.endTime))}
         </Text>
       </XStack>
       <YStack width="70%">
-        <Text style={{color: 'black'}} fontWeight={600}>
-          <Text>Group: </Text>
+        <Text style={{color: 'black'}} fontWeight={600} fontSize={20}>
+          <Text fontSize={20}>Group: </Text>
           {session.group.groupName}
         </Text>
         <XStack gap={5}>
-          <Text>Clients:</Text>
-          {session.group.clients.map((client) => (
-            <Text style={{color: 'black'}} key={client.id}>
-              {client.firstName} {client.lastName}
-            </Text>
-          ))}
+          <Text fontSize={20}>Clients:</Text>
+          {session.group.clients.length === 1 ? (
+            <>
+              {session.group.clients.map((client) => (
+                <>
+                  <Text style={{color: 'black'}} key={client.id} fontSize={20}>
+                    {client.firstName} {client.lastName}
+                  </Text>
+                </>
+              ))}
+            </>
+          ) : (
+            <>
+              {session.group.clients
+                .filter(
+                  (_, index) => index !== session.group.clients.length - 1
+                )
+                .map((client) => (
+                  <>
+                    <Text
+                      style={{color: 'black'}}
+                      key={client.id}
+                      fontSize={20}
+                    >
+                      {client.firstName} {client.lastName},
+                    </Text>
+                  </>
+                ))}
+              {session.group.clients
+                .filter(
+                  (_, index) => index === session.group.clients.length - 1
+                )
+                .map((client) => (
+                  <>
+                    <Text
+                      style={{color: 'black'}}
+                      key={client.id}
+                      fontSize={20}
+                    >
+                      & {client.firstName} {client.lastName}
+                    </Text>
+                  </>
+                ))}
+            </>
+          )}
         </XStack>
         <XStack>
-          <Text>Notes: </Text>
-          <Text> {session.notes}</Text>
+          <Text fontSize={20}>Notes: </Text>
+          <Text fontSize={20}> {session.notes}</Text>
         </XStack>
       </YStack>
-      <XStack gap={10} width="10%">
+      <XStack gap={20} width="10%">
         <Button
-          size={25}
+          size={35}
           background="#e6f2ff"
           borderRadius={4}
           onPress={() => navigate(`/sessions/${session.id}`)}
