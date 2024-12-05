@@ -161,48 +161,52 @@ export const SessionView: React.FC = () => {
                         onClose={() => setIsTrackingSessionModalOpen(false)}
                       />
                       <Text color="black">{goal.information}</Text>
-                      <XStack justifyContent="center" gap={10}>
-                        <Text>
-                          Correct Trials:{' '}
-                          {
-                            session.sessionGoalGetDtos.find(
-                              (x) => x.goalId === goal.id
-                            )?.correctTrials
-                          }{' '}
-                          /{' '}
-                          {
-                            session.sessionGoalGetDtos.find(
-                              (x) => x.goalId === goal.id
-                            )?.totalTrials
-                          }
-                        </Text>
-                        <Text>
-                          Duration:
-                          {
-                            session.sessionGoalGetDtos.find(
-                              (x) => x.goalId === goal.id
-                            )?.duration
-                          }
-                        </Text>
-                      </XStack>
+
+                      <Button
+                        size={15}
+                        style={{
+                          background: '#282e67',
+                        }}
+                        borderRadius={4}
+                        onPress={() => setIsTrackingSessionModalOpen(true)}
+                      >
+                        <Text color="white">Track Session</Text>
+                      </Button>
+                      {session.sessionGoalGetDtos.find(
+                        (x) => x.goalId === goal.id
+                      ) && (
+                        <XStack justifyContent="center" gap={10}>
+                          <Text>
+                            Correct Trials:{' '}
+                            {
+                              session.sessionGoalGetDtos.find(
+                                (x) => x.goalId === goal.id
+                              )?.correctTrials
+                            }{' '}
+                            /{' '}
+                            {
+                              session.sessionGoalGetDtos.find(
+                                (x) => x.goalId === goal.id
+                              )?.totalTrials
+                            }
+                          </Text>
+                          <Text>
+                            Duration:
+                            {
+                              session.sessionGoalGetDtos.find(
+                                (x) => x.goalId === goal.id
+                              )?.duration
+                            }{' '}
+                            minutes
+                          </Text>
+                        </XStack>
+                      )}
                       <XStack
                         justifyContent="flex-end"
                         alignItems="flex-end"
                         gap={8}
                         padding={4}
                       >
-                        <Button
-                          size={15}
-                          style={{
-                            background: '#282e67',
-                            bottom: 10,
-                            right: 10,
-                          }}
-                          borderRadius={4}
-                          onPress={() => setIsTrackingSessionModalOpen(true)}
-                        >
-                          <Text color="white">Track Session</Text>
-                        </Button>
                         <YStack alignItems="flex-end">
                           <Button
                             size={30}
