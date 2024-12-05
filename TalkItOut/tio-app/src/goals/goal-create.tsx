@@ -1,8 +1,8 @@
-import type React from "react";
-import { useEffect, useState } from "react";
-import api from "../api/api";
-import type { ClientGetDto, GoalCreateDto, Response } from "../types";
-import { useNavigate, useParams } from "react-router-dom";
+import type React from 'react';
+import {useEffect, useState} from 'react';
+import api from '../api/api';
+import type {ClientGetDto, GoalCreateDto, Response} from '../types';
+import {useNavigate, useParams} from 'react-router-dom';
 import {
   YStack,
   SizableText,
@@ -11,17 +11,16 @@ import {
   Text,
   Form,
   XStack,
-  View,
   Spinner,
-} from "tamagui";
+} from 'tamagui';
 
 const GoalCreate: React.FC = () => {
   const navigate = useNavigate();
-  const { id: clientId } = useParams();
+  const {id: clientId} = useParams();
   const parsedClientId = clientId ? parseInt(clientId, 10) : null;
   const [goalData, setGoalData] = useState<GoalCreateDto>({
     userId: 1,
-    information: "",
+    information: '',
     clientId: parsedClientId || 0,
   });
   const [client, setClient] = useState<ClientGetDto | null>(null);
@@ -39,7 +38,7 @@ const GoalCreate: React.FC = () => {
         );
         setClient(response.data.data);
       } catch (err) {
-        console.error("Failed to load client data:", err);
+        console.error('Failed to load client data:', err);
       } finally {
         setLoadingClient(false);
       }
@@ -52,11 +51,11 @@ const GoalCreate: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!goalData.information) {
-      setError("Goal information cannot be empty.");
+      setError('Goal information cannot be empty.');
       return;
     }
     if (!parsedClientId) {
-      setError("Invalid or missing client ID.");
+      setError('Invalid or missing client ID.');
       return;
     }
 
@@ -98,11 +97,11 @@ const GoalCreate: React.FC = () => {
 
           <Button
             size={25}
-            style={{ background: "#282e67" }}
+            style={{background: '#282e67'}}
             borderRadius={4}
             onPress={() => navigate(`/clients/${clientId}/view`)}
           >
-            <Text color={"white"}>Back</Text>
+            <Text color={'white'}>Back</Text>
           </Button>
         </XStack>
 
@@ -119,7 +118,7 @@ const GoalCreate: React.FC = () => {
               minHeight={100}
               value={goalData.information}
               onChangeText={(value) =>
-                setGoalData((prev) => ({ ...prev, information: value }))
+                setGoalData((prev) => ({...prev, information: value}))
               }
               placeholder="Enter goal information..."
               placeholderTextColor="#b0b0b0"
@@ -134,13 +133,13 @@ const GoalCreate: React.FC = () => {
             alignSelf="center"
             size={30}
             disabled={loading}
-            style={{ overflow: "hidden", background: "#282e67" }}
+            style={{overflow: 'hidden', background: '#282e67'}}
             onPress={handleSubmit}
             borderRadius={4}
             marginTop={10}
           >
-            <Text fontSize={18} color={"white"}>
-              {loading ? <Spinner /> : "Create Goal"}
+            <Text fontSize={18} color={'white'}>
+              {loading ? <Spinner /> : 'Create Goal'}
             </Text>
           </Button>
         </Form>

@@ -1,7 +1,7 @@
-import type React from "react";
-import api from "../api/api";
-import type { Response, ClientGetDto } from "../types";
-import { useAsync } from "react-use";
+import type React from 'react';
+import api from '../api/api';
+import type {Response, ClientGetDto} from '../types';
+import {useAsync} from 'react-use';
 import {
   Button,
   Spinner,
@@ -22,12 +22,12 @@ const Clients: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteAction, setDeleteAction] = useState<() => void>(() => {});
 
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
 
-  const { loading, value: clients } = useAsync(async () => {
-    const response = await api.get<Response<ClientGetDto[]>>("/clients");
+  const {loading, value: clients} = useAsync(async () => {
+    const response = await api.get<Response<ClientGetDto[]>>('/clients');
     return response.data;
-  });
+  }, []);
 
   const filteredClients = clients?.data?.filter((client) => {
     const fullName = `${client.firstName} ${client.lastName}`.toLowerCase();
@@ -83,11 +83,11 @@ const Clients: React.FC = () => {
         />
         <Button
           size={30}
-          style={{ background: "#282e67" }}
+          style={{background: '#282e67'}}
           borderRadius={4}
-          onPress={() => navigate("/clients/create")}
+          onPress={() => navigate('/clients/create')}
         >
-          <Text style={{ color: "white", fontSize: 18 }}>Add A Client</Text>
+          <Text style={{color: 'white', fontSize: 18}}>Add A Client</Text>
         </Button>
       </XStack>
 
@@ -144,13 +144,13 @@ const Clients: React.FC = () => {
                 width="100%"
               >
                 <YStack width="33%" alignItems="flex-start">
-                  <Text style={{ color: "black" }}>
+                  <Text style={{color: 'black'}}>
                     {client.firstName} {client.lastName}
                   </Text>
                 </YStack>
 
                 <YStack width="33%" alignItems="center">
-                  <Text style={{ color: "black" }}>
+                  <Text style={{color: 'black'}}>
                     {formatDate(dateOfBirth)}
                   </Text>
                 </YStack>
@@ -159,21 +159,19 @@ const Clients: React.FC = () => {
                   <XStack gap={10}>
                     <Button
                       size={25}
-                      style={{ background: "gray" }}
+                      style={{background: 'gray'}}
                       borderRadius={4}
                       onPress={() => navigate(`/clients/${client.id}/view`)}
                     >
-                      <Text style={{ color: "white", fontSize: 16 }}>View</Text>
+                      <Text style={{color: 'white', fontSize: 16}}>View</Text>
                     </Button>
                     <Button
                       size={25}
-                      style={{ background: "#b32d00" }}
+                      style={{background: '#b32d00'}}
                       borderRadius={4}
                       onPress={() => handleDeleteClient(client.id.toString())}
                     >
-                      <Text style={{ color: "white", fontSize: 16 }}>
-                        Delete
-                      </Text>
+                      <Text style={{color: 'white', fontSize: 16}}>Delete</Text>
                     </Button>
                   </XStack>
                 </YStack>

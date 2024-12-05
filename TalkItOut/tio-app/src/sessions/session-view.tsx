@@ -1,6 +1,6 @@
-import type React from "react";
-import api from "../api/api";
-import { useAsync } from "react-use";
+import type React from 'react';
+import api from '../api/api';
+import {useAsync} from 'react-use';
 import {
   Button,
   YStack,
@@ -9,79 +9,37 @@ import {
   Text,
   XStack,
   View,
-} from "tamagui";
-import { formatSessionTime } from "../components/format-date";
-import { useNavigate, useParams } from "react-router-dom";
-import type {
-  SessionGetDto,
-  ClientGetDto,
-  GroupGetDto,
-  Response,
-  GoalGetDto,
-} from "../types";
-import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import DeleteModal from "../components/delete-modal";
+} from 'tamagui';
+import {formatSessionTime} from '../components/format-date';
+import {useNavigate, useParams} from 'react-router-dom';
+import type {SessionGetDto, Response} from '../types';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
+import {faTrash} from '@fortawesome/free-solid-svg-icons';
+import DeleteModal from '../components/delete-modal';
+import {useState} from 'react';
+import {SessionGoalModal} from '../components/session-goal-modal';
 
 export const SessionView: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
-  const { loading: loadingSession, value: session } = useAsync(async () => {
-    const response = await api.get<Response<SessionGetDto>>(`/sessions/${id}`);
-    return response.data.data;
-  });
-  const { loading: loadingClients, value: clients } = useAsync(async () => {
-    const response = await api.get<Response<ClientGetDto[]>>("/clients");
-    return response.data;
-  });
-
-  const { loading: loadingGroups, value: groups } = useAsync(async () => {
-    const response = await api.get<Response<GroupGetDto[]>>("/groups");
-    return response.data;
-  });
-  const [allGoals, setAllGoals] = useState<GoalGetDto[] | null>(null);
+  const {id} = useParams<{id: string}>();
+  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTrackingSessionModalOpen, setIsTrackingSessionModalOpen] =
+    useState(false);
   const [deleteAction, setDeleteAction] = useState<() => void>(() => {});
 
-  useEffect(() => {
-    const fetchAllGoals = async () => {
-      try {
-        const response = await api.get<Response<GoalGetDto[]>>("/goals");
-        setAllGoals(response.data.data);
-      } catch (err) {
-        console.error("Failed to load goals data:", err);
-      }
-    };
-    fetchAllGoals();
+  const {loading: loadingSession, value: session} = useAsync(async () => {
+    const response = await api.get<Response<SessionGetDto>>(`/sessions/${id}`);
+    console.log(response.data.data);
+    return response.data.data;
   }, []);
-
-  const [filteredGoals, setFilteredGoals] = useState<GoalGetDto[][]>([]);
-
-  const navigate = useNavigate();
-
-  const clientMap = clients?.data?.reduce<Record<number, ClientGetDto>>(
-    (map, client) => {
-      map[client.id] = client;
-      return map;
-    },
-    {}
-  );
-
-  const groupMap = groups?.data?.reduce<Record<number, GroupGetDto>>(
-    (map, group) => {
-      map[group.id] = group;
-      return map;
-    },
-    {}
-  );
 
   const handleDeleteSession = (sessionId: number) => {
     setDeleteAction(() => async () => {
       try {
         await api.delete(`/sessions/${sessionId}`);
-        navigate("/home");
+        navigate('/home');
       } catch {
-        alert("Failed to delete client. Please try again.");
+        alert('Failed to delete client. Please try again.');
       } finally {
         setIsModalOpen(false);
       }
@@ -96,8 +54,7 @@ export const SessionView: React.FC = () => {
         window.location.reload();
       } catch (error) {
         alert('Failed to delete goal. Please try again.');
-      }
-      finally{
+      } finally {
         setIsModalOpen(false);
       }
     });
@@ -113,27 +70,6 @@ export const SessionView: React.FC = () => {
     );
   }
 
-  const group = session?.groupId ? groupMap?.[session.groupId] : null;
-  const client = session?.clientId ? clientMap?.[session.clientId] : null;
-
-  let clientsInSession: ClientGetDto[] = [];
-  if (group) {
-    clientsInSession =
-      clients?.data?.filter((client) => group.clientIds.includes(client.id)) ||
-      [];
-  } else if (client) {
-    clientsInSession = [client];
-  }
-
-  useEffect(() => {
-    if (Array.isArray(allGoals) && clients?.data) {
-      const goalsForClients = clientsInSession.map((client) => {
-        return allGoals.filter((goal) => goal.clientId === client.id);
-      });
-      setFilteredGoals(goalsForClients);
-    }
-  }, [allGoals, clientsInSession]);
-
   return (
     <View padding={20}>
       <DeleteModal
@@ -141,6 +77,7 @@ export const SessionView: React.FC = () => {
         onClose={() => setIsModalOpen(false)}
         onConfirm={deleteAction}
       />
+
       <XStack
         alignItems="center"
         justifyContent="space-between"
@@ -152,9 +89,9 @@ export const SessionView: React.FC = () => {
         </SizableText>
         <Button
           size={30}
-          style={{ background: "#282e67" }}
+          style={{background: '#282e67'}}
           borderRadius={4}
-          onPress={() => navigate("/home")}
+          onPress={() => navigate('/home')}
         >
           <Text color="white">Back</Text>
         </Button>
@@ -177,17 +114,17 @@ export const SessionView: React.FC = () => {
                   startTime.toISOString(),
                   endTime.toISOString()
                 )
-              : ""}
+              : ''}
           </SizableText>
           <SizableText size={20} color="black">
             {durationMinutes} minutes
           </SizableText>
 
-          <Text style={{ color: "black", marginTop: 10 }}>
+          <Text style={{color: 'black', marginTop: 10}}>
             Clients in this session:
           </Text>
           <YStack gap={10}>
-            {clientsInSession?.map((client, index) => (
+            {session.group.clients?.map((client) => (
               <YStack
                 key={client.id}
                 padding={10}
@@ -207,7 +144,7 @@ export const SessionView: React.FC = () => {
                   <Text color="black" fontSize={16} fontWeight="bold">
                     Goals:
                   </Text>
-                  {filteredGoals[index]?.map((goal) => (
+                  {client.goals.map((goal) => (
                     <YStack
                       key={goal.id}
                       padding={10}
@@ -216,7 +153,55 @@ export const SessionView: React.FC = () => {
                       background="#e0e0e0"
                       borderRadius={8}
                     >
+                      <SessionGoalModal
+                        session={session}
+                        client={client}
+                        goal={goal}
+                        isOpen={isTrackingSessionModalOpen}
+                        onClose={() => setIsTrackingSessionModalOpen(false)}
+                      />
                       <Text color="black">{goal.information}</Text>
+                      <XStack justifyContent="center" gap={10}>
+                        <Button
+                          size={20}
+                          style={{
+                            background: '#282e67',
+                          }}
+                          borderRadius={4}
+                          onPress={() => setIsTrackingSessionModalOpen(true)}
+                        >
+                          <Text color="white">Track Session</Text>
+                        </Button>
+                      </XStack>
+                      {session.sessionGoalGetDtos.find(
+                        (x) => x.goalId === goal.id
+                      ) && (
+                        <XStack justifyContent="center" gap={10}>
+                          <Text>
+                            Correct Trials:{' '}
+                            {
+                              session.sessionGoalGetDtos.find(
+                                (x) => x.goalId === goal.id
+                              )?.correctTrials
+                            }{' '}
+                            /{' '}
+                            {
+                              session.sessionGoalGetDtos.find(
+                                (x) => x.goalId === goal.id
+                              )?.totalTrials
+                            }
+                          </Text>
+                          <Text>
+                            Duration:
+                            {
+                              session.sessionGoalGetDtos.find(
+                                (x) => x.goalId === goal.id
+                              )?.duration
+                            }{' '}
+                            minutes
+                          </Text>
+                        </XStack>
+                      )}
                       <XStack
                         justifyContent="flex-end"
                         alignItems="flex-end"
@@ -226,7 +211,7 @@ export const SessionView: React.FC = () => {
                         <YStack alignItems="flex-end">
                           <Button
                             size={30}
-                            style={{ background: "#e0e0e0" }}
+                            style={{background: '#e0e0e0'}}
                             borderRadius={4}
                             onPress={() => navigate(`/goals/${goal.id}`)}
                           >
@@ -236,7 +221,7 @@ export const SessionView: React.FC = () => {
                         <YStack alignItems="flex-end">
                           <Button
                             size={30}
-                            style={{ background: "#e0e0e0" }}
+                            style={{background: '#e0e0e0'}}
                             borderRadius={4}
                             onPress={() => handleDeleteGoal(goal.id)}
                           >
@@ -251,7 +236,7 @@ export const SessionView: React.FC = () => {
                   <Button
                     size={30}
                     style={{
-                      background: "#282e67",
+                      background: '#282e67',
                       bottom: 10,
                       right: 10,
                     }}
@@ -268,7 +253,7 @@ export const SessionView: React.FC = () => {
           <XStack gap={10} marginTop={20}>
             <Button
               size={30}
-              style={{ background: "#282e67" }}
+              style={{background: '#282e67'}}
               borderRadius={4}
               onPress={() => navigate(`/sessions/${session.id}`)}
             >
@@ -276,7 +261,7 @@ export const SessionView: React.FC = () => {
             </Button>
             <Button
               size={30}
-              style={{ background: "#b32d00" }}
+              style={{background: '#b32d00'}}
               borderRadius={4}
               onPress={() => handleDeleteSession(session.id)}
             >

@@ -15,6 +15,7 @@ namespace TalkItOut.Entities
         public User User { get; set; }
         public Group? Group { get; set; }
         public string Notes { get; set; }
+        public List<SessionGoals> SessionGoalsList { get; set; }
     }
 
     public class SessionGetDto
@@ -28,6 +29,7 @@ namespace TalkItOut.Entities
         public string ClientName { get; set; }
         public GroupGetDto Group { get; set; }
         public string Notes { get; set; }
+        public List<SessionGoalGetDto> SessionGoalGetDtos { get; set; }
     }
 
     public class SessionCreateDto

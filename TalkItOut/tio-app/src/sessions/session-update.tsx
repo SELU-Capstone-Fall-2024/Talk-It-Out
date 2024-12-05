@@ -72,7 +72,7 @@ const SessionUpdate: React.FC = () => {
   const {value: clients} = useAsync(async () => {
     const response = await api.get<Response<ClientGetDto[]>>('/clients');
     return response.data;
-  });
+  }, []);
   const clientOptions = clients?.data?.map((client) => ({
     label: `${client.firstName} ${client.lastName}`,
     value: client.id.toString(),
@@ -81,7 +81,7 @@ const SessionUpdate: React.FC = () => {
   const {value: groups} = useAsync(async () => {
     const response = await api.get<Response<GroupGetDto[]>>('/groups');
     return response.data;
-  });
+  }, []);
   const groupOptions = groups?.data?.map((group) => ({
     label: group.groupName,
     value: group.id.toString(),

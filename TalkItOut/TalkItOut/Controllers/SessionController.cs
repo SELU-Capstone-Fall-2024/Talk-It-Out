@@ -23,6 +23,9 @@ namespace TalkItOut.Controllers;
 
             var sessions = _dataContext.Set<Session>()
                 .Include(x => x.Client)
+                .Include(x => x.Group)
+                .ThenInclude(x => x.Clients)
+                .ThenInclude(x => x.Goals)
                 .Select(x => new SessionGetDto
                 {
                     Id = x.Id,
@@ -33,6 +36,22 @@ namespace TalkItOut.Controllers;
                     ClientId = x.ClientId,
                     ClientName = x.Client.FirstName + " " + x.Client.LastName,
                     Notes = x.Notes,
+                    Group = new GroupGetDto
+                    {
+                        GroupName = x.Group.GroupName,
+                        Clients = x.Group.Clients.Select(y => new ClientGetDto
+                        {
+                            Id = y.Id,
+                            DateOfBirth = y.DateOfBirth,
+                            FirstName = y.FirstName,
+                            LastName = y.LastName,
+                            Goals = y.Goals.Select(z => new GoalGetDto
+                            {
+                                Id = z.Id,
+                                Information = z.Information
+                            }).ToList()
+                        }).ToList()
+                    },
                 })
                 .ToList();
 
@@ -49,6 +68,7 @@ namespace TalkItOut.Controllers;
             var sessions = _dataContext.Set<Session>()
                 .Include(x => x.Client)
                 .Include(x => x.Group)
+                .ThenInclude(x => x.Clients)
                 .Where(x => x.StartTime.Date.Equals(DateTime.Today))
                 .Select(x => new SessionGetDto
                 {
@@ -69,6 +89,11 @@ namespace TalkItOut.Controllers;
                             DateOfBirth = y.DateOfBirth,
                             FirstName = y.FirstName,
                             LastName = y.LastName,
+                            Goals = y.Goals.Select(z => new GoalGetDto
+                            {
+                                Id = z.Id,
+                                Information = z.Information
+                            }).ToList()
                         }).ToList()
                     },
                 })
@@ -85,6 +110,9 @@ namespace TalkItOut.Controllers;
             var response = new Response();
 
             var session = await _dataContext.Set<Session>()
+                .Include(x => x.Client)
+                .Include(x => x.Group).ThenInclude(x => x.Clients).ThenInclude(x => x.Goals)
+                .Include(x => x.SessionGoalsList)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (session == null)
@@ -101,7 +129,32 @@ namespace TalkItOut.Controllers;
                 EndTime = session.EndTime,
                 GroupId = session.GroupId,
                 ClientId = session.ClientId,
-                Notes = session.Notes
+                Notes = session.Notes,
+                Group = new GroupGetDto
+                {
+                    GroupName = session.Group.GroupName,
+                    Clients = session.Group.Clients.Select(y => new ClientGetDto
+                    {
+                        Id = y.Id,
+                        DateOfBirth = y.DateOfBirth,
+                        FirstName = y.FirstName,
+                        LastName = y.LastName,
+                        Goals = y.Goals.Select(z => new GoalGetDto
+                        {
+                            Id = z.Id,
+                            Information = z.Information
+                        }).ToList()
+                    }).ToList()
+                },
+                SessionGoalGetDtos = session.SessionGoalsList.Select(x => new SessionGoalGetDto
+                {
+                    Id = x.Id,
+                    SessionId = x.SessionId,
+                    GoalId = x.GoalId,
+                    Duration = x.Duration,
+                    CorrectTrials = x.CorrectTrials,
+                    TotalTrials = x.TotalTrials
+                }).ToList()
             };
             
             return Ok(response);
@@ -144,6 +197,71 @@ namespace TalkItOut.Controllers;
                 ClientId = sessionToCreate.ClientId,
                 Notes = sessionToCreate.Notes,
             });        
+        }
+
+        [HttpPost("session-goal")]
+        public async Task<IActionResult> TrackSession([FromBody] SessionGoalCreateDto sessionGoalCreateDto)
+        {
+            var response = new Response();
+
+            var session = await _dataContext.Set<Session>().Include(x => x.SessionGoalsList).FirstOrDefaultAsync(x => x.Id == sessionGoalCreateDto.SessionId);
+            var goal = await _dataContext.Set<Goal>().FirstOrDefaultAsync(x => x.Id == sessionGoalCreateDto.GoalId);
+
+            if (session == null)
+            {
+                response.AddError("Session", "Invalid session");
+            }
+
+            if (goal == null)
+            {
+                response.AddError("Goal", "Invalid Goal");
+            }
+
+            if (response.HasErrors)
+            {
+                return BadRequest(response);
+            }
+            
+            if (sessionGoalCreateDto.CorrectTrials > sessionGoalCreateDto.TotalTrials)
+            {
+                response.AddError("Trials", "Correct Trials cannot exceed Total.");
+            }
+
+            if (session.SessionGoalsList.Sum(x => x.Duration) + sessionGoalCreateDto.Duration >
+                session.EndTime.Subtract(session.StartTime).TotalMinutes)
+            {
+                response.AddError("Duration", "Duration of goals exceeds total session duration.");
+            }
+
+            if (response.HasErrors)
+            {
+                return BadRequest(response);
+            }
+
+            var sessionGoal = new SessionGoals
+            {
+                SessionId = sessionGoalCreateDto.SessionId,
+                GoalId = sessionGoalCreateDto.GoalId,
+                Duration = sessionGoalCreateDto.Duration,
+                CorrectTrials = sessionGoalCreateDto.CorrectTrials,
+                TotalTrials = sessionGoalCreateDto.TotalTrials
+            };
+
+            await _dataContext.AddAsync(sessionGoal);
+            await _dataContext.SaveChangesAsync();
+
+            var sessionGoalGetDto = new SessionGoalGetDto
+            {
+                SessionId = sessionGoal.SessionId,
+                GoalId = sessionGoal.GoalId,
+                Duration = sessionGoal.Duration,
+                CorrectTrials = sessionGoal.CorrectTrials,
+                TotalTrials = sessionGoal.TotalTrials
+            };
+
+            response.Data = sessionGoalGetDto;
+            
+            return Ok(response);
         }
 
         [HttpPut("{id}")]
