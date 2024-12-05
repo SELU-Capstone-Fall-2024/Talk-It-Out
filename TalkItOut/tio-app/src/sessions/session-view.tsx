@@ -1,6 +1,6 @@
-import type React from "react";
-import api from "../api/api";
-import { useAsync } from "react-use";
+import type React from 'react';
+import api from '../api/api';
+import {useAsync} from 'react-use';
 import {
   Button,
   YStack,
@@ -15,11 +15,14 @@ import {useNavigate, useParams} from 'react-router-dom';
 import type {SessionGetDto, Response} from '../types';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
-import DeleteModal from "../components/delete-modal";
+import DeleteModal from '../components/delete-modal';
+import {useState} from 'react';
 
 export const SessionView: React.FC = () => {
   const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteAction, setDeleteAction] = useState<() => void>(() => {});
 
   const {loading: loadingSession, value: session} = useAsync(async () => {
     const response = await api.get<Response<SessionGetDto>>(`/sessions/${id}`);
@@ -31,9 +34,9 @@ export const SessionView: React.FC = () => {
     setDeleteAction(() => async () => {
       try {
         await api.delete(`/sessions/${sessionId}`);
-        navigate("/home");
+        navigate('/home');
       } catch {
-        alert("Failed to delete client. Please try again.");
+        alert('Failed to delete client. Please try again.');
       } finally {
         setIsModalOpen(false);
       }
@@ -48,8 +51,7 @@ export const SessionView: React.FC = () => {
         window.location.reload();
       } catch (error) {
         alert('Failed to delete goal. Please try again.');
-      }
-      finally{
+      } finally {
         setIsModalOpen(false);
       }
     });
@@ -83,9 +85,9 @@ export const SessionView: React.FC = () => {
         </SizableText>
         <Button
           size={30}
-          style={{ background: "#282e67" }}
+          style={{background: '#282e67'}}
           borderRadius={4}
-          onPress={() => navigate("/home")}
+          onPress={() => navigate('/home')}
         >
           <Text color="white">Back</Text>
         </Button>
@@ -108,13 +110,13 @@ export const SessionView: React.FC = () => {
                   startTime.toISOString(),
                   endTime.toISOString()
                 )
-              : ""}
+              : ''}
           </SizableText>
           <SizableText size={20} color="black">
             {durationMinutes} minutes
           </SizableText>
 
-          <Text style={{ color: "black", marginTop: 10 }}>
+          <Text style={{color: 'black', marginTop: 10}}>
             Clients in this session:
           </Text>
           <YStack gap={10}>
@@ -157,7 +159,7 @@ export const SessionView: React.FC = () => {
                         <YStack alignItems="flex-end">
                           <Button
                             size={30}
-                            style={{ background: "#e0e0e0" }}
+                            style={{background: '#e0e0e0'}}
                             borderRadius={4}
                             onPress={() => navigate(`/goals/${goal.id}`)}
                           >
@@ -167,7 +169,7 @@ export const SessionView: React.FC = () => {
                         <YStack alignItems="flex-end">
                           <Button
                             size={30}
-                            style={{ background: "#e0e0e0" }}
+                            style={{background: '#e0e0e0'}}
                             borderRadius={4}
                             onPress={() => handleDeleteGoal(goal.id)}
                           >
@@ -182,7 +184,7 @@ export const SessionView: React.FC = () => {
                   <Button
                     size={30}
                     style={{
-                      background: "#282e67",
+                      background: '#282e67',
                       bottom: 10,
                       right: 10,
                     }}
@@ -199,7 +201,7 @@ export const SessionView: React.FC = () => {
           <XStack gap={10} marginTop={20}>
             <Button
               size={30}
-              style={{ background: "#282e67" }}
+              style={{background: '#282e67'}}
               borderRadius={4}
               onPress={() => navigate(`/sessions/${session.id}`)}
             >
@@ -207,7 +209,7 @@ export const SessionView: React.FC = () => {
             </Button>
             <Button
               size={30}
-              style={{ background: "#b32d00" }}
+              style={{background: '#b32d00'}}
               borderRadius={4}
               onPress={() => handleDeleteSession(session.id)}
             >
