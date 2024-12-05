@@ -261,7 +261,7 @@ const ClientView = () => {
           style={{ background: "#282e67" }}
           onPress={handleDownload}
         >
-          <Text color="white">Dowload Progress Report</Text>
+          <Text color="white">Download Progress Report</Text>
         </Button>
         <DatePicker
           selected={formData.startTime ? new Date(formData.startTime) : null}
