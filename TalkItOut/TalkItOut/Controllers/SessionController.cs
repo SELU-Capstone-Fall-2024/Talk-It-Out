@@ -23,6 +23,9 @@ namespace TalkItOut.Controllers;
 
             var sessions = _dataContext.Set<Session>()
                 .Include(x => x.Client)
+                .Include(x => x.Group)
+                .ThenInclude(x => x.Clients)
+                .ThenInclude(x => x.Goals)
                 .Select(x => new SessionGetDto
                 {
                     Id = x.Id,
@@ -33,6 +36,22 @@ namespace TalkItOut.Controllers;
                     ClientId = x.ClientId,
                     ClientName = x.Client.FirstName + " " + x.Client.LastName,
                     Notes = x.Notes,
+                    Group = new GroupGetDto
+                    {
+                        GroupName = x.Group.GroupName,
+                        Clients = x.Group.Clients.Select(y => new ClientGetDto
+                        {
+                            Id = y.Id,
+                            DateOfBirth = y.DateOfBirth,
+                            FirstName = y.FirstName,
+                            LastName = y.LastName,
+                            Goals = y.Goals.Select(z => new GoalGetDto
+                            {
+                                Id = z.Id,
+                                Information = z.Information
+                            }).ToList()
+                        }).ToList()
+                    },
                 })
                 .ToList();
 
@@ -49,6 +68,7 @@ namespace TalkItOut.Controllers;
             var sessions = _dataContext.Set<Session>()
                 .Include(x => x.Client)
                 .Include(x => x.Group)
+                .ThenInclude(x => x.Clients)
                 .Where(x => x.StartTime.Date.Equals(DateTime.Today))
                 .Select(x => new SessionGetDto
                 {
@@ -69,6 +89,11 @@ namespace TalkItOut.Controllers;
                             DateOfBirth = y.DateOfBirth,
                             FirstName = y.FirstName,
                             LastName = y.LastName,
+                            Goals = y.Goals.Select(z => new GoalGetDto
+                            {
+                                Id = z.Id,
+                                Information = z.Information
+                            }).ToList()
                         }).ToList()
                     },
                 })
@@ -85,6 +110,8 @@ namespace TalkItOut.Controllers;
             var response = new Response();
 
             var session = await _dataContext.Set<Session>()
+                .Include(x => x.Client)
+                .Include(x => x.Group).ThenInclude(x => x.Clients).ThenInclude(x => x.Goals)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (session == null)
@@ -101,7 +128,23 @@ namespace TalkItOut.Controllers;
                 EndTime = session.EndTime,
                 GroupId = session.GroupId,
                 ClientId = session.ClientId,
-                Notes = session.Notes
+                Notes = session.Notes,
+                Group = new GroupGetDto
+                {
+                    GroupName = session.Group.GroupName,
+                    Clients = session.Group.Clients.Select(y => new ClientGetDto
+                    {
+                        Id = y.Id,
+                        DateOfBirth = y.DateOfBirth,
+                        FirstName = y.FirstName,
+                        LastName = y.LastName,
+                        Goals = y.Goals.Select(z => new GoalGetDto
+                        {
+                            Id = z.Id,
+                            Information = z.Information
+                        }).ToList()
+                    }).ToList()
+                },
             };
             
             return Ok(response);

@@ -50,6 +50,7 @@ export type ClientGetDto = {
   lastName: string;
   dateOfBirth: string;
   userId: number;
+  goals: GoalGetDto[];
 };
 
 export type ClientCreateDto = {

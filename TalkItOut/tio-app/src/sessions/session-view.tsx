@@ -12,65 +12,19 @@ import {
 } from 'tamagui';
 import {formatSessionTime} from '../components/format-date';
 import {useNavigate, useParams} from 'react-router-dom';
-import type {
-  SessionGetDto,
-  ClientGetDto,
-  GroupGetDto,
-  Response,
-  GoalGetDto,
-} from '../types';
-import {useEffect, useState} from 'react';
+import type {SessionGetDto, Response} from '../types';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 
 export const SessionView: React.FC = () => {
   const {id} = useParams<{id: string}>();
-  const {loading: loadingSession, value: session} = useAsync(async () => {
-    const response = await api.get<Response<SessionGetDto>>(`/sessions/${id}`);
-    return response.data.data;
-  });
-  const {loading: loadingClients, value: clients} = useAsync(async () => {
-    const response = await api.get<Response<ClientGetDto[]>>('/clients');
-    return response.data;
-  });
-
-  const {loading: loadingGroups, value: groups} = useAsync(async () => {
-    const response = await api.get<Response<GroupGetDto[]>>('/groups');
-    return response.data;
-  });
-  const [allGoals, setAllGoals] = useState<GoalGetDto[] | null>(null);
-
-  useEffect(() => {
-    const fetchAllGoals = async () => {
-      try {
-        const response = await api.get<Response<GoalGetDto[]>>('/goals');
-        setAllGoals(response.data.data);
-      } catch (err) {
-        console.error('Failed to load goals data:', err);
-      }
-    };
-    fetchAllGoals();
-  }, []);
-
-  const [filteredGoals, setFilteredGoals] = useState<GoalGetDto[][]>([]);
-
   const navigate = useNavigate();
 
-  const clientMap = clients?.data?.reduce<Record<number, ClientGetDto>>(
-    (map, client) => {
-      map[client.id] = client;
-      return map;
-    },
-    {}
-  );
-
-  const groupMap = groups?.data?.reduce<Record<number, GroupGetDto>>(
-    (map, group) => {
-      map[group.id] = group;
-      return map;
-    },
-    {}
-  );
+  const {loading: loadingSession, value: session} = useAsync(async () => {
+    const response = await api.get<Response<SessionGetDto>>(`/sessions/${id}`);
+    console.log(response.data.data);
+    return response.data.data;
+  }, []);
 
   const handleDeleteSession = async (sessionId: number) => {
     if (window.confirm('Are you sure you want to delete this session?')) {
@@ -104,27 +58,6 @@ export const SessionView: React.FC = () => {
       (endTime.getTime() - startTime.getTime()) / (1000 * 60)
     );
   }
-
-  const group = session?.groupId ? groupMap?.[session.groupId] : null;
-  const client = session?.clientId ? clientMap?.[session.clientId] : null;
-
-  let clientsInSession: ClientGetDto[] = [];
-  if (group) {
-    clientsInSession =
-      clients?.data?.filter((client) => group.clientIds.includes(client.id)) ||
-      [];
-  } else if (client) {
-    clientsInSession = [client];
-  }
-
-  useEffect(() => {
-    if (Array.isArray(allGoals) && clients?.data) {
-      const goalsForClients = clientsInSession.map((client) => {
-        return allGoals.filter((goal) => goal.clientId === client.id);
-      });
-      setFilteredGoals(goalsForClients);
-    }
-  }, [allGoals, clientsInSession]);
 
   return (
     <View padding={20}>
@@ -174,7 +107,7 @@ export const SessionView: React.FC = () => {
             Clients in this session:
           </Text>
           <YStack gap={10}>
-            {clientsInSession?.map((client, index) => (
+            {session.group.clients?.map((client) => (
               <YStack
                 key={client.id}
                 padding={10}
@@ -194,7 +127,7 @@ export const SessionView: React.FC = () => {
                   <Text color="black" fontSize={16} fontWeight="bold">
                     Goals:
                   </Text>
-                  {filteredGoals[index]?.map((goal) => (
+                  {client.goals.map((goal) => (
                     <YStack
                       key={goal.id}
                       padding={10}
