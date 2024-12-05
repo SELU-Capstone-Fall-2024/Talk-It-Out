@@ -17,11 +17,14 @@ import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import DeleteModal from '../components/delete-modal';
 import {useState} from 'react';
+import {SessionGoalModal} from '../components/session-goal-modal';
 
 export const SessionView: React.FC = () => {
   const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isTrackingSessionModalOpen, setIsTrackingSessionModalOpen] =
+    useState(false);
   const [deleteAction, setDeleteAction] = useState<() => void>(() => {});
 
   const {loading: loadingSession, value: session} = useAsync(async () => {
@@ -74,6 +77,7 @@ export const SessionView: React.FC = () => {
         onClose={() => setIsModalOpen(false)}
         onConfirm={deleteAction}
       />
+
       <XStack
         alignItems="center"
         justifyContent="space-between"
@@ -149,13 +153,56 @@ export const SessionView: React.FC = () => {
                       background="#e0e0e0"
                       borderRadius={8}
                     >
+                      <SessionGoalModal
+                        session={session}
+                        client={client}
+                        goalId={goal.id}
+                        isOpen={isTrackingSessionModalOpen}
+                        onClose={() => setIsTrackingSessionModalOpen(false)}
+                      />
                       <Text color="black">{goal.information}</Text>
+                      <XStack justifyContent="center" gap={10}>
+                        <Text>
+                          Correct Trials:{' '}
+                          {
+                            session.sessionGoalGetDtos.find(
+                              (x) => x.goalId === goal.id
+                            )?.correctTrials
+                          }{' '}
+                          /{' '}
+                          {
+                            session.sessionGoalGetDtos.find(
+                              (x) => x.goalId === goal.id
+                            )?.totalTrials
+                          }
+                        </Text>
+                        <Text>
+                          Duration:
+                          {
+                            session.sessionGoalGetDtos.find(
+                              (x) => x.goalId === goal.id
+                            )?.duration
+                          }
+                        </Text>
+                      </XStack>
                       <XStack
                         justifyContent="flex-end"
                         alignItems="flex-end"
                         gap={8}
                         padding={4}
                       >
+                        <Button
+                          size={15}
+                          style={{
+                            background: '#282e67',
+                            bottom: 10,
+                            right: 10,
+                          }}
+                          borderRadius={4}
+                          onPress={() => setIsTrackingSessionModalOpen(true)}
+                        >
+                          <Text color="white">Track Session</Text>
+                        </Button>
                         <YStack alignItems="flex-end">
                           <Button
                             size={30}

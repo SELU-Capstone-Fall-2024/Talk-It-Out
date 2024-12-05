@@ -112,6 +112,7 @@ namespace TalkItOut.Controllers;
             var session = await _dataContext.Set<Session>()
                 .Include(x => x.Client)
                 .Include(x => x.Group).ThenInclude(x => x.Clients).ThenInclude(x => x.Goals)
+                .Include(x => x.SessionGoalsList)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             if (session == null)
@@ -145,6 +146,15 @@ namespace TalkItOut.Controllers;
                         }).ToList()
                     }).ToList()
                 },
+                SessionGoalGetDtos = session.SessionGoalsList.Select(x => new SessionGoalGetDto
+                {
+                    Id = x.Id,
+                    SessionId = x.SessionId,
+                    GoalId = x.GoalId,
+                    Duration = x.Duration,
+                    CorrectTrials = x.CorrectTrials,
+                    TotalTrials = x.TotalTrials
+                }).ToList()
             };
             
             return Ok(response);
@@ -187,6 +197,55 @@ namespace TalkItOut.Controllers;
                 ClientId = sessionToCreate.ClientId,
                 Notes = sessionToCreate.Notes,
             });        
+        }
+
+        [HttpPost("session-goal")]
+        public async Task<IActionResult> TrackSession([FromBody] SessionGoalCreateDto sessionGoalCreateDto)
+        {
+            var response = new Response();
+
+            var session = await _dataContext.Set<Session>().FirstOrDefaultAsync(x => x.Id == sessionGoalCreateDto.SessionId);
+            var goal = await _dataContext.Set<Goal>().FirstOrDefaultAsync(x => x.Id == sessionGoalCreateDto.GoalId);
+
+            if (session == null)
+            {
+                response.AddError("Session", "Invalid session");
+            }
+
+            if (goal == null)
+            {
+                response.AddError("Goal", "Invalid Goal");
+            }
+
+            if (response.HasErrors)
+            {
+                return BadRequest(response);
+            }
+
+            var sessionGoal = new SessionGoals
+            {
+                SessionId = sessionGoalCreateDto.SessionId,
+                GoalId = sessionGoalCreateDto.GoalId,
+                Duration = sessionGoalCreateDto.Duration,
+                CorrectTrials = sessionGoalCreateDto.CorrectTrials,
+                TotalTrials = sessionGoalCreateDto.TotalTrials
+            };
+
+            await _dataContext.AddAsync(sessionGoal);
+            await _dataContext.SaveChangesAsync();
+
+            var sessionGoalGetDto = new SessionGoalGetDto
+            {
+                SessionId = sessionGoal.SessionId,
+                GoalId = sessionGoal.GoalId,
+                Duration = sessionGoal.Duration,
+                CorrectTrials = sessionGoal.CorrectTrials,
+                TotalTrials = sessionGoal.TotalTrials
+            };
+
+            response.Data = sessionGoalGetDto;
+            
+            return Ok(response);
         }
 
         [HttpPut("{id}")]
