@@ -1,6 +1,6 @@
-import type React from 'react';
-import api from '../api/api';
-import {useAsync} from 'react-use';
+import type React from "react";
+import api from "../api/api";
+import { useAsync } from "react-use";
 import {
   Button,
   YStack,
@@ -9,44 +9,47 @@ import {
   Text,
   XStack,
   View,
-} from 'tamagui';
-import {formatSessionTime} from '../components/format-date';
-import {useNavigate, useParams} from 'react-router-dom';
+} from "tamagui";
+import { formatSessionTime } from "../components/format-date";
+import { useNavigate, useParams } from "react-router-dom";
 import type {
   SessionGetDto,
   ClientGetDto,
   GroupGetDto,
   Response,
   GoalGetDto,
-} from '../types';
-import {useEffect, useState} from 'react';
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import {faTrash} from '@fortawesome/free-solid-svg-icons';
+} from "../types";
+import { useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import DeleteModal from "../components/delete-modal";
 
 export const SessionView: React.FC = () => {
-  const {id} = useParams<{id: string}>();
-  const {loading: loadingSession, value: session} = useAsync(async () => {
+  const { id } = useParams<{ id: string }>();
+  const { loading: loadingSession, value: session } = useAsync(async () => {
     const response = await api.get<Response<SessionGetDto>>(`/sessions/${id}`);
     return response.data.data;
   });
-  const {loading: loadingClients, value: clients} = useAsync(async () => {
-    const response = await api.get<Response<ClientGetDto[]>>('/clients');
+  const { loading: loadingClients, value: clients } = useAsync(async () => {
+    const response = await api.get<Response<ClientGetDto[]>>("/clients");
     return response.data;
   });
 
-  const {loading: loadingGroups, value: groups} = useAsync(async () => {
-    const response = await api.get<Response<GroupGetDto[]>>('/groups');
+  const { loading: loadingGroups, value: groups } = useAsync(async () => {
+    const response = await api.get<Response<GroupGetDto[]>>("/groups");
     return response.data;
   });
   const [allGoals, setAllGoals] = useState<GoalGetDto[] | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteAction, setDeleteAction] = useState<() => void>(() => {});
 
   useEffect(() => {
     const fetchAllGoals = async () => {
       try {
-        const response = await api.get<Response<GoalGetDto[]>>('/goals');
+        const response = await api.get<Response<GoalGetDto[]>>("/goals");
         setAllGoals(response.data.data);
       } catch (err) {
-        console.error('Failed to load goals data:', err);
+        console.error("Failed to load goals data:", err);
       }
     };
     fetchAllGoals();
@@ -72,28 +75,33 @@ export const SessionView: React.FC = () => {
     {}
   );
 
-  const handleDeleteSession = async (sessionId: number) => {
-    if (window.confirm('Are you sure you want to delete this session?')) {
+  const handleDeleteSession = (sessionId: number) => {
+    setDeleteAction(() => async () => {
       try {
         await api.delete(`/sessions/${sessionId}`);
-        navigate('/home');
-      } catch (error) {
-        console.error('Failed to delete session:', error);
-        alert('Failed to delete session. Please try again.');
+        navigate("/home");
+      } catch {
+        alert("Failed to delete client. Please try again.");
+      } finally {
+        setIsModalOpen(false);
       }
-    }
+    });
+    setIsModalOpen(true);
   };
 
-  const handleDeleteGoal = async (goalId: number) => {
-    if (window.confirm('Are you sure you want to delete this goal?')) {
+  const handleDeleteGoal = (goalId: number) => {
+    setDeleteAction(() => async () => {
       try {
         await api.delete(`/goals/${goalId}`);
         window.location.reload();
       } catch (error) {
-        console.error('Failed to delete goal:', error);
         alert('Failed to delete goal. Please try again.');
       }
-    }
+      finally{
+        setIsModalOpen(false);
+      }
+    });
+    setIsModalOpen(true);
   };
 
   const startTime = session ? new Date(session.startTime) : null;
@@ -128,6 +136,11 @@ export const SessionView: React.FC = () => {
 
   return (
     <View padding={20}>
+      <DeleteModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={deleteAction}
+      />
       <XStack
         alignItems="center"
         justifyContent="space-between"
@@ -139,9 +152,9 @@ export const SessionView: React.FC = () => {
         </SizableText>
         <Button
           size={30}
-          style={{background: '#282e67'}}
+          style={{ background: "#282e67" }}
           borderRadius={4}
-          onPress={() => navigate('/home')}
+          onPress={() => navigate("/home")}
         >
           <Text color="white">Back</Text>
         </Button>
@@ -164,13 +177,13 @@ export const SessionView: React.FC = () => {
                   startTime.toISOString(),
                   endTime.toISOString()
                 )
-              : ''}
+              : ""}
           </SizableText>
           <SizableText size={20} color="black">
             {durationMinutes} minutes
           </SizableText>
 
-          <Text style={{color: 'black', marginTop: 10}}>
+          <Text style={{ color: "black", marginTop: 10 }}>
             Clients in this session:
           </Text>
           <YStack gap={10}>
@@ -213,7 +226,7 @@ export const SessionView: React.FC = () => {
                         <YStack alignItems="flex-end">
                           <Button
                             size={30}
-                            style={{background: '#e0e0e0'}}
+                            style={{ background: "#e0e0e0" }}
                             borderRadius={4}
                             onPress={() => navigate(`/goals/${goal.id}`)}
                           >
@@ -223,7 +236,7 @@ export const SessionView: React.FC = () => {
                         <YStack alignItems="flex-end">
                           <Button
                             size={30}
-                            style={{background: '#e0e0e0'}}
+                            style={{ background: "#e0e0e0" }}
                             borderRadius={4}
                             onPress={() => handleDeleteGoal(goal.id)}
                           >
@@ -238,7 +251,7 @@ export const SessionView: React.FC = () => {
                   <Button
                     size={30}
                     style={{
-                      background: '#282e67',
+                      background: "#282e67",
                       bottom: 10,
                       right: 10,
                     }}
@@ -255,7 +268,7 @@ export const SessionView: React.FC = () => {
           <XStack gap={10} marginTop={20}>
             <Button
               size={30}
-              style={{background: '#282e67'}}
+              style={{ background: "#282e67" }}
               borderRadius={4}
               onPress={() => navigate(`/sessions/${session.id}`)}
             >
@@ -263,7 +276,7 @@ export const SessionView: React.FC = () => {
             </Button>
             <Button
               size={30}
-              style={{background: '#b32d00'}}
+              style={{ background: "#b32d00" }}
               borderRadius={4}
               onPress={() => handleDeleteSession(session.id)}
             >

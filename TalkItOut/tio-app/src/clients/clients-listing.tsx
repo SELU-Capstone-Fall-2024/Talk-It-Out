@@ -15,9 +15,12 @@ import {
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../components/format-date";
 import { useState } from "react";
+import DeleteModal from "../components/delete-modal";
 
 const Clients: React.FC = () => {
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteAction, setDeleteAction] = useState<() => void>(() => {});
 
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -36,20 +39,27 @@ const Clients: React.FC = () => {
 
   const displayedClients = filteredClients ?? clients?.data;
 
-  const handleDeleteClient = async (clientId: number) => {
-    if (window.confirm("Are you sure you want to delete this client?")) {
+  const handleDeleteClient = (id: string) => {
+    setDeleteAction(() => async () => {
       try {
-        await api.delete(`/clients/${clientId}`);
+        await api.delete(`/clients/${id}`);
         window.location.reload();
-      } catch (error) {
-        console.error("Failed to delete client:", error);
+      } catch {
         alert("Failed to delete client. Please try again.");
+      } finally {
+        setIsModalOpen(false);
       }
-    }
+    });
+    setIsModalOpen(true);
   };
 
   return (
     <View padding={20}>
+      <DeleteModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={deleteAction}
+      />
       <SizableText size={44} color="black" textAlign="left">
         Clients
       </SizableText>
@@ -159,7 +169,7 @@ const Clients: React.FC = () => {
                       size={25}
                       style={{ background: "#b32d00" }}
                       borderRadius={4}
-                      onPress={() => handleDeleteClient(client.id)}
+                      onPress={() => handleDeleteClient(client.id.toString())}
                     >
                       <Text style={{ color: "white", fontSize: 16 }}>
                         Delete
