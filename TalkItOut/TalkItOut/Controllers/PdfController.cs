@@ -30,7 +30,9 @@ public class PDFController : ControllerBase
     [ProducesResponseType(200, Type = typeof(FileContentResult))]
     public IActionResult GeneratePdf(int id, [FromQuery] String startDate, String endDate)
     {
+        // use any method to create a document, e.g.: injected service
         var document = CreateDocument(id, startDate, endDate);
+        // generate PDF file and return it as a response
         var pdf = document.GeneratePdf();
         Response.Headers.Add("Content-Disposition", "attachment; filename=progress-report.pdf");
         Response.ContentType = "application/octet-stream";
@@ -58,7 +60,7 @@ public class PDFController : ControllerBase
                 page.DefaultTextStyle(x => x.FontSize(18));
 
                 page.Header()
-                    .Text("Client Progress Report")
+                    .Text("Patient Progress Report")
                     .SemiBold().FontSize(36).FontColor(Colors.Indigo.Darken2);
 
                 page.Content()
@@ -69,8 +71,6 @@ public class PDFController : ControllerBase
 
                         x.Item().Text("Client name: "+client.FirstName+" "+client.LastName);
                         x.Spacing(10);
-                        x.Item().Text(parsedStartDate+" "+ parsedEndDate);
-                        x.Spacing(10);
                         x.Item().Text("Session time total: "+ totalTime.ToString());
                         x.Spacing(10);
                         x.Item().Text("Total amount of Sessions: "+ length.ToString());
@@ -79,12 +79,14 @@ public class PDFController : ControllerBase
                             x.Spacing(10);
                             x.Item().Text("Goal "+ count +" : "+ info.Information);
                         }
+
+                        count = 0;
                         foreach(var session in sessions){
                             if (!session.Notes.IsNullOrEmpty())
                             {
                                 count = count + 1;
                                 x.Spacing(10);
-                                x.Item().Text("Note (" +session.StartTime + ") : " + session.Notes);
+                                x.Item().Text("Note " + count + " : " + session.Notes);
                             }
                         }
                     });
