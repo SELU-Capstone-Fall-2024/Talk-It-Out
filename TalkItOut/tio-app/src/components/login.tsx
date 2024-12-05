@@ -6,8 +6,9 @@ import {YStack, Input, Button, Text, SizableText, Form, Spinner} from 'tamagui';
 import type {
   NativeSyntheticEvent,
   TextInputChangeEventData,
-} from 'react-native';
-import {useAuth} from '../auth/auth-context';
+} from "react-native";
+import { useAuth } from "../auth/auth-context";
+import { Link } from "react-router-dom";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();

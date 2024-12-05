@@ -17,6 +17,7 @@ const Header: React.FC = () => {
         <h1 className="title">Talk It Out</h1>
         {user && (
           <div className="user-info">
+            {/* <span>Welcome, {user.username}</span> */}
             <button className="settings-btn">
               <FaCog className="settings-icon" size={30} color="#282e67" />
             </button>

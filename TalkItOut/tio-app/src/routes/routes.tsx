@@ -21,6 +21,7 @@ export const BrowserRoutes: React.FC = () => {
         <Route path="/*">
           <Route index element={<Login />} />
           <Route path="home" element={<TodaySessions />} />
+          {/* <Route path="calendar/*" element={<MyCalendar />} /> */}
           <Route path="sessions/*" element={<SessionRoutes />} />
           <Route path="month" element={<CalendarMonth />} />
           <Route path="clients/*" element={<ClientRoutes />} />

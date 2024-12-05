@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Button,
@@ -14,7 +14,7 @@ import api from "../api/api";
 import { formatDate } from "../components/format-date";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import DeleteModal from "../components/delete-modal";
+import DatePicker from "react-datepicker";
 
 const ClientView = () => {
   const { id } = useParams<{ id: string }>();
@@ -26,8 +26,10 @@ const ClientView = () => {
   const [client, setClient] = useState<ClientGetDto | null>(null);
   const [allGoals, setAllGoals] = useState<GoalGetDto[] | null>(null);
   const [filteredGoals, setFilteredGoals] = useState<GoalGetDto[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [deleteAction, setDeleteAction] = useState<() => void>(() => {});
+  const [formData, setFormData] = useState({
+    startTime: '',
+    endTime: '',
+  });
 
   useEffect(() => {
     const fetchClient = async () => {
@@ -72,42 +74,49 @@ const ClientView = () => {
     }
   }, [allGoals, id]);
 
-  const handleDeleteGoal = (goalId: number) => {
-    setDeleteAction(() => async () => {
+  const handleDeleteGoal = async (goalId: number) => {
+    if (window.confirm("Are you sure you want to delete this goal?")) {
       try {
         await api.delete(`/goals/${goalId}`);
         setFilteredGoals((prev) => prev.filter((goal) => goal.id !== goalId));
       } catch {
         alert("Failed to delete goal. Please try again.");
-      } finally {
-        setIsModalOpen(false);
       }
-    });
-    setIsModalOpen(true);
+    }
   };
 
-  const handleDeleteClient = () => {
-    setDeleteAction(() => async () => {
+  const handleDownload = async () => {
+    if (window.confirm("Would you like to download this progress report?")) {
+      try {
+        window.open(`https://localhost:5001/pdfs/${id}?startDate=${encodeURIComponent(formData.startTime)}&endDate=${encodeURIComponent(formData.endTime)}`);
+      } catch {
+        alert("Failed to download report. Please try again.");
+      }
+    }
+  };
+
+  const handleChange =
+    (field: keyof typeof formData) => (value: string | number) => {
+      setFormData((prevData) => ({
+        ...prevData,
+        [field]: value,
+      }));
+    };
+
+
+  const handleDeleteClient = async () => {
+    if (window.confirm("Are you sure you want to delete this client?")) {
       try {
         await api.delete(`/clients/${id}`);
         navigate("/clients/listing");
       } catch {
         alert("Failed to delete client. Please try again.");
-      } finally {
-        setIsModalOpen(false);
       }
-    });
-    setIsModalOpen(true);
+    }
   };
 
   return (
     <View padding={20}>
-      <DeleteModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onConfirm={deleteAction}
-      />
-
       <XStack
         alignItems="center"
         justifyContent="space-between"
@@ -190,7 +199,7 @@ const ClientView = () => {
                 <XStack justifyContent="flex-end" gap={10} marginTop={10}>
                   <Button
                     size={30}
-                    style={{ background: "#f0f0f0" }}
+                    style={{background: "#f0f0f0"}}
                     onPress={() => navigate(`/goals/${goal.id}`)}
                   >
                     <Text color="black">...</Text>
