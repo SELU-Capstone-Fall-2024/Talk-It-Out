@@ -1,4 +1,10 @@
-import React, {createContext, useContext, useState, ReactNode} from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react';
 import api from '../api/api';
 import {UserLoginDto, Response} from '../types';
 import {useAsyncFn} from 'react-use';
@@ -19,10 +25,19 @@ const AuthContext = createContext<AuthContext | undefined>(undefined);
 export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
   const [user, setUser] = useState<User | null>(null);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
   const [loginState, login] = useAsyncFn(async (userData: UserLoginDto) => {
     const response = await api.post<Response>('/users/authenticate', userData);
     if (response.status === 200) {
-      setUser(userData);
+      const user: User = {username: userData.userName};
+      setUser(user);
+      localStorage.setItem('user', JSON.stringify(user));
     }
     return response.data;
   }, []);
@@ -31,13 +46,14 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({children}) => {
     try {
       await api.post('/users/logout');
       setUser(null);
+      localStorage.removeItem('user');
     } catch (error) {
       console.error('An error occurred during logout:', error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{user, loginState, login, logout}}>
+    <AuthContext.Provider value={{user, loginState, login: login, logout}}>
       {children}
     </AuthContext.Provider>
   );

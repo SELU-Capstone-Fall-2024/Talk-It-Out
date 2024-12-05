@@ -18,7 +18,7 @@ import DeleteModal from "../components/delete-modal";
 import DatePicker from "react-datepicker";
 
 const ClientView = () => {
-  const { id } = useParams<{ id: string }>();
+  const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
   const [loadingClient, setLoadingClient] = useState(false);
   const [loadingGoals, setLoadingGoals] = useState(false);
@@ -44,7 +44,7 @@ const ClientView = () => {
         );
         setClient(response.data.data);
       } catch {
-        setErrorClient("Failed to load client data. Please try again.");
+        setErrorClient('Failed to load client data. Please try again.');
       } finally {
         setLoadingClient(false);
       }
@@ -60,7 +60,7 @@ const ClientView = () => {
         const response = await api.get<Response<GoalGetDto[]>>(`/goals`);
         setAllGoals(response.data.data);
       } catch {
-        setErrorGoals("Failed to load goals data. Please try again.");
+        setErrorGoals('Failed to load goals data. Please try again.');
       } finally {
         setLoadingGoals(false);
       }
@@ -78,23 +78,30 @@ const ClientView = () => {
     }
   }, [allGoals, id]);
 
-  const handleDeleteGoal = async (goalId: number) => {
-    if (window.confirm("Are you sure you want to delete this goal?")) {
+  const handleDeleteGoal = (goalId: number) => {
+    setDeleteAction(() => async () => {
       try {
         await api.delete(`/goals/${goalId}`);
         setFilteredGoals((prev) => prev.filter((goal) => goal.id !== goalId));
       } catch {
-        alert("Failed to delete goal. Please try again.");
+        alert('Failed to delete goal. Please try again.');
+      } finally {
+        setIsModalOpen(false);
       }
-    }
+    });
+    setIsModalOpen(true);
   };
 
   const handleDownload = async () => {
-    if (window.confirm("Would you like to download this progress report?")) {
+    if (window.confirm('Would you like to download this progress report?')) {
       try {
-        window.open(`https://localhost:5001/pdfs/${id}?startDate=${encodeURIComponent(formData.startTime)}&endDate=${encodeURIComponent(formData.endTime)}`);
+        window.open(
+          `https://localhost:5001/pdfs/${id}?startDate=${encodeURIComponent(
+            formData.startTime
+          )}&endDate=${encodeURIComponent(formData.endTime)}`
+        );
       } catch {
-        alert("Failed to download report. Please try again.");
+        alert('Failed to download report. Please try again.');
       }
     }
   };
@@ -107,12 +114,11 @@ const ClientView = () => {
       }));
     };
 
-
   const handleDeleteClient = async () => {
-    if (window.confirm("Are you sure you want to delete this client?")) {
+    if (window.confirm('Are you sure you want to delete this client?')) {
       try {
         await api.delete(`/clients/${id}`);
-        navigate("/clients/listing");
+        navigate('/clients/listing');
       } catch {
         alert("Failed to delete client. Please try again.");
       } finally {
@@ -140,8 +146,8 @@ const ClientView = () => {
         </SizableText>
         <Button
           size={30}
-          style={{ background: "#282e67" }}
-          onPress={() => navigate("/clients/listing")}
+          style={{background: '#282e67'}}
+          onPress={() => navigate('/clients/listing')}
         >
           <Text color="white">Back</Text>
         </Button>
@@ -183,7 +189,7 @@ const ClientView = () => {
           </SizableText>
           <Button
             size={30}
-            style={{ background: "#282e67" }}
+            style={{background: '#282e67'}}
             onPress={() => navigate(`/goals/create/${id}`)}
           >
             <Text color="white">Add a Goal</Text>
@@ -219,7 +225,7 @@ const ClientView = () => {
                   </Button>
                   <Button
                     size={30}
-                    style={{ background: "#f0f0f0" }}
+                    style={{background: '#f0f0f0'}}
                     onPress={() => handleDeleteGoal(goal.id)}
                   >
                     <FontAwesomeIcon color="#b32d00" icon={faTrash} />
@@ -238,21 +244,21 @@ const ClientView = () => {
       <XStack gap={10}>
         <Button
           size={30}
-          style={{ background: "#282e67" }}
+          style={{background: '#282e67'}}
           onPress={() => navigate(`/clients/${id}`)}
         >
           <Text color="white">Edit Client</Text>
         </Button>
         <Button
           size={30}
-          style={{ background: "#b32d00" }}
+          style={{background: '#b32d00'}}
           onPress={handleDeleteClient}
         >
           <Text color="white">Delete Client</Text>
         </Button>
         <Button
           size={30}
-          style={{ background: "#282e67" }}
+          style={{background: '#282e67'}}
           onPress={handleDownload}
         >
           <Text color="white">Dowload Progress Report</Text>
