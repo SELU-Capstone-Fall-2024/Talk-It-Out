@@ -156,7 +156,7 @@ export const SessionView: React.FC = () => {
                       <SessionGoalModal
                         session={session}
                         client={client}
-                        goalId={goal.id}
+                        goal={goal}
                         isOpen={isTrackingSessionModalOpen}
                         onClose={() => setIsTrackingSessionModalOpen(false)}
                       />

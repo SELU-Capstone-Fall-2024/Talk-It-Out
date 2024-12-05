@@ -9,14 +9,19 @@ import {
   Form,
   Input,
 } from 'tamagui';
-import {ClientGetDto, SessionGetDto, SessionGoalCreateDto} from '../types';
+import {
+  ClientGetDto,
+  GoalGetDto,
+  SessionGetDto,
+  SessionGoalCreateDto,
+} from '../types';
 import {useState} from 'react';
 import api from '../api/api';
 
 type SessionGoalModalProps = {
   session: SessionGetDto;
   client: ClientGetDto;
-  goalId: number;
+  goal: GoalGetDto;
   isOpen: boolean;
   onClose: () => void;
 };
@@ -24,7 +29,7 @@ type SessionGoalModalProps = {
 export const SessionGoalModal: React.FC<SessionGoalModalProps> = ({
   session,
   client,
-  goalId,
+  goal,
   isOpen,
   onClose,
 }) => {
@@ -32,7 +37,7 @@ export const SessionGoalModal: React.FC<SessionGoalModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<SessionGoalCreateDto>({
     sessionId: session.id,
-    goalId: goalId,
+    goalId: goal.id,
     correctTrials: 0,
     totalTrials: 0,
     duration: 0,
@@ -96,10 +101,10 @@ export const SessionGoalModal: React.FC<SessionGoalModalProps> = ({
                 <SizableText size={20} fontWeight="bold" color="black">
                   {client.firstName} {client.lastName}
                 </SizableText>
-                <Text fontSize={16} color="gray">
-                  Are you sure you want to delete this? This action cannot be
-                  undone.
-                </Text>
+                <SizableText size={16} color="black">
+                  {goal.information}
+                </SizableText>
+
                 <XStack gap={5}>
                   <YStack gap={10}>
                     <SizableText size={18} color={'black'}>
