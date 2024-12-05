@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Button,
@@ -14,6 +14,7 @@ import api from "../api/api";
 import { formatDate } from "../components/format-date";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import DeleteModal from "../components/delete-modal";
 import DatePicker from "react-datepicker";
 
 const ClientView = () => {
@@ -26,9 +27,12 @@ const ClientView = () => {
   const [client, setClient] = useState<ClientGetDto | null>(null);
   const [allGoals, setAllGoals] = useState<GoalGetDto[] | null>(null);
   const [filteredGoals, setFilteredGoals] = useState<GoalGetDto[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteAction, setDeleteAction] = useState<() => void>(() => {});
   const [formData, setFormData] = useState({
     startTime: '',
     endTime: '',
+    notes: '',
   });
 
   useEffect(() => {
@@ -111,12 +115,21 @@ const ClientView = () => {
         navigate("/clients/listing");
       } catch {
         alert("Failed to delete client. Please try again.");
+      } finally {
+        setIsModalOpen(false);
       }
-    }
+    });
+    setIsModalOpen(true);
   };
 
   return (
     <View padding={20}>
+      <DeleteModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={deleteAction}
+      />
+
       <XStack
         alignItems="center"
         justifyContent="space-between"
@@ -199,7 +212,7 @@ const ClientView = () => {
                 <XStack justifyContent="flex-end" gap={10} marginTop={10}>
                   <Button
                     size={30}
-                    style={{background: "#f0f0f0"}}
+                    style={{ background: "#f0f0f0" }}
                     onPress={() => navigate(`/goals/${goal.id}`)}
                   >
                     <Text color="black">...</Text>
@@ -254,9 +267,9 @@ const ClientView = () => {
               showTimeSelect
               timeFormat="hh:mm aa"
               timeIntervals={15}
-              timeCaption="Time"
+              timeCaption="Date"
               dateFormat="MM/dd/yyyy h:mm aa"
-              placeholderText="Select Start Time"
+              placeholderText="Select Start Date"
             />
             <DatePicker
               selected={
@@ -268,9 +281,9 @@ const ClientView = () => {
               showTimeSelect
               timeFormat="hh:mm aa"
               timeIntervals={15}
-              timeCaption="Time"
+              timeCaption="Date"
               dateFormat="MM/dd/yyyy h:mm aa"
-              placeholderText="Select Start Time"
+              placeholderText="Select Start Date"
             />
       </XStack>
     </View>
