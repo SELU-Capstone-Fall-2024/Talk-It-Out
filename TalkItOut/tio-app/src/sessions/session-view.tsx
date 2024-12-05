@@ -161,17 +161,18 @@ export const SessionView: React.FC = () => {
                         onClose={() => setIsTrackingSessionModalOpen(false)}
                       />
                       <Text color="black">{goal.information}</Text>
-
-                      <Button
-                        size={15}
-                        style={{
-                          background: '#282e67',
-                        }}
-                        borderRadius={4}
-                        onPress={() => setIsTrackingSessionModalOpen(true)}
-                      >
-                        <Text color="white">Track Session</Text>
-                      </Button>
+                      <XStack justifyContent="center" gap={10}>
+                        <Button
+                          size={20}
+                          style={{
+                            background: '#282e67',
+                          }}
+                          borderRadius={4}
+                          onPress={() => setIsTrackingSessionModalOpen(true)}
+                        >
+                          <Text color="white">Track Session</Text>
+                        </Button>
+                      </XStack>
                       {session.sessionGoalGetDtos.find(
                         (x) => x.goalId === goal.id
                       ) && (
