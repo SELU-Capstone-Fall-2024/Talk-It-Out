@@ -204,7 +204,7 @@ namespace TalkItOut.Controllers;
         {
             var response = new Response();
 
-            var session = await _dataContext.Set<Session>().FirstOrDefaultAsync(x => x.Id == sessionGoalCreateDto.SessionId);
+            var session = await _dataContext.Set<Session>().Include(x => x.SessionGoalsList).FirstOrDefaultAsync(x => x.Id == sessionGoalCreateDto.SessionId);
             var goal = await _dataContext.Set<Goal>().FirstOrDefaultAsync(x => x.Id == sessionGoalCreateDto.GoalId);
 
             if (session == null)
@@ -215,6 +215,22 @@ namespace TalkItOut.Controllers;
             if (goal == null)
             {
                 response.AddError("Goal", "Invalid Goal");
+            }
+
+            if (response.HasErrors)
+            {
+                return BadRequest(response);
+            }
+            
+            if (sessionGoalCreateDto.CorrectTrials > sessionGoalCreateDto.TotalTrials)
+            {
+                response.AddError("Trials", "Correct Trials cannot exceed Total.");
+            }
+
+            if (session.SessionGoalsList.Sum(x => x.Duration) + sessionGoalCreateDto.Duration >
+                session.EndTime.Subtract(session.StartTime).TotalMinutes)
+            {
+                response.AddError("Duration", "Duration of goals exceeds total session duration.");
             }
 
             if (response.HasErrors)

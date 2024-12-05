@@ -98,6 +98,11 @@ export const SessionGoalModal: React.FC<SessionGoalModalProps> = ({
           >
             <Form onSubmit={handleSubmit} gap={10}>
               <YStack alignItems="center" gap={15}>
+                {error && (
+                  <SizableText size={20} fontWeight="bold" color="black">
+                    {error}
+                  </SizableText>
+                )}
                 <SizableText size={20} fontWeight="bold" color="black">
                   {client.firstName} {client.lastName}
                 </SizableText>
