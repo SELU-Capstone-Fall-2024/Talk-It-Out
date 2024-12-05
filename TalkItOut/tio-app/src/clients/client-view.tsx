@@ -14,6 +14,7 @@ import api from "../api/api";
 import { formatDate } from "../components/format-date";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import DatePicker from "react-datepicker";
 
 const ClientView = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,6 +26,10 @@ const ClientView = () => {
   const [client, setClient] = useState<ClientGetDto | null>(null);
   const [allGoals, setAllGoals] = useState<GoalGetDto[] | null>(null);
   const [filteredGoals, setFilteredGoals] = useState<GoalGetDto[]>([]);
+  const [formData, setFormData] = useState({
+    startTime: '',
+    endTime: '',
+  });
 
   useEffect(() => {
     const fetchClient = async () => {
@@ -79,6 +84,25 @@ const ClientView = () => {
       }
     }
   };
+
+  const handleDownload = async () => {
+    if (window.confirm("Would you like to download this progress report?")) {
+      try {
+        window.open(`https://localhost:5001/pdfs/${id}?startDate=${encodeURIComponent(formData.startTime)}&endDate=${encodeURIComponent(formData.endTime)}`);
+      } catch {
+        alert("Failed to download report. Please try again.");
+      }
+    }
+  };
+
+  const handleChange =
+    (field: keyof typeof formData) => (value: string | number) => {
+      setFormData((prevData) => ({
+        ...prevData,
+        [field]: value,
+      }));
+    };
+
 
   const handleDeleteClient = async () => {
     if (window.confirm("Are you sure you want to delete this client?")) {
@@ -213,6 +237,41 @@ const ClientView = () => {
         >
           <Text color="white">Delete Client</Text>
         </Button>
+        <Button
+          size={30}
+          style={{ background: "#282e67" }}
+          onPress={handleDownload}
+        >
+          <Text color="white">Dowload Progress Report</Text>
+        </Button>
+        <DatePicker
+              selected={
+                formData.startTime ? new Date(formData.startTime) : null
+              }
+              onChange={(date) =>
+                handleChange('startTime')(date?.toISOString() || '')
+              }
+              showTimeSelect
+              timeFormat="hh:mm aa"
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="MM/dd/yyyy h:mm aa"
+              placeholderText="Select Start Time"
+            />
+            <DatePicker
+              selected={
+                formData.endTime ? new Date(formData.endTime) : null
+              }
+              onChange={(date) =>
+                handleChange('endTime')(date?.toISOString() || '')
+              }
+              showTimeSelect
+              timeFormat="hh:mm aa"
+              timeIntervals={15}
+              timeCaption="Time"
+              dateFormat="MM/dd/yyyy h:mm aa"
+              placeholderText="Select Start Time"
+            />
       </XStack>
     </View>
   );
