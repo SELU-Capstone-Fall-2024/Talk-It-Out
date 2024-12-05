@@ -44,7 +44,7 @@ public class PDFController : ControllerBase
         var client = _dataContext.Set<Client>().Include(x=>x.Sessions).FirstOrDefault(x => x.Id == id);
         var sessions = _dataContext.Set<Session>()
             .Where(x => x.StartTime > parsedStartDate && x.EndTime < parsedEndDate && (x.ClientId == id || x.GroupId == client.GroupId)).ToList();
-        var totalTime = sessions.Sum(x => x.EndTime.Subtract(x.StartTime).Minutes);
+        var totalTime = sessions.Sum(x => x.EndTime.Subtract(x.StartTime).TotalMinutes);
         var length = sessions.Count();
         var goal = _dataContext.Set<Goal>().Where(x=>x.ClientId == id).ToList();
         var count = 0;
@@ -67,24 +67,24 @@ public class PDFController : ControllerBase
                     {
                         x.Spacing(20);
 
-                        x.Item().Text("Client name: "+client.FirstName+" "+client.LastName);
+                        x.Item().Text("Client Name: " + client.FirstName + " " + client.LastName);
                         x.Spacing(10);
-                        x.Item().Text(parsedStartDate+" "+ parsedEndDate);
+                        x.Item().Text(parsedStartDate.Date.ToString("MM/dd/yyyy") + " - " + parsedEndDate.Date.ToString("MM/dd/yyyy"));
                         x.Spacing(10);
-                        x.Item().Text("Session time total: "+ totalTime.ToString());
+                        x.Item().Text("Total Minutes: " + totalTime.ToString() + " minutes");
                         x.Spacing(10);
-                        x.Item().Text("Total amount of Sessions: "+ length.ToString());
+                        x.Item().Text("Total Sessions: " + length.ToString());
                         foreach(var info in goal){
                             count = count + 1; 
                             x.Spacing(10);
-                            x.Item().Text("Goal "+ count +" : "+ info.Information);
+                            x.Item().Text("Goal " + count + " : " + info.Information);
                         }
                         foreach(var session in sessions){
                             if (!session.Notes.IsNullOrEmpty())
                             {
                                 count = count + 1;
                                 x.Spacing(10);
-                                x.Item().Text("Note (" +session.StartTime + ") : " + session.Notes);
+                                x.Item().Text("Note (" +session.StartTime.Date.ToString("MM/dd/yyyy") + ") : " + session.Notes);
                             }
                         }
                     });
