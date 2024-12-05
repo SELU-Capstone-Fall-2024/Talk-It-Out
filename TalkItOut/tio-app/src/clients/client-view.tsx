@@ -283,7 +283,7 @@ const ClientView = () => {
               timeIntervals={15}
               timeCaption="Date"
               dateFormat="MM/dd/yyyy h:mm aa"
-              placeholderText="Select Start Date"
+              placeholderText="Select End Date"
             />
       </XStack>
     </View>
