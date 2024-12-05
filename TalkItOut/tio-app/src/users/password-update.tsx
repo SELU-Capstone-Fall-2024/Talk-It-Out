@@ -1,17 +1,17 @@
-import type React from "react";
-import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import api from "../api/api";
-import { Form, Input, SizableText, YStack, Text, Button, View } from "tamagui";
-import { TouchableOpacity } from "react-native";
-import { FiEye, FiEyeOff } from "react-icons/fi";
+import type React from 'react';
+import {useState} from 'react';
+import {useParams, useNavigate} from 'react-router-dom';
+import api from '../api/api';
+import {Form, Input, SizableText, YStack, Text, Button, View} from 'tamagui';
+import {TouchableOpacity} from 'react-native';
+import {FiEye, FiEyeOff} from 'react-icons/fi';
 
 const PasswordUpdate: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
 
-  const [currentPassword, setCurrentPassword] = useState<string>("");
-  const [newPassword, setNewPassword] = useState<string>("");
+  const [currentPassword, setCurrentPassword] = useState<string>('');
+  const [newPassword, setNewPassword] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isCurrentPasswordVisible, setCurrentPasswordVisible] = useState(false);
@@ -34,12 +34,12 @@ const PasswordUpdate: React.FC = () => {
       });
 
       if (response.status === 200) {
-        navigate("/users/listing");
+        navigate('/users/listing');
       } else {
-        setError("Failed to update password. Please try again.");
+        setError('Failed to update password. Please try again.');
       }
     } catch (err) {
-      setError("An error occurred while updating the password.");
+      setError('An error occurred while updating the password.');
     } finally {
       setLoading(false);
     }
@@ -51,7 +51,6 @@ const PasswordUpdate: React.FC = () => {
       justifyContent="center"
       alignItems="center"
       padding={20}
-      background="$darkBackground"
       minHeight="100vh"
       width="100vw"
     >
@@ -95,8 +94,8 @@ const PasswordUpdate: React.FC = () => {
                 onPress={toggleCurrentPasswordVisibility}
                 style={{
                   marginTop: 10,
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                 }}
               >
                 {isCurrentPasswordVisible ? (
@@ -104,8 +103,8 @@ const PasswordUpdate: React.FC = () => {
                 ) : (
                   <FiEye color="#e6f2ff" size={20} />
                 )}
-                <Text color="#e6f2ff" style={{ marginLeft: 5 }}>
-                  {isCurrentPasswordVisible ? "Hide" : "Show"}
+                <Text color="#e6f2ff" style={{marginLeft: 5}}>
+                  {isCurrentPasswordVisible ? 'Hide' : 'Show'}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -131,8 +130,8 @@ const PasswordUpdate: React.FC = () => {
                 onPress={toggleNewPasswordVisibility}
                 style={{
                   marginTop: 10,
-                  flexDirection: "row",
-                  alignItems: "center",
+                  flexDirection: 'row',
+                  alignItems: 'center',
                 }}
               >
                 {isNewPasswordVisible ? (
@@ -140,8 +139,8 @@ const PasswordUpdate: React.FC = () => {
                 ) : (
                   <FiEye color="#e6f2ff" size={20} />
                 )}
-                <Text color="#e6f2ff" style={{ marginLeft: 5 }}>
-                  {isNewPasswordVisible ? "Hide" : "Show"}
+                <Text color="#e6f2ff" style={{marginLeft: 5}}>
+                  {isNewPasswordVisible ? 'Hide' : 'Show'}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -155,13 +154,13 @@ const PasswordUpdate: React.FC = () => {
             padding={12}
             disabled={loading}
             background="#e6f2ff"
-            style={{ overflow: "hidden" }}
-            theme={loading ? "secondary" : "primary"}
+            style={{overflow: 'hidden'}}
+            theme={loading ? 'secondary' : 'primary'}
             onPress={handleSubmit}
             borderRadius={4}
           >
             <Text fontSize={14}>
-              {loading ? "Updating..." : "Update Password"}
+              {loading ? 'Updating...' : 'Update Password'}
             </Text>
           </Button>
         </Form>

@@ -1,26 +1,26 @@
-import type React from "react";
-import { useEffect, useState } from "react";
-import api from "../api/api";
+import type React from 'react';
+import {useEffect, useState} from 'react';
+import api from '../api/api';
 import type {
   ClientGetDto,
   GroupCreateDto,
   GroupGetDto,
   OptionType,
   Response,
-} from "../types";
-import { useNavigate, useParams } from "react-router-dom";
-import { YStack, SizableText, Button, Input, Text, Form } from "tamagui";
-import ReactSelect from "react-select";
-import { useAsync } from "react-use";
-import Option from "../components/multi-select";
+} from '../types';
+import {useNavigate, useParams} from 'react-router-dom';
+import {YStack, SizableText, Button, Input, Text, Form} from 'tamagui';
+import ReactSelect from 'react-select';
+import {useAsync} from 'react-use';
+import Option from '../components/multi-select';
 
 const GroupUpdate: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
 
   const [groupData, setGroupData] = useState<GroupCreateDto>({
     userId: 1,
-    groupName: "",
+    groupName: '',
     clientIds: [],
   });
 
@@ -36,18 +36,17 @@ const GroupUpdate: React.FC = () => {
       try {
         const response = await api.get<GroupGetDto>(`/groups/${id}`);
         if (response.status === 200) {
-          const { userId, groupName, clientIds } = response.data;
+          const {userId, groupName, clientIds} = response.data;
           setGroupData({
             userId: userId,
             groupName: groupName,
             clientIds: clientIds,
           });
-          console.log(response);
         } else {
-          setError("Failed to load group.");
+          setError('Failed to load group.');
         }
       } catch (err) {
-        setError("An error occurred while loading the group.");
+        setError('An error occurred while loading the group.');
       } finally {
         setLoading(false);
       }
@@ -55,8 +54,8 @@ const GroupUpdate: React.FC = () => {
     fetchGroup();
   }, [id]);
 
-  const { value: clients } = useAsync(async () => {
-    const response = await api.get<Response<ClientGetDto[]>>("/clients");
+  const {value: clients} = useAsync(async () => {
+    const response = await api.get<Response<ClientGetDto[]>>('/clients');
     return response.data;
   });
 
@@ -89,14 +88,13 @@ const GroupUpdate: React.FC = () => {
     try {
       const response = await api.put(`/groups/${id}`, groupData);
       if (response.status === 200) {
-        navigate("/groups/listing");
+        navigate('/groups/listing');
       } else {
-        console.log(response);
         setError("Failed to update group. Please try again.");
       }
     } catch (err) {
       console.error(err);
-      setError("An error occurred while updating the group.");
+      setError('An error occurred while updating the group.');
     } finally {
       setLoading(false);
     }
@@ -108,7 +106,6 @@ const GroupUpdate: React.FC = () => {
       justifyContent="center"
       alignItems="center"
       padding={20}
-      background="$darkBackground"
       minHeight="100vh"
       width="100vw"
     >
@@ -141,7 +138,7 @@ const GroupUpdate: React.FC = () => {
               flex={1}
               padding={4}
               value={groupData.groupName}
-              onChangeText={(text) => handleChange("groupName")(text)}
+              onChangeText={(text) => handleChange('groupName')(text)}
               placeholder="Group Name"
               placeholderTextColor="gray"
               color="black"
@@ -174,13 +171,13 @@ const GroupUpdate: React.FC = () => {
             size={30}
             padding={12}
             disabled={loading}
-            style={{ overflow: "hidden" }}
+            style={{overflow: 'hidden'}}
             onPress={handleSubmit}
             borderRadius={4}
             marginTop={20}
           >
             <Text fontSize={18}>
-              {loading ? "Updating..." : "Update Group"}
+              {loading ? 'Updating...' : 'Update Group'}
             </Text>
           </Button>
         </Form>

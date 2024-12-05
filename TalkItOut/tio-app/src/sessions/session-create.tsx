@@ -1,34 +1,49 @@
-import type React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api/api";
-import type { ClientGetDto, GroupGetDto, Response } from "../types";
-import { YStack, SizableText, Button, Text, Form, Spinner } from "tamagui";
-import ReactSelect from "react-select";
-import { useAsync } from "react-use";
-import DatePicker from "react-datepicker";
+import type React from 'react';
+import {useState} from 'react';
+import {useNavigate} from 'react-router-dom';
+import api from '../api/api';
+import type {
+  ClientGetDto,
+  GroupGetDto,
+  Response,
+  SessionCreateDto,
+} from '../types';
+import {
+  YStack,
+  SizableText,
+  Button,
+  Text,
+  Form,
+  Spinner,
+  XStack,
+  Input,
+} from 'tamagui';
+import ReactSelect from 'react-select';
+import {useAsync} from 'react-use';
+import DatePicker from 'react-datepicker';
 
 const SessionCreate: React.FC = () => {
   const navigate = useNavigate();
 
-  const [sessionData, setSessionData] = useState({
+  const [sessionData, setSessionData] = useState<SessionCreateDto>({
     userId: 1,
-    startTime: "",
-    endTime: "",
+    startTime: '',
+    endTime: '',
     groupId: 0,
     clientId: 0,
+    notes: '',
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { value: clients } = useAsync(async () => {
-    const response = await api.get<Response<ClientGetDto[]>>("/clients");
+  const {value: clients} = useAsync(async () => {
+    const response = await api.get<Response<ClientGetDto[]>>('/clients');
     return response.data;
   });
 
-  const { value: groups } = useAsync(async () => {
-    const response = await api.get<Response<GroupGetDto[]>>("/groups");
+  const {value: groups} = useAsync(async () => {
+    const response = await api.get<Response<GroupGetDto[]>>('/groups');
     return response.data;
   });
 
@@ -52,27 +67,27 @@ const SessionCreate: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!sessionData.startTime || !sessionData.endTime) {
-      setError("Please select both start and end times.");
+      setError('Please select both start and end times.');
       return;
     }
 
     if (sessionData.clientId && sessionData.groupId) {
-      setError("Only select client or group, not both.");
+      setError('Only select client or group, not both.');
     }
 
     setLoading(true);
     try {
       const response = await api.post<Response<typeof sessionData>>(
-        "/sessions",
+        '/sessions',
         sessionData
       );
       if (response.status === 201 && !response.data.hasErrors) {
-        navigate("/week");
+        navigate('/week');
       } else {
-        setError("Failed to create session. Please try again.");
+        setError('Failed to create session. Please try again.');
       }
     } catch (err) {
-      setError("An error occurred while creating the session.");
+      setError('An error occurred while creating the session.');
     } finally {
       setLoading(false);
     }
@@ -82,22 +97,32 @@ const SessionCreate: React.FC = () => {
     <YStack
       flex={1}
       justifyContent="flex-start"
-      alignItems="flex-start"
+      alignItems="center"
       padding={20}
       minHeight="100vh"
       width="100vw"
     >
       <YStack
         width="100%"
-        maxWidth={400}
+        maxWidth={500}
         padding={30}
         borderRadius={15}
-        alignItems="flex-start"
-        justifyContent="center"
+        alignItems="center"
       >
-        <SizableText size={30} marginBottom={20} color="black">
-          Create a New Session
-        </SizableText>
+        <XStack alignItems="center" justifyContent="space-between" width="100%">
+          <SizableText size={30} marginBottom={20} color="black">
+            Create a New Session
+          </SizableText>
+
+          <Button
+            size={25}
+            style={{background: '#282e67'}}
+            borderRadius={4}
+            onPress={() => navigate(`/week`)}
+          >
+            <Text color={'white'}>Back</Text>
+          </Button>
+        </XStack>
 
         {error && (
           <Text color="red" marginBottom={15}>
@@ -115,7 +140,7 @@ const SessionCreate: React.FC = () => {
                 sessionData.startTime ? new Date(sessionData.startTime) : null
               }
               onChange={(date) =>
-                handleChange("startTime")(date?.toISOString() || "")
+                handleChange('startTime')(date?.toISOString() || '')
               }
               showTimeSelect
               timeFormat="hh:mm aa"
@@ -135,7 +160,7 @@ const SessionCreate: React.FC = () => {
                 sessionData.endTime ? new Date(sessionData.endTime) : null
               }
               onChange={(date) =>
-                handleChange("endTime")(date?.toISOString() || "")
+                handleChange('endTime')(date?.toISOString() || '')
               }
               showTimeSelect
               timeFormat="hh:mm aa"
@@ -153,7 +178,7 @@ const SessionCreate: React.FC = () => {
             <ReactSelect
               options={clientOptions}
               onChange={(selectedOption) =>
-                handleChange("clientId")(Number(selectedOption?.value))
+                handleChange('clientId')(Number(selectedOption?.value))
               }
               value={clientOptions?.find(
                 (option) => Number(option.value) === sessionData.clientId
@@ -173,13 +198,30 @@ const SessionCreate: React.FC = () => {
             <ReactSelect
               options={groupOptions}
               onChange={(selectedOption) =>
-                handleChange("groupId")(Number(selectedOption?.value))
+                handleChange('groupId')(Number(selectedOption?.value))
               }
               value={groupOptions?.find(
                 (option) => Number(option.value) === sessionData.groupId
               )}
               placeholder="Select Group"
               isClearable={true}
+            />
+          </YStack>
+
+          <YStack gap={10}>
+            <SizableText size={18} color="black">
+              Notes
+            </SizableText>
+            <Input
+              size={46}
+              flex={1}
+              padding={4}
+              value={sessionData.notes}
+              onChangeText={(text) => handleChange('notes')(text)}
+              placeholder="Notes"
+              placeholderTextColor="gray"
+              color="black"
+              borderRadius={2}
             />
           </YStack>
 
@@ -192,10 +234,10 @@ const SessionCreate: React.FC = () => {
             onPress={handleSubmit}
             borderRadius={4}
             marginTop={20}
-            background="#282e67"
+            style={{background: '#282e67'}}
           >
             <Text fontSize={18} color="white">
-              {loading ? <Spinner /> : "Add Session"}
+              {loading ? <Spinner /> : 'Add Session'}
             </Text>
           </Button>
         </Form>

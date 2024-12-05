@@ -1,19 +1,19 @@
-import type React from "react";
-import { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import api from "../api/api";
-import type { UserGetDto, UserUpdateDto } from "../types";
-import { Form, Input, SizableText, YStack, Text, Button } from "tamagui";
+import type React from 'react';
+import {useEffect, useState} from 'react';
+import {useParams, useNavigate, Link} from 'react-router-dom';
+import api from '../api/api';
+import type {UserGetDto, UserUpdateDto} from '../types';
+import {Form, Input, SizableText, YStack, Text, Button} from 'tamagui';
 
 const UserUpdate: React.FC = () => {
-  const { id } = useParams<{ id: string }>();
+  const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState<UserUpdateDto>({
-    firstName: "",
-    lastName: "",
-    userName: "",
-    email: "",
+    firstName: '',
+    lastName: '',
+    userName: '',
+    email: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -25,13 +25,13 @@ const UserUpdate: React.FC = () => {
       try {
         const response = await api.get<UserGetDto>(`/users/${id}`);
         if (response.status === 200) {
-          const { firstName, lastName, userName, email } = response.data;
-          setUserData({ firstName, lastName, userName, email });
+          const {firstName, lastName, userName, email} = response.data;
+          setUserData({firstName, lastName, userName, email});
         } else {
-          setError("Failed to load user.");
+          setError('Failed to load user.');
         }
       } catch (err) {
-        setError("An error occurred while loading the user.");
+        setError('An error occurred while loading the user.');
       } finally {
         setLoading(false);
       }
@@ -57,12 +57,12 @@ const UserUpdate: React.FC = () => {
 
       const response = await api.put(`/users/${id}`, updateData);
       if (response.status === 200) {
-        navigate("/users/listing");
+        navigate('/users/listing');
       } else {
-        setError("Failed to update user. Please try again.");
+        setError('Failed to update user. Please try again.');
       }
     } catch (err) {
-      setError("An error occurred while updating the user.");
+      setError('An error occurred while updating the user.');
     } finally {
       setLoading(false);
     }
@@ -74,7 +74,6 @@ const UserUpdate: React.FC = () => {
       justifyContent="center"
       alignItems="center"
       padding={20}
-      background="$darkBackground"
       minHeight="100vh"
       width="100vw"
     >
@@ -99,12 +98,12 @@ const UserUpdate: React.FC = () => {
 
         <Form onSubmit={handleSubmit} gap={20} width="100%">
           <YStack gap={10}>
-            <SizableText size={18} color={"#e6f2ff"}>
+            <SizableText size={18} color={'#e6f2ff'}>
               First Name
             </SizableText>
             <Input
               value={userData.firstName}
-              onChangeText={(text) => handleChange("firstName")(text)}
+              onChangeText={(text) => handleChange('firstName')(text)}
               placeholder="First Name"
               size={46}
               flex={1}
@@ -115,12 +114,12 @@ const UserUpdate: React.FC = () => {
           </YStack>
 
           <YStack gap={10}>
-            <SizableText size={18} color={"#e6f2ff"}>
+            <SizableText size={18} color={'#e6f2ff'}>
               Last Name
             </SizableText>
             <Input
               value={userData.lastName}
-              onChangeText={(text) => handleChange("lastName")(text)}
+              onChangeText={(text) => handleChange('lastName')(text)}
               placeholder="Last Name"
               size={46}
               flex={1}
@@ -136,7 +135,7 @@ const UserUpdate: React.FC = () => {
             </SizableText>
             <Input
               value={userData.email}
-              onChangeText={(text) => handleChange("email")(text)}
+              onChangeText={(text) => handleChange('email')(text)}
               placeholder="Email"
               size={46}
               flex={1}
@@ -152,7 +151,7 @@ const UserUpdate: React.FC = () => {
             </SizableText>
             <Input
               value={userData.userName}
-              onChangeText={(text) => handleChange("userName")(text)}
+              onChangeText={(text) => handleChange('userName')(text)}
               placeholder="UserName"
               size={46}
               flex={1}
@@ -166,8 +165,8 @@ const UserUpdate: React.FC = () => {
             to={`/users/password/${id}`}
             style={{
               marginTop: 15,
-              color: "#e6f2ff",
-              textDecoration: "underline",
+              color: '#e6f2ff',
+              textDecoration: 'underline',
             }}
           >
             Change Password
@@ -180,12 +179,12 @@ const UserUpdate: React.FC = () => {
             padding={12}
             disabled={loading}
             background="#e6f2ff"
-            style={{ overflow: "hidden" }}
-            theme={loading ? "secondary" : "primary"}
+            style={{overflow: 'hidden'}}
+            theme={loading ? 'secondary' : 'primary'}
             onPress={handleSubmit}
             borderRadius={4}
           >
-            <Text fontSize={18}>{loading ? "Updating..." : "Update User"}</Text>
+            <Text fontSize={18}>{loading ? 'Updating...' : 'Update User'}</Text>
           </Button>
         </Form>
       </YStack>

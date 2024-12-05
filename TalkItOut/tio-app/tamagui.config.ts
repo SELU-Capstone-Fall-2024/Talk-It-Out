@@ -1,5 +1,5 @@
-import {createTamagui, createTokens, View, styled, Text} from '@tamagui/core';
-import { Input } from 'tamagui';
+import {createTamagui, createTokens, styled, Text} from '@tamagui/core';
+import {Input} from 'tamagui';
 
 export default createTamagui({
   tokens: createTokens({
@@ -54,21 +54,7 @@ export default createTamagui({
     },
   },
 });
-const ButtonFrames = styled(View, {
-  name: 'Button',
-  alignItems: 'center',
-  flexDirection: 'row',
-  backgroundColor: '$background', // #ccc
-  hoverStyle: {
-    backgroundColor: '$backgroundHover', // #ddd
-  },
-  pressStyle: {
-    backgroundColor: '$backgroundPress', // #bbb
-  },
-  height: '$md', // 46
-  borderRadius: '$md', // 8
-  paddingHorizontal: '$sm', // 25
-});
+
 export const ButtonText = styled(Text, {
   name: 'ButtonText',
   color: '$color',

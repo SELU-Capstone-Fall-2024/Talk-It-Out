@@ -42,7 +42,6 @@ public class ClientUpdateDto
     public string LastName { get; set; }
     public DateTimeOffset DateOfBirth { get; set; }
     public int UserId { get; set; }
-    public bool IsDateOfBirthUpdated { get; set; }
     
 }
 

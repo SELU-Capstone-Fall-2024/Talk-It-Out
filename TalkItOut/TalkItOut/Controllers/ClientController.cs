@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Runtime.InteropServices.JavaScript;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using TalkItOut.Common;
@@ -119,7 +120,7 @@ public class ClientController : ControllerBase
         {
             client.LastName = clientUpdateDto.LastName;
         }
-        if (clientUpdateDto.IsDateOfBirthUpdated)
+        if (!(clientUpdateDto.DateOfBirth == null))
         {
             client.DateOfBirth = clientUpdateDto.DateOfBirth;
         }

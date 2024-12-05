@@ -74,6 +74,8 @@ export type SessionGetDto = {
   endTime: string;
   groupId: number;
   clientId: number;
+  group: GroupGetDto;
+  notes: string;
 };
 
 export type SessionCreateDto = {
@@ -82,6 +84,7 @@ export type SessionCreateDto = {
   endTime: string;
   groupId: number;
   clientId: number;
+  notes: string;
 };
 
 export type SessionUpdateDto = {
@@ -90,6 +93,7 @@ export type SessionUpdateDto = {
   endTime: string;
   groupId: number;
   clientId: number;
+  notes: string;
 };
 
 export type GoalGetDto = {
@@ -119,6 +123,7 @@ export type GroupGetDto = {
   groupName: string;
   clientIds: number[];
   userId: number;
+  clients: ClientGetDto[];
 };
 
 export type GroupCreateDto = {
