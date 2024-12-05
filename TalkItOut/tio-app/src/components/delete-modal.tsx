@@ -1,5 +1,13 @@
-import React from "react";
-import { Dialog, YStack, XStack, Button, SizableText, Text } from "tamagui";
+import React from 'react';
+import {
+  Dialog,
+  YStack,
+  XStack,
+  Button,
+  SizableText,
+  Text,
+  DialogPortal,
+} from 'tamagui';
 
 interface DeleteModalProps {
   isOpen: boolean;
@@ -13,14 +21,15 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   onConfirm,
 }) => (
   <>
-    {isOpen && (
-      <Dialog onOpenChange={onClose}>
+    <Dialog onOpenChange={onClose} open={isOpen}>
+      <DialogPortal>
         <Dialog.Overlay
           animation="quick"
-          enterStyle={{ opacity: 0 }}
-          exitStyle={{ opacity: 0 }}
+          enterStyle={{opacity: 0}}
+          exitStyle={{opacity: 0}}
           opacity={0.8}
           backgroundColor="rgba(0, 0, 0, 0)"
+          alignContent="flex-start"
         />
         <Dialog.Content
           elevate
@@ -29,7 +38,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
           backgroundColor="white"
           padding={20}
           animation={[
-            "quick",
+            'quick',
             {
               opacity: {
                 overshootClamping: true,
@@ -52,7 +61,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
               gap={10}
               alignItems="center"
               justifyContent="space-between"
-              width={"100%"}
+              width={'100%'}
             >
               <YStack>
                 <Button size={40} onPress={onClose}>
@@ -62,17 +71,17 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
               <YStack>
                 <Button
                   size={40}
-                  style={{ background: "#b32d00" }}
+                  style={{background: '#b32d00'}}
                   onPress={onConfirm}
                 >
-                  <Text color={"white"}>Delete</Text>
+                  <Text color={'white'}>Delete</Text>
                 </Button>
               </YStack>
             </XStack>
           </YStack>
         </Dialog.Content>
-      </Dialog>
-    )}
+      </DialogPortal>
+    </Dialog>
   </>
 );
 
